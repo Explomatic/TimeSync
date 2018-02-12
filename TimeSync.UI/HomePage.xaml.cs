@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TimeSync.UI
 {
     /// <summary>
-    /// Interaction logic for LogoPage.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class LogoPage : Page
+    public partial class HomePage : Page
     {
-        public LogoPage()
+        public HomePage()
         {
             InitializeComponent();
         }
@@ -33,12 +33,14 @@ namespace TimeSync.UI
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Toolkits toolkits = new Toolkits();
+            this.NavigationService.Navigate(toolkits);
         }
 
-        private void ButtonBase_OnClickTimeregistration(object sender, RoutedEventArgs e)
+        private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Timeregistrations timeregistrations = new Timeregistrations();
+            this.NavigationService.Navigate(timeregistrations);
         }
     }
 }

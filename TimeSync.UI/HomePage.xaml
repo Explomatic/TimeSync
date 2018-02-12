@@ -1,4 +1,4 @@
-﻿<Page x:Class="TimeSync.UI.LogoPage"
+﻿<Page x:Class="TimeSync.UI.HomePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:TimeSync.UI"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="600"
-      Title="Logo page">
+      Title="Homepage">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,8 +20,8 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         
-        <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" FontFamily="Trebuchet MS"
-               FontWeight="Bold" FontSize="24" Foreground="#0066cc"  HorizontalAlignment="Center" Grid.RowSpan="2">
+        <Label Grid.Column="1" VerticalAlignment="Center" FontFamily="Trebuchet MS"
+               FontWeight="Bold" FontSize="24" Foreground="#0066cc"  HorizontalAlignment="Center" Grid.RowSpan="4">
             Welcome to TimeSync!
         </Label>
 
@@ -39,7 +39,7 @@
 
         <!-- View timme registrations button -->
         <Button Grid.Column="0" Grid.Row="3" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ButtonBase_OnClickTimeregistration">
+                Height="50" HorizontalAlignment="Right" Click="ButtonBase_OnClickTimeregistrations">
             <TextBlock>Timeregistrations</TextBlock>
         </Button>
 
