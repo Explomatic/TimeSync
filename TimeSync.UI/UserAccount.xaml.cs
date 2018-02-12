@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TimeSync.UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for UserAccount.xaml
     /// </summary>
-    public partial class MainWindow : NavigationWindow
+    public partial class UserAccount : Page
     {
-        public MainWindow()
+        public UserAccount()
         {
             InitializeComponent();
         }
