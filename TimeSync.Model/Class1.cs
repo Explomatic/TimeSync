@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSync.BusinessLogic
+namespace TimeSync.Model
 {
     public class Class1
     {

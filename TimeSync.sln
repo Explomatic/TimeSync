@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSync.DataAccess", "Time
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSync.Tests", "TimeSync.Tests\TimeSync.Tests.csproj", "{CC6F9ECE-6A70-4F63-AC41-1D98AF50B96A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSync.Model", "Model\TimeSync.Model.csproj", "{68A655C7-402A-4E51-9CA1-90E6BDCFFE5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSync.Model", "TimeSync.Model\TimeSync.Model.csproj", "{8A6DFA78-FB4F-49C3-9C31-D43A4517AB66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{CC6F9ECE-6A70-4F63-AC41-1D98AF50B96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC6F9ECE-6A70-4F63-AC41-1D98AF50B96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC6F9ECE-6A70-4F63-AC41-1D98AF50B96A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68A655C7-402A-4E51-9CA1-90E6BDCFFE5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68A655C7-402A-4E51-9CA1-90E6BDCFFE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68A655C7-402A-4E51-9CA1-90E6BDCFFE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68A655C7-402A-4E51-9CA1-90E6BDCFFE5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A6DFA78-FB4F-49C3-9C31-D43A4517AB66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A6DFA78-FB4F-49C3-9C31-D43A4517AB66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A6DFA78-FB4F-49C3-9C31-D43A4517AB66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A6DFA78-FB4F-49C3-9C31-D43A4517AB66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

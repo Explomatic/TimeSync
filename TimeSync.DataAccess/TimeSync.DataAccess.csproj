@@ -68,8 +68,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\TimeSync.Model.csproj">
-      <Project>{68a655c7-402a-4e51-9ca1-90e6bdcffe5c}</Project>
+    <ProjectReference Include="..\TimeSync.Model\TimeSync.Model.csproj">
+      <Project>{8a6dfa78-fb4f-49c3-9c31-d43a4517ab66}</Project>
       <Name>TimeSync.Model</Name>
     </ProjectReference>
   </ItemGroup>

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TimeSync.BusinessLogic")]
+[assembly: AssemblyTitle("TimeSync.Model")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TimeSync.BusinessLogic")]
+[assembly: AssemblyProduct("TimeSync.Model")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8a1bad34-0ed0-4671-8e6b-594ddce35a1a")]
+[assembly: Guid("8a6dfa78-fb4f-49c3-9c31-d43a4517ab66")]
 
 // Version information for an assembly consists of the following four values:
 //
