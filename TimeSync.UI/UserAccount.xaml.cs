@@ -97,7 +97,7 @@ namespace TimeSync.UI
                 richParagraph.Foreground = Brushes.Gray;
                 richParagraph.FontWeight = FontWeights.Light;
                 rbox.Document.Blocks.Add(richParagraph);
-                usernameTextBoxInitialFocus = false;
+                passwordTextBoxInitialFocus = false;
             }
         }
     }
