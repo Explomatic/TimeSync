@@ -20,6 +20,9 @@ namespace TimeSync.UI
     /// </summary>
     public partial class UserAccount : Page
     {
+        private bool usernameTextBoxInitialFocus = false;
+        private bool passwordTextBoxInitialFocus = false;
+
         public UserAccount()
         {
             InitializeComponent();
@@ -41,6 +44,61 @@ namespace TimeSync.UI
         {
             Timeregistrations timeregistrations = new Timeregistrations();
             this.NavigationService.Navigate(timeregistrations);
+        }
+
+        private void UsernameRichTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+            if (!usernameTextBoxInitialFocus)
+            {
+                RichTextBox rbox = sender as RichTextBox;
+                rbox.Document.Blocks.Clear();
+                usernameTextBoxInitialFocus = true;
+            }
+        }
+
+        private void PasswordRichTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!passwordTextBoxInitialFocus)
+            {
+                RichTextBox rbox = sender as RichTextBox;
+                rbox.Document.Blocks.Clear();
+                passwordTextBoxInitialFocus = true;
+            }
+        }
+
+        private void UsernameRichTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            RichTextBox rbox = sender as RichTextBox;
+            string richText = new TextRange(rbox.Document.ContentStart, rbox.Document.ContentEnd).Text;
+            if (string.IsNullOrEmpty(richText))
+            {
+                Paragraph richParagraph = new Paragraph();
+                richParagraph.Inlines.Add(new Run("Initials"));
+                richParagraph.FontSize = 12;
+                richParagraph.FontStyle = FontStyles.Italic;
+                richParagraph.Foreground = Brushes.Gray;
+                richParagraph.FontWeight = FontWeights.Light;
+                rbox.Document.Blocks.Add(richParagraph);
+                usernameTextBoxInitialFocus = false;
+            }
+        }
+
+        private void PasswordRichTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            RichTextBox rbox = sender as RichTextBox;
+            string richText = new TextRange(rbox.Document.ContentStart, rbox.Document.ContentEnd).Text;
+            if (string.IsNullOrEmpty(richText))
+            {
+                Paragraph richParagraph = new Paragraph();
+                richParagraph.Inlines.Add(new Run("Password"));
+                richParagraph.FontSize = 12;
+                richParagraph.FontStyle = FontStyles.Italic;
+                richParagraph.Foreground = Brushes.Gray;
+                richParagraph.FontWeight = FontWeights.Light;
+                rbox.Document.Blocks.Add(richParagraph);
+                usernameTextBoxInitialFocus = false;
+            }
         }
     }
 }
