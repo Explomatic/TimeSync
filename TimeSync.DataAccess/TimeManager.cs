@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
@@ -26,6 +27,11 @@ namespace TimeSync.DataAccess
             //Logging?
             //Get stored timeregs
             //Send to Sharepoint
+            throw new NotImplementedException();
+        }
+
+        private void ValidateCustomerField(Timeregistration timereg)
+        {
             throw new NotImplementedException();
         }
     }

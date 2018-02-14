@@ -3,22 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SharePoint.Client;
 using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
     public class SharepointClient
     {
-        public void GetUserId(string toolkitName)
+        public UserInfo GetUserId(UserInfo userInfo, ToolkitInfo toolkitInfo)
         {
-            throw new NotImplementedException();
+            ClientContext clientContext = new ClientContext(toolkitInfo.Url);
+            var email = $"{userInfo.Initials}@netcompany.com";
+            UserCollection userCollection = clientContext.Web.SiteUsers;
+            clientContext.Load(userCollection);
+            clientContext.ExecuteQuery();
+
+            User user = userCollection.GetByEmail(email);
+            clientContext.Load(user);
+            clientContext.ExecuteQuery();
+
+            toolkitInfo.UserId = user.Id;
+            userInfo.ToolkitInfos.Add(toolkitInfo);
+
+            return userInfo;
         }
 
 
 
-        public void MakeTimeRegistration(Timeregistration timereg)
+        public void MakeTimeRegistration(Timeregistration timereg, UserInfo userInfo)
         {
-            throw new NotImplementedException();
+            ToolkitInfo toolkitInfo =
+                userInfo.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
         }
 
         public void MakeTimeregistrations(List<Timeregistration> timeregs)

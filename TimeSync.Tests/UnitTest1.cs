@@ -26,7 +26,7 @@ namespace TimeSync.Tests
         }
 
         [TestMethod]
-        public void GetUserIdTest()
+        public void GetUserIdByEmailTest()
         {
             var email = "moma@netcompany.com";
             UserCollection userCollection = _clientContext.Web.SiteUsers;
@@ -34,6 +34,21 @@ namespace TimeSync.Tests
             _clientContext.ExecuteQuery();
 
             User user = userCollection.GetByEmail(email);
+            _clientContext.Load(user);
+            _clientContext.ExecuteQuery();
+
+            Assert.AreEqual(user.Id, 419);
+        }
+
+        [TestMethod]
+        public void GetUserIdByLoginNameTest()
+        {
+            var loginName = "i:0#.w|ncdmz\\moma";
+            UserCollection userCollection = _clientContext.Web.SiteUsers;
+            _clientContext.Load(userCollection);
+            _clientContext.ExecuteQuery();
+
+            User user = userCollection.GetByLoginName(loginName);
             _clientContext.Load(user);
             _clientContext.ExecuteQuery();
 
