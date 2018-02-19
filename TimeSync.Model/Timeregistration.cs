@@ -12,5 +12,6 @@ namespace TimeSync.Model
         public DateTime DoneDate;
         public string Customer;
         public double Hours;
+        public bool IsSynchronized;
     }
 }

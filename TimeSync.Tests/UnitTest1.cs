@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using Microsoft.SharePoint;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.SharePoint.Client;
+using Newtonsoft.Json;
+using TimeSync.Model;
 
 namespace TimeSync.Tests
 {
@@ -169,6 +173,87 @@ namespace TimeSync.Tests
 
             var id = Convert.ToInt32(tmpItems.Id.ToString());
             Assert.AreEqual(id, timeregId);
+        }
+
+        [TestMethod]
+        public void GetUserInfoFromRepoTest()
+        {
+            UserInfo userInfo;
+            string saveLocation = "SavedData.txt";
+            try
+            {
+                using (FileStream fileStream = new FileStream(saveLocation, FileMode.Open))
+                using (StreamReader streamReader = new StreamReader(fileStream))
+                {
+                    string storedJsonString = streamReader.ReadToEnd();
+                    userInfo = JsonConvert.DeserializeObject<UserInfo>(storedJsonString);
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                userInfo = new UserInfo();
+            }
+
+            Assert.AreEqual(userInfo.Initials, "MOMA");
+            Assert.AreEqual(userInfo.Password, "blablabla");
+            Assert.AreEqual(userInfo.ToolkitInfos.Count, 2);
+
+            ToolkitInfo toolkitInfo1 = userInfo.ToolkitInfos[0];
+            ToolkitInfo toolkitInfo2 = userInfo.ToolkitInfos[1];
+
+            Assert.AreEqual(toolkitInfo1.Url, "https://goto.netcompany.com/cases/GTO22/NCMOD");
+            Assert.AreEqual(toolkitInfo1.CustomerName, "NCMOD");
+            Assert.AreEqual(toolkitInfo1.UserId, 419);
+
+            Assert.AreEqual(toolkitInfo2.Url, "https://goto.netcompany.com/cases/GTO539/NCOPEATEAM");
+            Assert.AreEqual(toolkitInfo2.CustomerName, "ATEAM");
+            Assert.AreEqual(toolkitInfo2.UserId, 43);
+        }
+
+        [TestMethod]
+        public void SaveUserInfoToRepoTest()
+        {
+            string _saveLocation = "SavedData.txt";
+            UserInfo userInfo = new UserInfo();
+            ToolkitInfo toolkitInfo1 = new ToolkitInfo();
+            ToolkitInfo toolkitInfo2 = new ToolkitInfo();
+
+            toolkitInfo1.Url = "https://goto.netcompany.com/cases/GTO22/NCMOD";
+            toolkitInfo1.CustomerName = "NCMOD";
+            toolkitInfo1.UserId = 419;
+
+            toolkitInfo2.Url = "https://goto.netcompany.com/cases/GTO539/NCOPEATEAM";
+            toolkitInfo2.CustomerName = "ATEAM";
+            toolkitInfo2.UserId = 43;
+
+            userInfo.Initials = "MOMA";
+            userInfo.Password = "blablabla";
+
+            userInfo.ToolkitInfos.Add(toolkitInfo1);
+            userInfo.ToolkitInfos.Add(toolkitInfo2);
+            
+            bool couldSerializeAndSaveData = false;
+
+            FileMode mode = FileMode.Create;
+            try
+            {
+                string jsonString = JsonConvert.SerializeObject(userInfo);
+
+                using (FileStream fileStream = new FileStream(_saveLocation, mode))
+                using (StreamWriter streamWriter = new StreamWriter(fileStream))
+                {
+                    streamWriter.Write(jsonString);
+                }
+
+                couldSerializeAndSaveData = true;
+
+            }
+            catch(Exception e)
+            {
+                
+            }
+
+            Assert.IsTrue(couldSerializeAndSaveData);
         }
     }
 }

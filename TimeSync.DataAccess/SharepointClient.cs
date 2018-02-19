@@ -10,6 +10,14 @@ namespace TimeSync.DataAccess
 {
     public class SharepointClient
     {
+        private Repository _repo = new Repository();
+        private UserInfo _userInfo;
+
+        public SharepointClient()
+        {
+            _userInfo = _repo.GetUserInfo();
+        }
+
         public UserInfo GetUserId(UserInfo userInfo, ToolkitInfo toolkitInfo)
         {
             ClientContext clientContext = new ClientContext(toolkitInfo.Url);
@@ -34,6 +42,8 @@ namespace TimeSync.DataAccess
         {
             ToolkitInfo toolkitInfo =
                 userInfo.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
+
+
         }
 
         public void MakeTimeregistrations(List<Timeregistration> timeregs)

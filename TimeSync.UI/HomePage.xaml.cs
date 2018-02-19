@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TimeSync.DataAccess;
 
 namespace TimeSync.UI
 {
@@ -20,9 +21,13 @@ namespace TimeSync.UI
     /// </summary>
     public partial class HomePage : Page
     {
+
+        private SharepointClient _sharepointClient;
+
         public HomePage()
         {
             InitializeComponent();
+            _sharepointClient = new SharepointClient();
         }
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
