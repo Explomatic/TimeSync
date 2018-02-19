@@ -35,10 +35,27 @@ namespace TimeSync.DataAccess
             throw new NotImplementedException();
         }
 
-        public void SaveUserInfo()
+        public bool SaveUserInfo(UserInfo userInfo)
         {
             //info.Password = Encrypt(info.Password);
-            throw new NotImplementedException();
+
+            FileMode mode = FileMode.Create;
+            try
+            {
+                string jsonString = JsonConvert.SerializeObject(userInfo);
+
+                using (_fileStream = new FileStream(_saveLocation, mode))
+                using (_streamWriter = new StreamWriter(_fileStream))
+                {
+                    _streamWriter.Write(jsonString);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public UserInfo GetUserInfo()

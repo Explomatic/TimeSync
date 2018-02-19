@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SharePoint;
 using Microsoft.SharePoint.Client;
 using TimeSync.Model;
 
@@ -12,6 +14,8 @@ namespace TimeSync.DataAccess
     {
         private Repository _repo = new Repository();
         private UserInfo _userInfo;
+        private ClientContext _clientContext;
+        private string _toolkitDomain = "NCDMZ";
 
         public SharepointClient()
         {
@@ -43,7 +47,29 @@ namespace TimeSync.DataAccess
             ToolkitInfo toolkitInfo =
                 userInfo.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
 
+            _clientContext = new ClientContext(toolkitInfo.Url);
+            _clientContext.Credentials = new NetworkCredential(userInfo.Initials, userInfo.Password, _toolkitDomain);
 
+            var timeregList = "tidsregistrering";
+            var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);
+            _clientContext.Load(sharepointList);
+            _clientContext.ExecuteQuery();
+
+            var doneBy = new SPFieldLookupValue(419, userInfo.Initials);
+            var author = new SPFieldLookupValue(419, userInfo.Initials);
+            var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
+
+            ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+            ListItem sharepointListItem = sharepointList.AddItem(itemCreateInfo);
+
+            sharepointListItem["Hours"] = timereg.Hours;
+            sharepointListItem["DoneBy"] = doneBy;
+            sharepointListItem["Author"] = author;
+            sharepointListItem["Case"] = toolkitCase;
+            sharepointListItem["DoneDate"] = timereg.DoneDate;
+
+            sharepointListItem.Update();
+            _clientContext.ExecuteQuery();
         }
 
         public void MakeTimeregistrations(List<Timeregistration> timeregs)
