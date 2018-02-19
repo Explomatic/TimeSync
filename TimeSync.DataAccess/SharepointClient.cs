@@ -15,7 +15,6 @@ namespace TimeSync.DataAccess
         private Repository _repo = new Repository();
         private UserInfo _userInfo;
         private ClientContext _clientContext;
-        private string _toolkitDomain = "NCDMZ";
 
         public SharepointClient()
         {
@@ -48,7 +47,7 @@ namespace TimeSync.DataAccess
                 userInfo.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
 
             _clientContext = new ClientContext(toolkitInfo.Url);
-            _clientContext.Credentials = new NetworkCredential(userInfo.Initials, userInfo.Password, _toolkitDomain);
+            _clientContext.Credentials = new NetworkCredential(userInfo.Initials, userInfo.Password, userInfo.Domain);
 
             var timeregList = "tidsregistrering";
             var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);

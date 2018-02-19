@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TimeSync.DataAccess;
 
 namespace TimeSync.UI
 {
@@ -20,50 +21,57 @@ namespace TimeSync.UI
     /// </summary>
     public partial class UserAccount : Page
     {
-        private bool usernameTextBoxInitialFocus = false;
-        private bool passwordTextBoxInitialFocus = false;
+        private bool _usernameTextBoxInitialFocus = false;
+        private bool _passwordTextBoxInitialFocus = false;
+        private SharepointClient _sharepointClient;
 
         public UserAccount()
         {
             InitializeComponent();
         }
 
+        public UserAccount(SharepointClient sharepointClient)
+        {
+            InitializeComponent();
+            _sharepointClient = sharepointClient;
+        }
+
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
         {
             UserAccount userAccount = new UserAccount();
-            this.NavigationService.Navigate(userAccount);
+            NavigationService.Navigate(userAccount);
         }
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
             Toolkits toolkits = new Toolkits();
-            this.NavigationService.Navigate(toolkits);
+            NavigationService.Navigate(toolkits);
         }
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
             Timeregistrations timeregistrations = new Timeregistrations();
-            this.NavigationService.Navigate(timeregistrations);
+            NavigationService.Navigate(timeregistrations);
         }
 
         private void UsernameRichTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
 
-            if (!usernameTextBoxInitialFocus)
+            if (!_usernameTextBoxInitialFocus)
             {
                 RichTextBox rbox = sender as RichTextBox;
                 rbox.Document.Blocks.Clear();
-                usernameTextBoxInitialFocus = true;
+                _usernameTextBoxInitialFocus = true;
             }
         }
 
         private void PasswordRichTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (!passwordTextBoxInitialFocus)
+            if (!_passwordTextBoxInitialFocus)
             {
                 RichTextBox rbox = sender as RichTextBox;
                 rbox.Document.Blocks.Clear();
-                passwordTextBoxInitialFocus = true;
+                _passwordTextBoxInitialFocus = true;
             }
         }
 
@@ -80,7 +88,7 @@ namespace TimeSync.UI
                 richParagraph.Foreground = Brushes.Gray;
                 richParagraph.FontWeight = FontWeights.Light;
                 rbox.Document.Blocks.Add(richParagraph);
-                usernameTextBoxInitialFocus = false;
+                _usernameTextBoxInitialFocus = false;
             }
         }
 
@@ -97,7 +105,7 @@ namespace TimeSync.UI
                 richParagraph.Foreground = Brushes.Gray;
                 richParagraph.FontWeight = FontWeights.Light;
                 rbox.Document.Blocks.Add(richParagraph);
-                passwordTextBoxInitialFocus = false;
+                _passwordTextBoxInitialFocus = false;
             }
         }
     }

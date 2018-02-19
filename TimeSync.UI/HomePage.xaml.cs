@@ -21,7 +21,6 @@ namespace TimeSync.UI
     /// </summary>
     public partial class HomePage : Page
     {
-
         private SharepointClient _sharepointClient;
 
         public HomePage()
@@ -32,20 +31,20 @@ namespace TimeSync.UI
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
         {
-            UserAccount userAccount = new UserAccount();
-            this.NavigationService.Navigate(userAccount);
+            UserAccount userAccount = new UserAccount(_sharepointClient);
+            NavigationService.Navigate(userAccount);
         }
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
-            Toolkits toolkits = new Toolkits();
-            this.NavigationService.Navigate(toolkits);
+            Toolkits toolkits = new Toolkits(_sharepointClient);
+            NavigationService.Navigate(toolkits);
         }
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
-            Timeregistrations timeregistrations = new Timeregistrations();
-            this.NavigationService.Navigate(timeregistrations);
+            Timeregistrations timeregistrations = new Timeregistrations(_sharepointClient);
+            NavigationService.Navigate(timeregistrations);
         }
     }
 }

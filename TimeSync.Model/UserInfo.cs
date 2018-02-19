@@ -12,10 +12,12 @@ namespace TimeSync.Model
         public string Initials;
         public string Password;
         public List<ToolkitInfo> ToolkitInfos;
+        public readonly string Domain;
 
         public UserInfo()
         {
             ToolkitInfos = new List<ToolkitInfo>();
+            Domain = "NCDMZ";
         }
     }
 }
