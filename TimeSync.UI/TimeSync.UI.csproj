@@ -159,6 +159,10 @@
       <Project>{58bbebda-02ee-4e26-aa6a-914e8bbd43b0}</Project>
       <Name>TimeSync.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TimeSync.Model\TimeSync.Model.csproj">
+      <Project>{8a6dfa78-fb4f-49c3-9c31-d43a4517ab66}</Project>
+      <Name>TimeSync.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

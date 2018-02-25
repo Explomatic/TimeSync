@@ -5,13 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
-    public class Repository
+    public class Repository<T> : IRepository<T> where T : new()
     {
-
         private FileStream _fileStream;
         private StreamWriter _streamWriter;
         private StreamReader _streamReader;
@@ -21,28 +19,28 @@ namespace TimeSync.DataAccess
         //Type in
         //Save (add/update): {registrations: [{"date": 20102, "hours": 210391, ....}, {"date": 2+01023...}]}
         //Sync: Update stored regs to be equal to failed regs + new regs
-        public void SaveTimeregistration(Timeregistration timereg)
+        public bool SaveTimeregistration(T data)
         {
             //Convert object to JSON (Newtonsoft)
             //Save JSON to DB
             throw new NotImplementedException();
         }
 
-        public List<Timeregistration> GetTimeregistrations()
+        public T GetTimeregistrations()
         {
             //Retrieve objects/read text file
             //Convert JSON to object (Newtonsoft)
             throw new NotImplementedException();
         }
 
-        public bool SaveUserInfo(UserInfo userInfo)
+        public bool SaveUserInfo(T data)
         {
             //info.Password = Encrypt(info.Password);
 
             FileMode mode = FileMode.Create;
             try
             {
-                string jsonString = JsonConvert.SerializeObject(userInfo);
+                string jsonString = JsonConvert.SerializeObject(data);
 
                 using (_fileStream = new FileStream(_saveLocation, mode))
                 using (_streamWriter = new StreamWriter(_fileStream))
@@ -58,7 +56,7 @@ namespace TimeSync.DataAccess
             }
         }
 
-        public UserInfo GetUserInfo()
+        public T GetUserInfo()
         {
             try
             {
@@ -66,13 +64,13 @@ namespace TimeSync.DataAccess
                 using (_streamReader = new StreamReader(_fileStream))
                 {
                     string storedJsonString = _streamReader.ReadToEnd();
-                    return JsonConvert.DeserializeObject<UserInfo>(storedJsonString);
+                    return JsonConvert.DeserializeObject<T>(storedJsonString);
                 }
             }
             catch (FileNotFoundException)
             {
                 Console.WriteLine("No data was found at specified location. Returning empty data.");
-                return new UserInfo();
+                return new T();
             }
         }
     }

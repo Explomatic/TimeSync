@@ -194,8 +194,8 @@ namespace TimeSync.Tests
                 userInfo = new UserInfo();
             }
 
-            Assert.AreEqual(userInfo.Initials, "MOMA");
-            Assert.AreEqual(userInfo.Password, "blablabla");
+            Assert.AreEqual(userInfo.UserInitials, "MOMA");
+            Assert.AreEqual(userInfo.UserPassword, "blablabla");
             Assert.AreEqual(userInfo.ToolkitInfos.Count, 2);
 
             ToolkitInfo toolkitInfo1 = userInfo.ToolkitInfos[0];
@@ -226,8 +226,8 @@ namespace TimeSync.Tests
             toolkitInfo2.CustomerName = "ATEAM";
             toolkitInfo2.UserId = 43;
 
-            userInfo.Initials = "MOMA";
-            userInfo.Password = "blablabla";
+            userInfo.UserInitials = "MOMA";
+            userInfo.UserPassword = "blablabla";
 
             userInfo.ToolkitInfos.Add(toolkitInfo1);
             userInfo.ToolkitInfos.Add(toolkitInfo2);

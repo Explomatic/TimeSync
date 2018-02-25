@@ -66,16 +66,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRepository.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="SharepointClient.cs" />
-    <Compile Include="TimeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TimeSync.Model\TimeSync.Model.csproj">
-      <Project>{8a6dfa78-fb4f-49c3-9c31-d43a4517ab66}</Project>
-      <Name>TimeSync.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

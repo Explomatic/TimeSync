@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Client;
-using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
-    public class SharepointClient
+    public static class SharepointClient
     {
-        private Repository _repo = new Repository();
-        private UserInfo _userInfo;
-        private ClientContext _clientContext;
+        private static ClientContext _clientContext;
+        private const string Domain = "NCDMZ";
 
-        public SharepointClient()
+        /// <summary>
+        /// Returns users userId in the specified toolkit.
+        /// </summary>
+        /// <param name="toolkitUrl"></param>
+        /// <param name="userInitials"></param>
+        /// <returns></returns>
+        public static int GetUserIdFromToolkit(string toolkitUrl, string userInitials)
         {
-            _userInfo = _repo.GetUserInfo();
-        }
-
-        public UserInfo GetUserId(UserInfo userInfo, ToolkitInfo toolkitInfo)
-        {
-            ClientContext clientContext = new ClientContext(toolkitInfo.Url);
-            var email = $"{userInfo.Initials}@netcompany.com";
+            ClientContext clientContext = new ClientContext(toolkitUrl);
+            var email = $"{userInitials}@netcompany.com";
             UserCollection userCollection = clientContext.Web.SiteUsers;
             clientContext.Load(userCollection);
             clientContext.ExecuteQuery();
@@ -33,50 +33,47 @@ namespace TimeSync.DataAccess
             clientContext.Load(user);
             clientContext.ExecuteQuery();
 
-            toolkitInfo.UserId = user.Id;
-            userInfo.ToolkitInfos.Add(toolkitInfo);
-
-            return userInfo;
+            return user.Id;
         }
 
-
-
-        public void MakeTimeRegistration(Timeregistration timereg, UserInfo userInfo)
+        /// <summary>
+        /// Sends timeregistration of amount 'hours' on 'doneDate' to the 'toolkitUrl' for the 'userInitials'. Returns timeregId.
+        /// </summary>
+        /// <param name="userInitials"></param>
+        /// <param name="userPassword"></param>
+        /// <param name="toolkitUrl"></param>
+        /// <param name="toolkitUserId"></param>
+        /// <param name="customer"></param>
+        /// <param name="caseId"></param>
+        /// <param name="hours"></param>
+        /// <param name="doneDate"></param>
+        public static int MakeTimeRegistration(string userInitials, string userPassword, string toolkitUrl, int toolkitUserId, string customer, int caseId, double hours, DateTime doneDate)
         {
-            ToolkitInfo toolkitInfo =
-                userInfo.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
-
-            _clientContext = new ClientContext(toolkitInfo.Url);
-            _clientContext.Credentials = new NetworkCredential(userInfo.Initials, userInfo.Password, userInfo.Domain);
+            _clientContext = new ClientContext(toolkitUrl);
+            _clientContext.Credentials = new NetworkCredential(userInitials, userPassword, Domain);
 
             var timeregList = "tidsregistrering";
             var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);
             _clientContext.Load(sharepointList);
             _clientContext.ExecuteQuery();
 
-            var doneBy = new SPFieldLookupValue(419, userInfo.Initials);
-            var author = new SPFieldLookupValue(419, userInfo.Initials);
-            var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
+            var doneBy = new SPFieldLookupValue(toolkitUserId, userInitials);
+            var author = new SPFieldLookupValue(toolkitUserId, userInitials);
+            var toolkitCase = new SPFieldLookupValue(caseId, $"{customer}-{caseId}");
 
             ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
             ListItem sharepointListItem = sharepointList.AddItem(itemCreateInfo);
 
-            sharepointListItem["Hours"] = timereg.Hours;
+            sharepointListItem["Hours"] = hours;
             sharepointListItem["DoneBy"] = doneBy;
             sharepointListItem["Author"] = author;
             sharepointListItem["Case"] = toolkitCase;
-            sharepointListItem["DoneDate"] = timereg.DoneDate;
+            sharepointListItem["DoneDate"] = doneDate;
 
             sharepointListItem.Update();
             _clientContext.ExecuteQuery();
-        }
 
-        public void MakeTimeregistrations(List<Timeregistration> timeregs)
-        {
-            //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
-            //Send to Toolkit -- SEE UNIT TEST PROJECT
-            throw new NotImplementedException();
+            return sharepointListItem.Id;
         }
-
     }
 }

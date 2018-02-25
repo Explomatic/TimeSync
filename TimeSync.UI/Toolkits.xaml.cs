@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TimeSync.DataAccess;
 
 namespace TimeSync.UI
 {
@@ -21,16 +20,9 @@ namespace TimeSync.UI
     /// </summary>
     public partial class Toolkits : Page
     {
-        private SharepointClient _sharepointClient;
         public Toolkits()
         {
             InitializeComponent();
-        }
-
-        public Toolkits(SharepointClient sharepointClient)
-        {
-            InitializeComponent();
-            _sharepointClient = sharepointClient;
         }
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
