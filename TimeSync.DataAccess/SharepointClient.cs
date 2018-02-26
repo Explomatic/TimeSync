@@ -72,5 +72,12 @@ namespace TimeSync.DataAccess
 
             return sharepointListItem.Id;
         }
+
+        public static void MakeTimeregistrations(List<Timeregistration> timeregs)
+        {
+            //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
+            //Send to Toolkit -- SEE UNIT TEST PROJECT
+            throw new NotImplementedException();
+        }
     }
 }
