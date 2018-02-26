@@ -25,10 +25,17 @@ namespace TimeSync.UI
         private bool _usernameTextBoxInitialFocus = false;
         private bool _passwordTextBoxInitialFocus = false;
         private Repository<UserInfo> _repo = new Repository<UserInfo>();
+        private TimeManager _timeManager;
 
         public UserAccount()
         {
             InitializeComponent();
+            _timeManager = new TimeManager();
+        }
+
+        private void SaveUserPassword(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void ClickUserAccount(object sender, RoutedEventArgs e)

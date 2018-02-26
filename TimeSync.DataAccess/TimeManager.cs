@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimeSync.DataAccess;
+using TimeSync.Model;
 
-namespace TimeSync.Model
+namespace TimeSync.DataAccess
 {
-    class TimeManager
+    public class TimeManager
     {
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"

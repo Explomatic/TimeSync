@@ -5,7 +5,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimeSync.DataAccess;
 
 namespace TimeSync.Model
 {
@@ -46,12 +45,6 @@ namespace TimeSync.Model
         {
             ToolkitInfos = new List<ToolkitInfo>();
             Domain = "NCDMZ";
-        }
-
-        public void AddToolkit(string url, string customerName)
-        {
-            ToolkitInfo toolkitInfo = new ToolkitInfo(url, customerName);
-            toolkitInfo.UserId = SharepointClient.GetUserIdFromToolkit(url, UserInitials);
         }
 
         protected void OnPropertyChanged(string name)

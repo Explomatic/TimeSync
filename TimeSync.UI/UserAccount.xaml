@@ -51,39 +51,28 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                
+                <Grid.Resources>
+                    <src:UserInfo x:Key="UserInfoDataSource"/>
+                </Grid.Resources>
+                
+                <Grid.DataContext>
+                    <Binding Source="{StaticResource UserInfoDataSource}"/>
+                </Grid.DataContext>
 
                 <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Right"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3" 
-                         Text="{Binding Source=UserInfo, Path=UserInitials, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, TargetNullValue='No Name Found'}"/>
-                <Label Grid.Column="2" Grid.Row="0" 
-                       Content="{Binding Source=UserInfo, Path=UserInitials, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue='No Name Found'}"/>
-                <!-- RichTextBox Grid.Column="1" Grid.Row="0" Margin="4" Padding="3" GotFocus="UsernameRichTextBox_GotFocus" 
-                             LostFocus="UsernameRichTextBox_LostFocus">
-                    <FlowDocument>
-                        <Paragraph FontSize="12" FontWeight="Light" Foreground="Gray" FontStyle="Italic">
-                            <Run>Initials</>
-                            <Run Text="{Binding Path=UserInitials}"></Run>
-                        </Paragraph>
-                    </FlowDocument>
-                </-->
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3"
+                         Text="{Binding Path=UserInitials, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="NCDMZ Password:" HorizontalAlignment="Right"/>
-                <!--RichTextBox Grid.Row="1" Grid.Column="1" Margin="4" Padding="3" 
-                         GotFocus="PasswordTextBox_GotFocus" LostFocus="PasswordTextBox_LostFocus"-->
-                <RichTextBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" GotFocus="PasswordRichTextBox_GotFocus" 
-                             LostFocus="PasswordRichTextBox_LostFocus">
-                    <FlowDocument>
-                        <Paragraph FontSize="12" FontWeight="Light" Foreground="Gray" FontStyle="Italic">
-                            <Run>Password</Run>
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
+                <PasswordBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" PasswordChanged="AssignPassword"></PasswordBox>
+                <!--TextBox Grid.Row="1" Grid.Column="1" Margin="4" Padding="3" FontFamily="ms-appx:///Assets/PassDot.ttf#PassDot"
+                         Text="{Binding Path=UserPassword, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/-->
             </Grid>
         </StackPanel>
 
