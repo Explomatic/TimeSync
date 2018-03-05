@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,27 +12,27 @@ namespace TimeSync.Model
 
     public class UserInfo : INotifyPropertyChanged
     {
-        private string _userInitials;
-        private string _userPassword;
+        private string _initials;
+        private SecureString _password;
 
         #region Properties setters and getters
-        public string UserInitials
+        public string Initials
         {
-            get { return _userInitials; }
+            get { return _initials; }
             set
             {
-                _userInitials = value;
-                OnPropertyChanged("UserInitials");
+                _initials = value;
+                OnPropertyChanged("Initials");
             }
         }
 
-        public string UserPassword
+        public SecureString Password
         {
-            get { return _userPassword; }
+            get { return _password; }
             set
             {
-                _userPassword = value;
-                OnPropertyChanged("UserPassword");
+                _password = value;
+                OnPropertyChanged("Password");
             }
         }
         #endregion

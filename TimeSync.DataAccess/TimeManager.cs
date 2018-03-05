@@ -9,6 +9,12 @@ namespace TimeSync.DataAccess
 {
     public class TimeManager
     {
+        public UserInfo UserInfo;
+
+        public TimeManager()
+        {
+            UserInfo = new UserInfo();
+        }
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
         /// </summary>
@@ -19,6 +25,13 @@ namespace TimeSync.DataAccess
             //Call Repo
             throw new NotImplementedException();
         }
+
+        public void AddToolkit(UserInfo userInfo, ToolkitInfo toolkitInfo)
+        {
+            toolkitInfo.UserId = SharepointClient.GetUserIdFromToolkit(toolkitInfo, userInfo);
+            userInfo.ToolkitInfos.Add(toolkitInfo);
+        }
+
         /// <summary>
         /// Call Sharepoint and do clean up for stored timeregs
         /// </summary>

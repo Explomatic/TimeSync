@@ -41,16 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeManager.cs" />
     <Compile Include="Timeregistration.cs" />
     <Compile Include="ToolkitInfo.cs" />
     <Compile Include="UserInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TimeSync.DataAccess\TimeSync.DataAccess.csproj">
-      <Project>{58bbebda-02ee-4e26-aa6a-914e8bbd43b0}</Project>
-      <Name>TimeSync.DataAccess</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

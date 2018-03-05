@@ -71,14 +71,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Timeregistrations.xaml.cs">
-      <DependentUpon>Timeregistrations.xaml</DependentUpon>
+    <Compile Include="TimeregistrationsPage.xaml.cs">
+      <DependentUpon>TimeregistrationsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Toolkits.xaml.cs">
-      <DependentUpon>Toolkits.xaml</DependentUpon>
+    <Compile Include="ToolkitsPage.xaml.cs">
+      <DependentUpon>ToolkitsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserAccount.xaml.cs">
-      <DependentUpon>UserAccount.xaml</DependentUpon>
+    <Compile Include="UserAccountPage.xaml.cs">
+      <DependentUpon>UserAccountPage.xaml</DependentUpon>
     </Compile>
     <Page Include="HomePage.xaml">
       <SubType>Designer</SubType>
@@ -99,15 +99,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Timeregistrations.xaml">
+    <Page Include="TimeregistrationsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Toolkits.xaml">
+    <Page Include="ToolkitsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserAccount.xaml">
+    <Page Include="UserAccountPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

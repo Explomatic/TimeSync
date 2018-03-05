@@ -25,7 +25,7 @@ namespace TimeSync.DataAccess
         public static int GetUserIdFromToolkit(ToolkitInfo toolkitInfo, UserInfo userInfo)
         {
             ClientContext clientContext = new ClientContext(toolkitInfo.Url);
-            var email = $"{userInfo.UserInitials}@netcompany.com";
+            var email = $"{userInfo.Initials}@netcompany.com";
             UserCollection userCollection = clientContext.Web.SiteUsers;
             clientContext.Load(userCollection);
             clientContext.ExecuteQuery();
@@ -47,15 +47,15 @@ namespace TimeSync.DataAccess
             ToolkitInfo toolkitInfo = userInfo.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
             
             _clientContext = new ClientContext(toolkitInfo.Url);
-            _clientContext.Credentials = new NetworkCredential(userInfo.UserInitials, userInfo.UserPassword, Domain);
+            _clientContext.Credentials = new NetworkCredential(userInfo.Initials, userInfo.Password, Domain);
 
             var timeregList = "tidsregistrering";
             var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);
             _clientContext.Load(sharepointList);
             _clientContext.ExecuteQuery();
 
-            var doneBy = new SPFieldLookupValue(toolkitInfo.UserId, userInfo.UserInitials);
-            var author = new SPFieldLookupValue(toolkitInfo.UserId, userInfo.UserInitials);
+            var doneBy = new SPFieldLookupValue(toolkitInfo.UserId, userInfo.Initials);
+            var author = new SPFieldLookupValue(toolkitInfo.UserId, userInfo.Initials);
             var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
 
             ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();

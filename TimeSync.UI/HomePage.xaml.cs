@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TimeSync.DataAccess;
+using TimeSync.Model;
 
 namespace TimeSync.UI
 {
@@ -20,31 +22,33 @@ namespace TimeSync.UI
     /// </summary>
     public partial class HomePage : Page
     {
-        private UserAccount _userAccount;
-        private Toolkits _toolkits;
-        private Timeregistrations _timeregistrations;
+        private TimeManager _timeManager;
+        private UserAccountPage _userAccountPage;
+        private ToolkitsPage _toolkitsPage;
+        private TimeregistrationsPage _timeregistrationsPage;
 
         public HomePage()
         {
             InitializeComponent();
-            _userAccount = new UserAccount();
-            _toolkits = new Toolkits();
-            _timeregistrations = new Timeregistrations();
+            _timeManager = new TimeManager();
+            _userAccountPage = new UserAccountPage(_timeManager);
+            _toolkitsPage = new ToolkitsPage(_timeManager);
+            _timeregistrationsPage = new TimeregistrationsPage(_timeManager);
         }
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(_userAccount);
+            NavigationService.Navigate(_userAccountPage);
         }
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(_toolkits);
+            NavigationService.Navigate(_toolkitsPage);
         }
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(_timeregistrations);
+            NavigationService.Navigate(_timeregistrationsPage);
         }
     }
 }

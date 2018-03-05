@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.SharePoint.Client;
 using Newtonsoft.Json;
 using TimeSync.Model;
+using System.Security;
 
 namespace TimeSync.Tests
 {
@@ -194,8 +195,8 @@ namespace TimeSync.Tests
                 userInfo = new UserInfo();
             }
 
-            Assert.AreEqual(userInfo.UserInitials, "MOMA");
-            Assert.AreEqual(userInfo.UserPassword, "blablabla");
+            Assert.AreEqual(userInfo.Initials, "MOMA");
+            Assert.AreEqual(userInfo.Password, "blablabla");
             Assert.AreEqual(userInfo.ToolkitInfos.Count, 2);
 
             ToolkitInfo toolkitInfo1 = userInfo.ToolkitInfos[0];
@@ -226,8 +227,8 @@ namespace TimeSync.Tests
             toolkitInfo2.CustomerName = "ATEAM";
             toolkitInfo2.UserId = 43;
 
-            userInfo.UserInitials = "MOMA";
-            userInfo.UserPassword = "blablabla";
+            userInfo.Initials = "MOMA";
+            userInfo.Password = new NetworkCredential("", "blablabla").SecurePassword;
 
             userInfo.ToolkitInfos.Add(toolkitInfo1);
             userInfo.ToolkitInfos.Add(toolkitInfo2);
