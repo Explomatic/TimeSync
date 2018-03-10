@@ -12,9 +12,10 @@ namespace TimeSync.DataAccess
     {
         public ToolkitUser UserInfo;
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly Repository<ToolkitUser> _toolkitUserRepository;
-        private readonly Repository<ToolkitInfo> _toolkitInfoRepository;
-        private readonly Repository<List<Timeregistration>> _timeregistrationRepository;
+        private readonly IRepository<ToolkitUser> _toolkitUserRepository;
+        private readonly IRepository<ToolkitInfo> _toolkitInfoRepository;
+        private readonly IRepository<List<Timeregistration>> _timeregistrationRepository;
+        private readonly ISharepointClient _sharepointClient;
         private ToolkitInfo _toolkitInfo;
         private ToolkitUser _toolkitUser;
 
@@ -24,6 +25,17 @@ namespace TimeSync.DataAccess
             _toolkitUserRepository = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
             _toolkitInfoRepository = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
             _timeregistrationRepository = new Repository<List<Timeregistration>>("TimeregistrationSaveLocation");
+            _sharepointClient = new SharepointClient();
+        }
+
+        public TimeManager(IRepository<ToolkitUser> userRepo, IRepository<ToolkitInfo> infoRepo,
+            IRepository<List<Timeregistration>> timeregRepo
+            , ISharepointClient spClient)
+        {
+            _toolkitUserRepository = userRepo;
+            _toolkitInfoRepository = infoRepo;
+            _timeregistrationRepository = timeregRepo;
+            _sharepointClient = spClient;
         }
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
@@ -42,7 +54,7 @@ namespace TimeSync.DataAccess
             foreach (var tk in toolkitInfo.Toolkits.Select(kvp => kvp.Value))
             {
                 if (tk.UserId == 0)
-                    tk.UserId = SharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
+                    tk.UserId = _sharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
             }
 
             //call repo to save
@@ -67,7 +79,7 @@ namespace TimeSync.DataAccess
             //Send to Sharepoint
             foreach (var timereg in timeregs.Where(tr => !tr.IsSynchronized))
             {
-                var id = SharepointClient.MakeTimeregistration(timereg, userInfo, toolkitInfo);
+                var id = _sharepointClient.MakeTimeregistration(timereg, userInfo, toolkitInfo);
 
                 if (id == -1)
                 {
