@@ -48,6 +48,7 @@
         <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" 
                     HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-50,0,0,0">
             <Grid>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="150"/>
@@ -84,7 +85,7 @@
                  TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="120" ToolTip="Insert your NCDMZ username (with domain)" />
         <Label Grid.Column="1" Margin="109,47,286,22" Grid.Row="1">Username: </Label>-->
         <Grid.Background>
-            <ImageBrush ImageSource="watermark.png"/>
+            <ImageBrush ImageSource="../watermark.png"/>
         </Grid.Background>
     </Grid>
 </Page>

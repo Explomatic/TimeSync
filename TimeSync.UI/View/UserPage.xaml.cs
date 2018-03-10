@@ -52,7 +52,7 @@ namespace TimeSync.UI.View
         private void ClickToolkits(object sender, RoutedEventArgs e)
         {
             ToolkitsPage toolkitsPage = new ToolkitsPage();
-            NavigationService.Navigate(toolkitsPage);
+            NavigationService.Navigate(toolkitsPage, this);
         }
 
         private void ClickTimeregistrations(object sender, RoutedEventArgs e)

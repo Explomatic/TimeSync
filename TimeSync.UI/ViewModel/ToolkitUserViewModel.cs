@@ -17,6 +17,11 @@ namespace TimeSync.UI.ViewModel
         private string _name;
         private SecureString _password;
 
+        public ToolkitUserViewModel()
+        {
+            
+        }
+
         public string Username
         {
             get { return _name; }
