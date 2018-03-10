@@ -12,7 +12,7 @@ namespace TimeSync.UI.ViewModel
 {
     class ToolkitUserViewModel : ObservableObject
     {
-        private readonly IRepository<ToolkitUser> _repo = new Repository<ToolkitUser>();
+        private readonly IRepository<ToolkitUser> _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
         private readonly ToolkitUser _toolkitUser = new ToolkitUser();
         private string _name;
         private SecureString _password;

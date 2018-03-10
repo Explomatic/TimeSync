@@ -14,6 +14,7 @@ namespace TimeSync.UI.View
 
         public TimeregistrationsPage(TimeManager timeManager)
         {
+            InitializeComponent();
             _timeManager = timeManager;
         }
 

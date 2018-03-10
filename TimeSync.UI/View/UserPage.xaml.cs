@@ -11,7 +11,7 @@ namespace TimeSync.UI.View
     {
         private bool _usernameTextBoxInitialFocus = false;
         private bool _passwordTextBoxInitialFocus = false;
-        private Repository<ToolkitUser> _repo = new Repository<ToolkitUser>();
+        private Repository<ToolkitUser> _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
         public TimeManager TimeManager;
 
         public UserPage()

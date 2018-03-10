@@ -71,6 +71,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\TimeregistrationViewModel.cs" />
+    <Compile Include="ViewModel\ToolkitInfoViewModel.cs" />
     <Compile Include="ViewModel\ToolkitUserViewModel.cs" />
     <Compile Include="View\TimeregistrationsPage.xaml.cs">
       <DependentUpon>TimeregistrationsPage.xaml</DependentUpon>
