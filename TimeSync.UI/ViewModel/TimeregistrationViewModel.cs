@@ -22,13 +22,23 @@ namespace TimeSync.UI.ViewModel
         private DateTime _doneDate;
         private bool _synchronised;
 
-        public ObservableCollection<string> strings { get; set; }
+        public ObservableCollection<Timeregistration> strings { get; set; }
 
         
 
         public TimeregistrationViewModel()
         {
-            strings = new ObservableCollection<string>() { "A", "B", "C" };
+            strings = new ObservableCollection<Timeregistration>();
+            strings.Add(new Timeregistration()
+            {
+                CaseId = -1,
+                Customer = "Morten",
+            });
+            strings.Add(new Timeregistration()
+            {
+                CaseId = -2,
+                Customer = "Også morten",
+            });
             //_timeregistration = _repo.GetData();
             //_timeregistration = _timeManager.GetTimeregData();
         }
@@ -41,7 +51,7 @@ namespace TimeSync.UI.ViewModel
 
         public void Add()
         {
-            strings.Add("Morten");
+            strings.Add(new Timeregistration());
 
         }
     }

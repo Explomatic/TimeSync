@@ -49,11 +49,10 @@
             <TextBlock>Timeregistrations</TextBlock>
         </Button>
 
-        <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" 
+        <StackPanel x:Name="sBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" 
                     HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-50,0,0,0">
-            <ListBox ItemsSource="{Binding strings}" ></ListBox>
-
-            <Button Command="{Binding AddTest}" Content="Add item" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
+            <ItemsControl ItemsSource ="{Binding strings}"></ItemsControl>
+            <Button Command="{Binding AddTest}" Content="Add row" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
 
         </StackPanel>
 

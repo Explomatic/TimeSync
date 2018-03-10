@@ -5,5 +5,12 @@
              xmlns:src="clr-namespace:TimeSync.Model;assembly=TimeSync.Model"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
+        <DataTemplate DataType="{x:Type src:Timeregistration}">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox ItemsSource="{Binding CaseId}"/>
+                <TextBox Text="{Binding Customer}"/>
+                <!-- the other controls with bindings -->
+            </StackPanel>
+        </DataTemplate>
     </Application.Resources>
 </Application>
