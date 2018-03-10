@@ -11,29 +11,40 @@ namespace TimeSync.DataAccess
     public class TimeManager : INotifyPropertyChanged
     {
         public ToolkitUser UserInfo;
-
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly Repository<ToolkitUser> _toolkitUserRepository;
+        private readonly Repository<ToolkitInfo> _toolkitInfoRepository;
+        private readonly Repository<List<Timeregistration>> _timeregistrationRepository;
 
         public TimeManager()
         {
             UserInfo = new ToolkitUser();
+            _toolkitUserRepository = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
+            _toolkitInfoRepository = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
+            _timeregistrationRepository = new Repository<List<Timeregistration>>("TimeregistrationSaveLocation");
         }
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
         /// </summary>
-        public void StoreTimereg()
+        public void StoreTimereg(List<Timeregistration> timeRegs)
         {
             //Logging?
             //Validation?
             //Call Repo
-            throw new NotImplementedException();
+            _timeregistrationRepository.SaveData(timeRegs);
         }
 
-        public void AddToolkit(ToolkitUser userInfo, ToolkitInfo toolkitInfo)
+        public void SaveToolkitInfo(ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
         {
-            //toolkitInfo.UserId = SharepointClient.GetUserIdFromToolkit(toolkitInfo, userInfo);
-            //userInfo.ToolkitInfos.Add(toolkitInfo);
-            throw new NotImplementedException();
+            //Get user ids
+            foreach (var tk in toolkitInfo.Toolkits.Select(kvp => kvp.Value))
+            {
+                if (tk.UserId == 0)
+                    tk.UserId = SharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
+            }
+
+            //call repo to save
+            _toolkitInfoRepository.SaveData(toolkitInfo);
         }
 
         /// <summary>
@@ -42,14 +53,10 @@ namespace TimeSync.DataAccess
         public void Sync()
         {
             //Logging?
-            //Get stored timeregs
+            //Get stored timeregs //TODO Maybe get from ViewModel instead?
+            var timeregs = _timeregistrationRepository.GetData();
             //Send to Sharepoint
-            throw new NotImplementedException();
-        }
-
-        private void ValidateCustomerField(Timeregistration timereg)
-        {
-            throw new NotImplementedException();
+            SharepointClient.MakeTimeregistrations(timeregs);
         }
     }
 }
