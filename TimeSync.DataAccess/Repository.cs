@@ -14,8 +14,14 @@ namespace TimeSync.DataAccess
         private FileStream _fileStream;
         private StreamWriter _streamWriter;
         private StreamReader _streamReader;
+        private string _saveLocation;
 
-        private string _saveLocation = ConfigurationManager.AppSettings["SaveLocation"];
+        public Repository(string saveLocationConfigKey)
+        {
+            _saveLocation = ConfigurationManager.AppSettings[saveLocationConfigKey];
+        }
+
+
 
         //Type in
         //Save (add/update): {registrations: [{"date": 20102, "hours": 210391, ....}, {"date": 2+01023...}]}

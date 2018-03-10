@@ -15,52 +15,54 @@ namespace TimeSync.DataAccess
     {
         private static ClientContext _clientContext;
 
-        public static int GetUserIdFromToolkit(ToolkitInfo toolkitInfo, ToolkitUser toolkitUser)
+        public static int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
         {
-            //ClientContext clientContext = new ClientContext(toolkitInfo.Toolkits[toolkitInfo].Url);
-            //var email = $"{toolkitUser.Name}@netcompany.com";
-            //UserCollection userCollection = clientContext.Web.SiteUsers;
-            //clientContext.Load(userCollection);
-            //clientContext.ExecuteQuery();
+            ClientContext clientContext = new ClientContext(toolkit.Url);
+            UserCollection userCollection = clientContext.Web.SiteUsers;
+            clientContext.Load(userCollection);
+            clientContext.ExecuteQuery();
 
-            //User user = userCollection.GetByEmail(email);
-            //clientContext.Load(user);
-            //clientContext.ExecuteQuery();
 
-            //return user.Id;
-            throw new NotImplementedException();
+            var email = $"{toolkitUser.Name}@netcompany.com";
+            User user = userCollection.GetByEmail(email);
+            clientContext.Load(user);
+            clientContext.ExecuteQuery();
+
+            return user.Id;
         }
 
-        public static int MakeTimeRegistration(Timeregistration timereg, ToolkitUser toolkitUser)
+        public static int MakeTimeRegistration(Timeregistration timereg, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
         {
-            ////ToolkitInfo toolkitInfo = toolkitUser.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
+            Toolkit toolkit;
+            var success = toolkitInfo.Toolkits.TryGetValue(timereg.Customer, out toolkit);
+            if (!success)
+                throw new Exception("Customer not found");
 
-            //_clientContext = new ClientContext(toolkitInfo.Url);
-            //_clientContext.Credentials = new NetworkCredential(userInfo.Username, userInfo.Password, Domain);
+            _clientContext = new ClientContext(toolkit.Url);
+            _clientContext.Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.Password, toolkitUser.Domain);
 
-            //var timeregList = "tidsregistrering";
-            //var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);
-            //_clientContext.Load(sharepointList);
-            //_clientContext.ExecuteQuery();
+            var timeregList = "tidsregistrering";
+            var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);
+            _clientContext.Load(sharepointList);
+            _clientContext.ExecuteQuery();
 
-            //var doneBy = new SPFieldLookupValue(toolkitInfo.UserId, userInfo.Username);
-            //var author = new SPFieldLookupValue(toolkitInfo.UserId, userInfo.Username);
-            //var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
+            var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
+            var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
+            var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
 
-            //ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
-            //ListItem sharepointListItem = sharepointList.AddItem(itemCreateInfo);
+            ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+            ListItem sharepointListItem = sharepointList.AddItem(itemCreateInfo);
 
-            //sharepointListItem["Hours"] = timereg.Hours;
-            //sharepointListItem["DoneBy"] = doneBy;
-            //sharepointListItem["Author"] = author;
-            //sharepointListItem["Case"] = toolkitCase;
-            //sharepointListItem["DoneDate"] = timereg.DoneDate;
+            sharepointListItem["Hours"] = timereg.Hours;
+            sharepointListItem["DoneBy"] = doneBy;
+            sharepointListItem["Author"] = author;
+            sharepointListItem["Case"] = toolkitCase;
+            sharepointListItem["DoneDate"] = timereg.DoneDate;
 
-            //sharepointListItem.Update();
-            //_clientContext.ExecuteQuery();
+            sharepointListItem.Update();
+            _clientContext.ExecuteQuery();
 
-            //return sharepointListItem.Id;
-            throw new NotImplementedException();
+            return sharepointListItem.Id;
         }
 
         public static void MakeTimeregistrations(List<Timeregistration> timeregs)
