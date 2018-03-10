@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Configuration;
 
 namespace TimeSync.DataAccess
 {
@@ -14,7 +15,7 @@ namespace TimeSync.DataAccess
         private StreamWriter _streamWriter;
         private StreamReader _streamReader;
 
-        private string _saveLocation = "C:\\Users\\moma\\Desktop\\SavedData.txt";
+        private string _saveLocation = ConfigurationManager.AppSettings["SaveLocation"];
 
         //Type in
         //Save (add/update): {registrations: [{"date": 20102, "hours": 210391, ....}, {"date": 2+01023...}]}
