@@ -9,12 +9,9 @@ namespace TimeSync.DataAccess
     public interface IRepository<T>
     {
         //string SaveLocation { get; set; }
-        T GetTimeregistrations();
+        T GetData();
 
-        bool SaveTimeregistration(T data);
+        bool SaveData(T data);
 
-        bool SaveUserInfo(T data);
-
-        T GetUserInfo();
     }
 }

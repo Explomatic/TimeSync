@@ -7,62 +7,26 @@ using System.Threading.Tasks;
 
 namespace TimeSync.Model
 {
-    public class ToolkitInfo : INotifyPropertyChanged
+    public class ToolkitInfo
     {
-        private string _url;
-        private string _customerName;
-        private int _userId;
-
-        #region Properties Getters and Setters
-        public string Url
+        public Dictionary<string, Toolkit> Toolkits;
+        public ToolkitInfo()
         {
-            get { return this._url; }
-            set
-            {
-                this._url = value;
-                OnPropertyChanged("Url");
-            }
+            Toolkits = new Dictionary<string, Toolkit>();
         }
 
-        public string CustomerName
+        public void AddToolkit(string url, string customerName)
         {
-            get { return this._customerName; }
-            set
-            {
-                this._customerName = value;
-                OnPropertyChanged("CustomerName");
-            }
-        }
-        public int UserId
-        {
-            get { return this._userId; }
-            set
-            {
-                this._userId = value;
-                OnPropertyChanged("UserId");
-            }
-        }
-        #endregion
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ToolkitInfo() {}
-
-        public ToolkitInfo(string url, string customerName)
-        {
-            this.Url = url;
-            this.CustomerName = customerName;
+            Toolkit toolkit = new Toolkit();
+            toolkit.Url = url;
+            Toolkits.Add(customerName, toolkit);
         }
 
-        protected void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
+    }
 
-
-
+    public class Toolkit 
+    {
+        public int UserId { get; set; }
+        public string Url { get; set; }
     }
 }

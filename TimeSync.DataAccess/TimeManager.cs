@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,13 +8,15 @@ using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
-    public class TimeManager
+    public class TimeManager : INotifyPropertyChanged
     {
-        public UserInfo UserInfo;
+        public ToolkitUser UserInfo;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public TimeManager()
         {
-            UserInfo = new UserInfo();
+            UserInfo = new ToolkitUser();
         }
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
@@ -26,10 +29,11 @@ namespace TimeSync.DataAccess
             throw new NotImplementedException();
         }
 
-        public void AddToolkit(UserInfo userInfo, ToolkitInfo toolkitInfo)
+        public void AddToolkit(ToolkitUser userInfo, ToolkitInfo toolkitInfo)
         {
-            toolkitInfo.UserId = SharepointClient.GetUserIdFromToolkit(toolkitInfo, userInfo);
-            userInfo.ToolkitInfos.Add(toolkitInfo);
+            //toolkitInfo.UserId = SharepointClient.GetUserIdFromToolkit(toolkitInfo, userInfo);
+            //userInfo.ToolkitInfos.Add(toolkitInfo);
+            throw new NotImplementedException();
         }
 
         /// <summary>

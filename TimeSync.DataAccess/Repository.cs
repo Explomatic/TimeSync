@@ -14,26 +14,12 @@ namespace TimeSync.DataAccess
         private StreamWriter _streamWriter;
         private StreamReader _streamReader;
 
-        private string _saveLocation = "SavedData.txt";
+        private string _saveLocation = "C:\\Users\\moma\\Desktop\\SavedData.txt";
 
         //Type in
         //Save (add/update): {registrations: [{"date": 20102, "hours": 210391, ....}, {"date": 2+01023...}]}
         //Sync: Update stored regs to be equal to failed regs + new regs
-        public bool SaveTimeregistration(T data)
-        {
-            //Convert object to JSON (Newtonsoft)
-            //Save JSON to DB
-            throw new NotImplementedException();
-        }
-
-        public T GetTimeregistrations()
-        {
-            //Retrieve objects/read text file
-            //Convert JSON to object (Newtonsoft)
-            throw new NotImplementedException();
-        }
-
-        public bool SaveUserInfo(T data)
+        public bool SaveData(T data)
         {
             //info.Password = Encrypt(info.Password);
 
@@ -56,7 +42,7 @@ namespace TimeSync.DataAccess
             }
         }
 
-        public T GetUserInfo()
+        public T GetData()
         {
             try
             {
