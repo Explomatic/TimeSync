@@ -17,10 +17,6 @@ namespace TimeSync.DataAccess
 
         public static int GetUserIdFromToolkit(ToolkitInfo toolkitInfo, ToolkitUser toolkitUser)
         {
-            //Toolkit URL
-            //NCDMZ user-pass
-
-
             //ClientContext clientContext = new ClientContext(toolkitInfo.Toolkits[toolkitInfo].Url);
             //var email = $"{toolkitUser.Name}@netcompany.com";
             //UserCollection userCollection = clientContext.Web.SiteUsers;
@@ -37,11 +33,6 @@ namespace TimeSync.DataAccess
 
         public static int MakeTimeRegistration(Timeregistration timereg, ToolkitUser toolkitUser)
         {
-            //TOOLKIT URL
-            //NCDMZ user-pass
-            //Case info
-
-
             ////ToolkitInfo toolkitInfo = toolkitUser.ToolkitInfos.Single(toolkit => toolkit.CustomerName == timereg.Customer);
 
             //_clientContext = new ClientContext(toolkitInfo.Url);
