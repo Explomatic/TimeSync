@@ -15,6 +15,8 @@ namespace TimeSync.DataAccess
         private readonly Repository<ToolkitUser> _toolkitUserRepository;
         private readonly Repository<ToolkitInfo> _toolkitInfoRepository;
         private readonly Repository<List<Timeregistration>> _timeregistrationRepository;
+        private ToolkitInfo _toolkitInfo;
+        private ToolkitUser _toolkitUser;
 
         public TimeManager()
         {
@@ -45,18 +47,40 @@ namespace TimeSync.DataAccess
 
             //call repo to save
             _toolkitInfoRepository.SaveData(toolkitInfo);
+
+            _toolkitInfo = toolkitInfo;
+            _toolkitUser = toolkitUser;
         }
 
         /// <summary>
         /// Call Sharepoint and do clean up for stored timeregs
         /// </summary>
-        public void Sync()
+        public void Sync(List<Timeregistration> timeregs)
         {
             //Logging?
             //Get stored timeregs //TODO Maybe get from ViewModel instead?
-            var timeregs = _timeregistrationRepository.GetData();
+            //var timeregs = _timeregistrationRepository.GetData();
+            var userInfo = _toolkitUser ?? _toolkitUserRepository.GetData();
+            var toolkitInfo = _toolkitInfo ?? _toolkitInfoRepository.GetData();
+
+
             //Send to Sharepoint
-            SharepointClient.MakeTimeregistrations(timeregs);
+            foreach (var timereg in timeregs.Where(tr => !tr.IsSynchronized))
+            {
+                var id = SharepointClient.MakeTimeregistration(timereg, userInfo, toolkitInfo);
+
+                if (id == -1)
+                {
+                    timereg.IsSynchronized = false;
+                }
+                else
+                {
+                    timereg.IsSynchronized = true;
+                }
+            }
+
+
+            _timeregistrationRepository.SaveData(timeregs);
         }
     }
 }
