@@ -11,11 +11,11 @@ using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
-    public static class SharepointClient
+    public class SharepointClient : ISharepointClient
     {
-        private static ClientContext _clientContext;
+        private ClientContext _clientContext;
 
-        public static int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
+        public int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
         {
             ClientContext clientContext = new ClientContext(toolkit.Url);
             UserCollection userCollection = clientContext.Web.SiteUsers;
@@ -31,7 +31,7 @@ namespace TimeSync.DataAccess
             return user.Id;
         }
 
-        public static int MakeTimeRegistration(Timeregistration timereg, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
+        public int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
         {
             Toolkit toolkit;
             var success = toolkitInfo.Toolkits.TryGetValue(timereg.Customer, out toolkit);
@@ -59,13 +59,22 @@ namespace TimeSync.DataAccess
             sharepointListItem["Case"] = toolkitCase;
             sharepointListItem["DoneDate"] = timereg.DoneDate;
 
-            sharepointListItem.Update();
-            _clientContext.ExecuteQuery();
+            try
+            {
+                sharepointListItem.Update();
+                _clientContext.ExecuteQuery();
+                return sharepointListItem.Id;
+            }
+            catch
+            {
+                return -1;
+            }
+            
 
-            return sharepointListItem.Id;
+            
         }
 
-        public static void MakeTimeregistrations(List<Timeregistration> timeregs)
+        public void MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
         {
             //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
             //Send to Toolkit -- SEE UNIT TEST PROJECT
