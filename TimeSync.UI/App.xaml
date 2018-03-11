@@ -2,14 +2,23 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TimeSync.UI"
+             xmlns:viewModels="clr-namespace:TimeSync.UI.ViewModel"
              xmlns:src="clr-namespace:TimeSync.Model;assembly=TimeSync.Model"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type src:Timeregistration}">
+        <DataTemplate x:Key="TimeregDataTemplate"  DataType="{x:Type src:Timeregistration}">
             <StackPanel Orientation="Horizontal">
-                <ComboBox ItemsSource="{Binding CaseId}"/>
-                <TextBox Text="{Binding Customer}"/>
-                <!-- the other controls with bindings -->
+                <ComboBox Width="50" Margin="20,5,20,5" ItemsSource="{Binding ListOfToolkits}" SelectedItem="{Binding Customer}"/>
+                <TextBox Width="50" Margin="20,5,20,5" Text="{Binding CaseId}"></TextBox>
+                <TextBox Width="50" Margin="20,5,20,5" Text="{Binding Hours}"/>
+                <DatePicker Width="100" Margin="20,5,20,5" Text="{Binding DoneDate}"></DatePicker>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ToolkitInfoDataTemplate"  DataType="{x:Type viewModels:ToolkitInfoViewModelWrapper}">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="75" Margin="20,5,20,5" Text="{Binding ToolkitName}"></TextBox>
+                <TextBox Width="210" Margin="20,5,20,5" Text="{Binding ToolkitUrl}"/>
             </StackPanel>
         </DataTemplate>
     </Application.Resources>

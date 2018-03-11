@@ -18,25 +18,46 @@ namespace TimeSync.Model
         public double Hours { get; set; }
         public bool IsSynchronized { get; set; }
 
+        public List<string> ListOfToolkits { get; set; }
+
+        public Timeregistration()
+        {
+            DoneDate = DateTime.Today;
+            ListOfToolkits = new List<string>()
+            {
+                "NCMOD",
+                "AKA",
+                "DM"
+            };
+        }
+
         public bool AddHours(string duration)
         {
+            var durationIsNumberOfHours = CheckIfDurationIsNumberOfHours(duration);
             double hours;
-            var durationIsNumberOfHours = double.TryParse(duration, out hours);
+            bool stringFormattedAsExpected;
             if (durationIsNumberOfHours)
             {
-                Hours = hours;
-                return true;
+                duration = duration.Replace(',', '.');
+                stringFormattedAsExpected = double.TryParse(duration, NumberStyles.Any, CultureInfo.InvariantCulture, out hours);
             }
             else
             {
-                var stringFormattedAsExpected = ParseDurationString(duration, out hours);
-                Hours = hours;
-                return stringFormattedAsExpected;
+                stringFormattedAsExpected = ParseTimeIntervalString(duration, out hours);
             }
-            
+
+            Hours = hours;
+            return stringFormattedAsExpected;
+
         }
 
-        private bool ParseDurationString(string duration, out double hours)
+        private bool CheckIfDurationIsNumberOfHours(string duration)
+        {
+            return duration.Trim().Length < 5;
+        }
+
+
+        private bool ParseTimeIntervalString(string duration, out double hours)
         {
             hours = 0;
             // expected string format "08(:,.)00 - 08(:,.)30"

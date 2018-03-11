@@ -22,23 +22,26 @@ namespace TimeSync.UI.ViewModel
         private DateTime _doneDate;
         private bool _synchronised;
 
-        public ObservableCollection<Timeregistration> strings { get; set; }
+        public ObservableCollection<string> listOfToolkits { get; set; }
+
+        public ObservableCollection<Timeregistration> listOfTimeregs { get; set; }
 
         
 
         public TimeregistrationViewModel()
         {
-            strings = new ObservableCollection<Timeregistration>();
-            strings.Add(new Timeregistration()
-            {
-                CaseId = -1,
-                Customer = "Morten",
-            });
-            strings.Add(new Timeregistration()
-            {
-                CaseId = -2,
-                Customer = "Også morten",
-            });
+            listOfTimeregs = new ObservableCollection<Timeregistration>();
+            listOfTimeregs.Add(new Timeregistration());
+            //strings.Add(new Timeregistration()
+            //{
+            //    CaseId = 10,
+            //    Customer = "NCMOD",
+            //});
+            //strings.Add(new Timeregistration()
+            //{
+            //    CaseId = 12,
+            //    Customer = "Også morten",
+            //});
             //_timeregistration = _repo.GetData();
             //_timeregistration = _timeManager.GetTimeregData();
         }
@@ -50,8 +53,9 @@ namespace TimeSync.UI.ViewModel
 
         public void Synchronise()
         {
-            _repo.SaveData(strings);
+            _repo.SaveData(listOfTimeregs);
         }
+
         public ICommand AddTest
         {
             get { return new DelegateCommand(Add); }
@@ -59,7 +63,7 @@ namespace TimeSync.UI.ViewModel
 
         public void Add()
         {
-            strings.Add(new Timeregistration());
+            listOfTimeregs.Add(new Timeregistration());
 
         }
     }

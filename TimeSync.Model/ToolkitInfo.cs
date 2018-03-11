@@ -9,7 +9,7 @@ namespace TimeSync.Model
 {
     public class ToolkitInfo
     {
-        public Dictionary<string, Toolkit> Toolkits;
+        public Dictionary<string, Toolkit> Toolkits { get; set; }
         public ToolkitInfo()
         {
             Toolkits = new Dictionary<string, Toolkit>();
@@ -21,7 +21,6 @@ namespace TimeSync.Model
             toolkit.Url = url;
             Toolkits.Add(customerName, toolkit);
         }
-
     }
 
     public class Toolkit 

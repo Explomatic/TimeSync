@@ -16,9 +16,10 @@ namespace TimeSync.UI.View
             InitializeComponent();
         }
 
-        public ToolkitsPage(TimeManager _timeManager)
+        public ToolkitsPage(TimeManager timeManager)
         {
-            _timeManager = _timeManager;
+            InitializeComponent();
+            _timeManager = timeManager;
         }
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
