@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="SharepointTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeregTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

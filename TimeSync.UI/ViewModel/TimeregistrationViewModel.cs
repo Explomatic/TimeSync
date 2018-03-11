@@ -13,8 +13,8 @@ namespace TimeSync.UI.ViewModel
 {
     class TimeregistrationViewModel : ObservableObject
     {
-        private readonly IRepository<Timeregistration> _repo = new Repository<Timeregistration>("TimeregistrationSaveLocation");
-        public List<Timeregistration> _timeregistration = new List<Timeregistration>();
+        private readonly IRepository<ObservableCollection<Timeregistration>> _repo = new Repository<ObservableCollection<Timeregistration>>("TimeregistrationSaveLocation");
+        public ObservableCollection<Timeregistration> Timeregistrations = new ObservableCollection<Timeregistration>();
         private readonly TimeManager _timeManager = new TimeManager();
         private string _customerName;
         private int _caseId;
@@ -43,7 +43,15 @@ namespace TimeSync.UI.ViewModel
             //_timeregistration = _timeManager.GetTimeregData();
         }
 
-        //public 
+        public ICommand SynchroniseCommand
+        {
+            get { return new DelegateCommand(Synchronise);}
+        }
+
+        public void Synchronise()
+        {
+            _repo.SaveData(strings);
+        }
         public ICommand AddTest
         {
             get { return new DelegateCommand(Add); }

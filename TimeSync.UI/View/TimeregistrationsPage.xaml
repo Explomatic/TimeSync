@@ -55,6 +55,7 @@
             <Button Command="{Binding AddTest}" Content="Add row" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
 
         </StackPanel>
+        <Button Command="{Binding SynchroniseCommand}" Content="Synchronise" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
 
         <!--
         <TextBox x:Name="usernameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="214,47,0,0" Grid.Row="1" 
