@@ -18,6 +18,7 @@ namespace TimeSync.UI.ViewModel
         private string _name;
         private string _password;
 
+        public TimeManager TimeManager { get; set; }
 
         public ToolkitUserViewModel()
         {
@@ -58,7 +59,7 @@ namespace TimeSync.UI.ViewModel
             {
                 _toolkitUser.Password = _password;
             }
-
+            TimeManager.UserInfo = _toolkitUser;
             _repo.SaveData(_toolkitUser);
 
         }

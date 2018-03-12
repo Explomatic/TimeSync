@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +15,14 @@ namespace TimeSync.UI.ViewModel
     class TimeregistrationViewModel : ObservableObject
     {
         private readonly IRepository<ObservableCollection<Timeregistration>> _timeregRepo;
-        private readonly TimeManager _timeManager = new TimeManager();
+        private List<Timeregistration> ListOfTimeregs;
         private string _customerName;
         private int _caseId;
         private string _hours;
         private DateTime _doneDate;
         private bool _synchronised;
+
+        public TimeManager TimeManager { get; set; }
 
         public ObservableCollection<Timeregistration> Timeregistrations { get; set; }
 
@@ -35,6 +38,8 @@ namespace TimeSync.UI.ViewModel
             ListOfToolkitNames = new ObservableCollection<string>();
             IRepository<ToolkitInfo> toolkitInfoRepo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
             PopulateListOfToolkits(toolkitInfoRepo.GetData());
+
+            ListOfTimeregs = new List<Timeregistration>();
         }
 
         private void PopulateListOfToolkits(ToolkitInfo toolkitInfo)
@@ -50,6 +55,16 @@ namespace TimeSync.UI.ViewModel
         public void Synchronise()
         {
             _timeregRepo.SaveData(Timeregistrations);
+            PopulateListOfTimeregs();
+            TimeManager.Sync(ListOfTimeregs);
+        }
+
+        private void PopulateListOfTimeregs()
+        {
+            foreach (var timereg in Timeregistrations)
+            {
+                ListOfTimeregs.Add(timereg);
+            }
         }
 
         public ICommand AddNewTimeregistrationCommand => new DelegateCommand(AddNewTimeregistration);

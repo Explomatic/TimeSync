@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,14 @@ namespace TimeSync.UI.ViewModel
     class ToolkitInfoViewModel : ObservableObject
     {
         private readonly IRepository<ToolkitInfo> _repo;
-        private readonly TimeManager _timeManager;
         private ToolkitInfo _toolkitInfo;
         public ObservableCollection<ToolkitInfoViewModelWrapper> ListOfToolkits { get; set; }
+
+        public TimeManager TimeManager { get; set; }
 
         public ToolkitInfoViewModel()
         {
             _repo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
-            _timeManager = new TimeManager();
             ListOfToolkits = new ObservableCollection<ToolkitInfoViewModelWrapper>();
             _toolkitInfo = _repo.GetData();
             PopulateWrapperClass(_toolkitInfo);
@@ -42,12 +43,13 @@ namespace TimeSync.UI.ViewModel
             ListOfToolkits.Add(new ToolkitInfoViewModelWrapper());
         }
 
-        public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
+        public ICommand SaveToolkitsCommand => new DelegateCommand(SaveToolkits);
 
-        public void Synchronise()
+        public void SaveToolkits()
         {
             PopulateToolkitInfoObject(ListOfToolkits);
-            _repo.SaveData(_toolkitInfo);
+            TimeManager.SaveToolkitInfo(TimeManager.UserInfo, _toolkitInfo);
+            //_repo.SaveData(_toolkitInfo);
         }
 
         private void PopulateToolkitInfoObject(ObservableCollection<ToolkitInfoViewModelWrapper> listOfToolkits)
