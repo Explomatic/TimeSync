@@ -25,6 +25,29 @@
         </Grid.RowDefinitions>
         
 
+        <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-50,0,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Right"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3"
+                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="NCDMZ Password:" HorizontalAlignment="Right"/>
+                <PasswordBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" PasswordChanged="PasswordBox_PasswordChanged"></PasswordBox>
+            </Grid>
+        </StackPanel>
+        <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
+
+
         <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#0066cc"  HorizontalAlignment="Center">
             TimeSync - Account information
@@ -47,50 +70,7 @@
                 Height="50" HorizontalAlignment="Right" Click="ClickTimeregistrations">
             <TextBlock>Timeregistrations</TextBlock>
         </Button>
-
-        <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" 
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-50,0,0,0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                
-                <!--<Grid.Resources>
-                    <viewModel:ToolkitUserViewModel x:Key="ToolkitUserViewModel"/>
-                    --><!--src:UserInfo x:Key="UserInfoDataSource"/>
-                    <srcd:TimeManager x:Key="TimeManagerDataSource"/--><!--
-                </Grid.Resources>-->
-                
-                <!--<Grid.DataContext>
-                    --><!--Binding Source="{StaticResource UserInfoDataSource}"/--><!--
-                    <Binding Source="{StaticResource TimeManagerDataSource}"/>
-                </Grid.DataContext>-->
-
-                <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Right"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3"
-                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Column="2" Grid.Row="0" Content="{Binding Username}"/>
-
-                <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="NCDMZ Password:" HorizontalAlignment="Right"/>
-                <PasswordBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" PasswordChanged="PasswordBox_PasswordChanged"></PasswordBox>
-                <Label Grid.Column="2" Grid.Row="1" Content="{Binding Password.Length}"/>
-                <!--TextBox Grid.Row="1" Grid.Column="1" Margin="4" Padding="3" FontFamily="ms-appx:///Assets/PassDot.ttf#PassDot"
-                         Text="{Binding Path=UserPassword, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/-->
-            </Grid>
-        </StackPanel>
-        <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
-
-
-        <!--
-        <TextBox x:Name="usernameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="214,47,0,0" Grid.Row="1" 
-                 TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="120" ToolTip="Insert your NCDMZ username (with domain)" />
-        <Label Grid.Column="1" Margin="109,47,286,22" Grid.Row="1">Username: </Label>-->
+        
         <Grid.Background>
             <ImageBrush ImageSource="../watermark.png"/>
         </Grid.Background>

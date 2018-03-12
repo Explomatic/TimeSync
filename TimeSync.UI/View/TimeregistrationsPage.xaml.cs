@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using TimeSync.DataAccess;
+using TimeSync.Model;
 
 namespace TimeSync.UI.View
 {

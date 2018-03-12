@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -12,11 +13,18 @@ namespace TimeSync.UI.ViewModel
 {
     class ToolkitUserViewModel : ObservableObject
     {
-        private readonly IRepository<ToolkitUser> _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
-        private readonly ToolkitUser _toolkitUser = new ToolkitUser();
+        private readonly IRepository<ToolkitUser> _repo;
+        private readonly ToolkitUser _toolkitUser;
         private string _name;
-        private SecureString _password;
+        private string _password;
 
+
+        public ToolkitUserViewModel()
+        {
+            _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
+            _toolkitUser = _repo.GetData();
+            Username = _toolkitUser.Name;
+        }
         public string Username
         {
             get { return _name; }
@@ -27,7 +35,7 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public SecureString Password
+        public string Password
         {
             get { return _password; }
             set
@@ -37,10 +45,7 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand UpdateToolkitUserCommand
-        {
-            get { return new DelegateCommand(UpdateToolkitUser); }
-        }
+        public ICommand UpdateToolkitUserCommand => new DelegateCommand(UpdateToolkitUser);
 
         public void UpdateToolkitUser()
         {

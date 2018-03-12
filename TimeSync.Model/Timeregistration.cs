@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
@@ -18,17 +19,12 @@ namespace TimeSync.Model
         public double Hours { get; set; }
         public bool IsSynchronized { get; set; }
 
-        public List<string> ListOfToolkits { get; set; }
+        public ObservableCollection<string> ListOfToolkitNames { get; set; }
 
         public Timeregistration()
         {
+            ListOfToolkitNames = new ObservableCollection<string>();
             DoneDate = DateTime.Today;
-            ListOfToolkits = new List<string>()
-            {
-                "NCMOD",
-                "AKA",
-                "DM"
-            };
         }
 
         public bool AddHours(string duration)

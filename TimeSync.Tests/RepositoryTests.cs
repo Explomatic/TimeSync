@@ -40,7 +40,7 @@ namespace TimeSync.Tests
 
 
             userInfo.Name = "MOMA";
-            userInfo.Password = new NetworkCredential("", "blablabla").SecurePassword;
+            userInfo.Password = "blablabla";
 ;
 
             var success = _repo.SaveData(userInfo);

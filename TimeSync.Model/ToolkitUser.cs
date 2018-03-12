@@ -12,7 +12,7 @@ namespace TimeSync.Model
     public class ToolkitUser
     {
         public string Name { get; set; }
-        public SecureString Password { get; set; }
+        public string Password { get; set; }
         public readonly string Domain;
 
         public ToolkitUser()

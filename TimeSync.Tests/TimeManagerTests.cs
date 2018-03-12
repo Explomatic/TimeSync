@@ -93,7 +93,7 @@ namespace TimeSync.Tests
             var user = new ToolkitUser()
             {
                 Name = "Morten",
-                Password = new SecureString(),
+                Password = "hest",
             };
 
 

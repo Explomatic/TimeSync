@@ -13,8 +13,7 @@ namespace TimeSync.UI.ViewModel
 {
     class TimeregistrationViewModel : ObservableObject
     {
-        private readonly IRepository<ObservableCollection<Timeregistration>> _repo = new Repository<ObservableCollection<Timeregistration>>("TimeregistrationSaveLocation");
-        public ObservableCollection<Timeregistration> Timeregistrations = new ObservableCollection<Timeregistration>();
+        private readonly IRepository<ObservableCollection<Timeregistration>> _timeregRepo;
         private readonly TimeManager _timeManager = new TimeManager();
         private string _customerName;
         private int _caseId;
@@ -22,48 +21,44 @@ namespace TimeSync.UI.ViewModel
         private DateTime _doneDate;
         private bool _synchronised;
 
-        public ObservableCollection<string> listOfToolkits { get; set; }
+        public ObservableCollection<Timeregistration> Timeregistrations { get; set; }
 
-        public ObservableCollection<Timeregistration> listOfTimeregs { get; set; }
-
+        public ObservableCollection<string> ListOfToolkitNames { get; set; }
         
 
         public TimeregistrationViewModel()
         {
-            listOfTimeregs = new ObservableCollection<Timeregistration>();
-            listOfTimeregs.Add(new Timeregistration());
-            //strings.Add(new Timeregistration()
-            //{
-            //    CaseId = 10,
-            //    Customer = "NCMOD",
-            //});
-            //strings.Add(new Timeregistration()
-            //{
-            //    CaseId = 12,
-            //    Customer = "Også morten",
-            //});
-            //_timeregistration = _repo.GetData();
-            //_timeregistration = _timeManager.GetTimeregData();
+            _timeregRepo = new Repository<ObservableCollection<Timeregistration>>("TimeregistrationSaveLocation");
+            Timeregistrations = new ObservableCollection<Timeregistration>();
+            Timeregistrations = _timeregRepo.GetData();
+
+            ListOfToolkitNames = new ObservableCollection<string>();
+            IRepository<ToolkitInfo> toolkitInfoRepo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
+            PopulateListOfToolkits(toolkitInfoRepo.GetData());
         }
 
-        public ICommand SynchroniseCommand
+        private void PopulateListOfToolkits(ToolkitInfo toolkitInfo)
         {
-            get { return new DelegateCommand(Synchronise);}
+            foreach(KeyValuePair<string, Toolkit> entry in toolkitInfo.Toolkits)
+            {
+                ListOfToolkitNames.Add(entry.Key);
+            }
         }
+
+        public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
 
         public void Synchronise()
         {
-            _repo.SaveData(listOfTimeregs);
+            _timeregRepo.SaveData(Timeregistrations);
         }
 
-        public ICommand AddTest
-        {
-            get { return new DelegateCommand(Add); }
-        }
+        public ICommand AddNewTimeregistrationCommand => new DelegateCommand(AddNewTimeregistration);
 
-        public void Add()
+        public void AddNewTimeregistration()
         {
-            listOfTimeregs.Add(new Timeregistration());
+            var timereg = new Timeregistration();
+            timereg.ListOfToolkitNames = ListOfToolkitNames;
+            Timeregistrations.Add(timereg);
 
         }
     }

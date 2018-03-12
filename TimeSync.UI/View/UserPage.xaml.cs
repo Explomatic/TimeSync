@@ -28,7 +28,7 @@ namespace TimeSync.UI.View
         public void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
-            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).SecurePassword; }
+            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
             //PasswordBox password = sender as PasswordBox;
             //DataAccess.TimeManager.UserInfo.Password = password.SecurePassword;
         }

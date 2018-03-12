@@ -12,41 +12,37 @@ namespace TimeSync.UI.ViewModel
 {
     class ToolkitInfoViewModel : ObservableObject
     {
-        private readonly IRepository<ToolkitInfo> _repo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
-        private readonly TimeManager _timeManager = new TimeManager();
+        private readonly IRepository<ToolkitInfo> _repo;
+        private readonly TimeManager _timeManager;
         private ToolkitInfo _toolkitInfo;
         public ObservableCollection<ToolkitInfoViewModelWrapper> ListOfToolkits { get; set; }
 
         public ToolkitInfoViewModel()
         {
+            _repo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
+            _timeManager = new TimeManager();
             ListOfToolkits = new ObservableCollection<ToolkitInfoViewModelWrapper>();
-            ListOfToolkits.Add(new ToolkitInfoViewModelWrapper()
-            {
-                ToolkitName = "NCMOD",
-                ToolkitUrl = "https://asd"
-            });
-            ListOfToolkits.Add(new ToolkitInfoViewModelWrapper()
-            {
-                ToolkitName = "AKA",
-                ToolkitUrl = "https://aaaa"
-            });
-            //_toolkitInfo = _repo.GetData();
+            _toolkitInfo = _repo.GetData();
+            PopulateWrapperClass(_toolkitInfo);
         }
 
-        public ICommand AddNewToolkitCommand
+        private void PopulateWrapperClass(ToolkitInfo toolkitInfo)
         {
-            get { return new DelegateCommand(AddNewToolkit); }
+            foreach (KeyValuePair<string, Toolkit> entry in toolkitInfo.Toolkits)
+            {
+                ListOfToolkits.Add(new ToolkitInfoViewModelWrapper { ToolkitName = entry.Key, ToolkitUrl = entry.Value.Url });
+            }
+
         }
+
+        public ICommand AddNewToolkitCommand => new DelegateCommand(AddNewToolkit);
 
         public void AddNewToolkit()
         {
             ListOfToolkits.Add(new ToolkitInfoViewModelWrapper());
         }
 
-        public ICommand SynchroniseCommand
-        {
-            get { return new DelegateCommand(Synchronise); }
-        }
+        public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
 
         public void Synchronise()
         {
