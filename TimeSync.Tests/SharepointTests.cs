@@ -8,26 +8,31 @@ using Microsoft.SharePoint.Client;
 using Newtonsoft.Json;
 using TimeSync.Model;
 using System.Security;
+using TimeSync.DataAccess;
 
 namespace TimeSync.Tests
 {
     [TestClass]
     public class SharepointTests
     {
+        private IRepository<ToolkitUser> _toolkitUserRepository;
         private ClientContext _clientContext = null;
-        private string _ToolkitUsername;
-        private string _ToolkitPassword;
-        private string _ToolkitDomain;
+        private string _toolkitUsername;
+        private string _toolkitPassword;
+        private string _toolkitDomain;
 
         [TestInitialize]
         public void Init()
         {
-            _ToolkitUsername = "moma";
-            _ToolkitPassword = "cTWq0yoW#dUyjfZUrw6m";
-            _ToolkitDomain = "ncdmz";
+            _toolkitUserRepository = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
+
+            var toolkitUser = _toolkitUserRepository.GetData();
+            _toolkitUsername = toolkitUser.Name;
+            _toolkitPassword = $@"{toolkitUser.Password}";
+            _toolkitDomain = toolkitUser.Domain;
 
             _clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO22/NCMOD");
-            _clientContext.Credentials = new NetworkCredential(_ToolkitUsername, _ToolkitPassword, _ToolkitDomain);
+            _clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
         }
 
         [TestMethod]
@@ -174,6 +179,38 @@ namespace TimeSync.Tests
 
             var id = Convert.ToInt32(tmpItems.Id.ToString());
             Assert.AreEqual(id, timeregId);
+        }
+
+        [TestMethod]
+        public void CheckTimeSlotDefinitionTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
+            clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
+            var list = "Time Slots";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            Assert.AreEqual(1, 1);
+        }
+
+        [TestMethod]
+        public void FetchAllListFromToolkitTest()
+        {
+            var ftfa = "https://goto.netcompany.com/cases/GTO627/FTFA";
+            var hk = "https://goto.netcompany.com/cases/GTO170/HKA";
+            var clientContext = new ClientContext(hk);
+            clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
+            var allLists = _clientContext.Web.Lists;
+            _clientContext.Load(allLists);
+            _clientContext.ExecuteQuery();
+            var blah = new List<string>();
+            foreach (var listitem in allLists)
+            {
+                blah.Add(listitem.Title);
+            }
+
+            Assert.AreEqual(1,2);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using TimeSync.DataAccess;
 
@@ -21,6 +23,10 @@ namespace TimeSync.UI.View
             _userPage = new UserPage(_timeManager);
             _toolkitsPage = new ToolkitsPage(_timeManager);
             _timeregistrationsPage = new TimeregistrationsPage(_timeManager);
+
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
+            Thread.CurrentThread.CurrentCulture = ci;
         }
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)

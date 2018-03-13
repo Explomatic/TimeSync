@@ -39,7 +39,7 @@ namespace TimeSync.UI.ViewModel
             IRepository<ToolkitInfo> toolkitInfoRepo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
             PopulateListOfToolkits(toolkitInfoRepo.GetData());
 
-            ListOfTimeregs = new List<Timeregistration>();
+            //ListOfTimeregs = new List<Timeregistration>();
         }
 
         private void PopulateListOfToolkits(ToolkitInfo toolkitInfo)
@@ -61,6 +61,7 @@ namespace TimeSync.UI.ViewModel
 
         private void PopulateListOfTimeregs()
         {
+            ListOfTimeregs = new List<Timeregistration>();
             foreach (var timereg in Timeregistrations)
             {
                 ListOfTimeregs.Add(timereg);

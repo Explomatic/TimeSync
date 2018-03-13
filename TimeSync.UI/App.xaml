@@ -18,7 +18,8 @@
                 <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfToolkitNames}" SelectedItem="{Binding Customer}"/>
                 <TextBox Width="100" Margin="5,5,5,5" Text="{Binding CaseId}" VerticalAlignment="Center"/>
                 <TextBox Width="100" Margin="5,5,5,5" Text="{Binding Hours}" VerticalAlignment="Center"/>
-                <DatePicker Width="150" Margin="5,5,5,5" Text="{Binding DoneDate}"></DatePicker>
+                <DatePicker Width="150" Margin="5,5,5,5" SelectedDate="{Binding DoneDate}" />
+                <!--<DatePicker Width="150" Margin="5,5,5,5" SelectedDate="{Binding DoneDate}" Text="{Binding DoneDate}" />-->
             </StackPanel>
         </DataTemplate>
 

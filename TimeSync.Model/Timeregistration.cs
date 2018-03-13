@@ -8,11 +8,13 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace TimeSync.Model
 {
     public class Timeregistration
     {
+        //TODO: Supporting setting a specified time slot for a given toolkit. E.g. at FTFA the can be queried, but not at HK.
         public int CaseId { get; set; }
         public DateTime DoneDate { get; set; }
         public string Customer { get; set; }

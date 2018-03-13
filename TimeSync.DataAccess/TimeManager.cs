@@ -26,6 +26,8 @@ namespace TimeSync.DataAccess
             _toolkitInfoRepository = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
             _timeregistrationRepository = new Repository<List<Timeregistration>>("TimeregistrationSaveLocation");
             _sharepointClient = new SharepointClient();
+
+            UserInfo = _toolkitUserRepository.GetData();
         }
 
         public TimeManager(IRepository<ToolkitUser> userRepo, IRepository<ToolkitInfo> infoRepo,
