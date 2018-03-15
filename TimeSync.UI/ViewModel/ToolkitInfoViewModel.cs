@@ -49,7 +49,6 @@ namespace TimeSync.UI.ViewModel
         {
             PopulateToolkitInfoObject(ListOfToolkits);
             TimeManager.SaveToolkitInfo(TimeManager.UserInfo, _toolkitInfo);
-            //_repo.SaveData(_toolkitInfo);
         }
 
         private void PopulateToolkitInfoObject(ObservableCollection<ToolkitInfoViewModelWrapper> listOfToolkits)
