@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Castle.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TimeSync.IoC;
 using TimeSync.Model;
 
 namespace TimeSync.DataAccess
 {
+    [Interceptor(typeof(LoggingInterceptor))]
     public class TimeManager : INotifyPropertyChanged
     {
         public ToolkitUser UserInfo;
