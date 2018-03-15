@@ -26,11 +26,11 @@ namespace TimeSync.UI.View
         {
             InitializeComponent();
 
-            //InitWindsor();
+            InitWindsor();
             XmlConfigurator.ConfigureAndWatch(new FileInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Log4Net.config"));
-            var logger = log4net.LogManager.GetLogger("Test");
-            logger.Debug("It works!");
-            _timeManager = new TimeManager();//_container.Resolve<TimeManager>();
+            //var logger = log4net.LogManager.GetLogger("Test");
+            //logger.Debug("It works!");
+            _timeManager = _container.Resolve<TimeManager>();
             _userPage = new UserPage(_timeManager);
             _toolkitsPage = new ToolkitsPage(_timeManager);
             _timeregistrationsPage = new TimeregistrationsPage(_timeManager);

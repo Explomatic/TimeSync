@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using TimeSync.DataAccess;
+using TimeSync.IoC;
 
 namespace TimeSync.UI.IoC
 {
@@ -14,8 +15,12 @@ namespace TimeSync.UI.IoC
         public static void InitializeContainer(IWindsorContainer container)
         {
             container.Register(
-                Component.For<TimeManager>()
+                Component.For<LoggingInterceptor>()
             );
+            container.Register(
+                Component.For<TimeManager>()      
+            );
+
         }
     }
 }

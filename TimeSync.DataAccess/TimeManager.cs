@@ -42,7 +42,7 @@ namespace TimeSync.DataAccess
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
         /// </summary>
-        public void StoreTimereg(List<Timeregistration> timeRegs)
+        public virtual void StoreTimereg(List<Timeregistration> timeRegs)
         {
             //Logging?
             //Validation?
@@ -50,7 +50,7 @@ namespace TimeSync.DataAccess
             _timeregistrationRepository.SaveData(timeRegs);
         }
 
-        public void SaveToolkitInfo(ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
+        public virtual void SaveToolkitInfo(ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
         {
             //Get user ids
             foreach (var tk in toolkitInfo.Toolkits.Select(kvp => kvp.Value))
@@ -69,7 +69,7 @@ namespace TimeSync.DataAccess
         /// <summary>
         /// Call Sharepoint and do clean up for stored timeregs
         /// </summary>
-        public void Sync(List<Timeregistration> timeregs)
+        public virtual void Sync(List<Timeregistration> timeregs)
         {
             //Logging?
             //Get stored timeregs //TODO Maybe get from ViewModel instead?
