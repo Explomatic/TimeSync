@@ -11,7 +11,7 @@ using TimeSync.Model;
 
 namespace TimeSync.UI.ViewModel
 {
-    class ToolkitUserViewModel : ObservableObject
+    class ToolkitUserViewModel : BaseViewModel
     {
         private readonly IRepository<ToolkitUser> _repo;
         private readonly ToolkitUser _toolkitUser;
@@ -24,7 +24,7 @@ namespace TimeSync.UI.ViewModel
         {
             _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
             _toolkitUser = _repo.GetData();
-            Username = _toolkitUser.Name;
+            Username = _toolkitUser.Name;            
         }
         public string Username
         {

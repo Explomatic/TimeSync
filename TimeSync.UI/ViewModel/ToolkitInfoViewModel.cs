@@ -11,7 +11,7 @@ using TimeSync.Model;
 
 namespace TimeSync.UI.ViewModel
 {
-    class ToolkitInfoViewModel : ObservableObject
+    class ToolkitInfoViewModel : BaseViewModel
     {
         private readonly IRepository<ToolkitInfo> _repo;
         private ToolkitInfo _toolkitInfo;

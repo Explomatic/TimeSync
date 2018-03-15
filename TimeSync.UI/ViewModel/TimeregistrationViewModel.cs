@@ -12,7 +12,7 @@ using TimeSync.Model;
 
 namespace TimeSync.UI.ViewModel
 {
-    class TimeregistrationViewModel : ObservableObject
+    class TimeregistrationViewModel : BaseViewModel
     {
         private readonly IRepository<ObservableCollection<Timeregistration>> _timeregRepo;
         private List<Timeregistration> ListOfTimeregs;

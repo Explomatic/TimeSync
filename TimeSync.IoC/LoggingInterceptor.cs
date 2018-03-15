@@ -20,7 +20,7 @@ namespace TimeSync.IoC
 
         public void Intercept(IInvocation invocation)
         {
-            _log.Info($"Method {invocation.Method.Name} called.");            
+            _log.Info($"Method {invocation.Method.Name} called.");                        
             invocation.Proceed();
         }
     }
