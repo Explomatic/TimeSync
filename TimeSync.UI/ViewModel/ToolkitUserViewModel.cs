@@ -59,7 +59,8 @@ namespace TimeSync.UI.ViewModel
             {
                 _toolkitUser.Password = _password;
             }
-            TimeManager.UserInfo = _toolkitUser;
+            //TODO Fix these lines. Roll into one function on TimeManager. ViewModel shouldn't think/know about how TimeManager's data/fields look
+            TimeManager.UserInfo = _toolkitUser; 
             _repo.SaveData(_toolkitUser);
 
         }
