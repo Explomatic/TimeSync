@@ -27,6 +27,7 @@ namespace TimeSync.UI.View
             InitializeComponent();
 
             InitWindsor();
+            //TODO Maybe set up our own LoggingManager class to wrap configuration and instantiation of loggers. Encapsulation principle!
             XmlConfigurator.ConfigureAndWatch(new FileInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Log4Net.config"));
             //var logger = log4net.LogManager.GetLogger("Test");
             //logger.Debug("It works!");
