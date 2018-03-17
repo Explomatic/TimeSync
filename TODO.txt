@@ -1,0 +1,5 @@
+For UI we need to do this:
+https://code.msdn.microsoft.com/windowsdesktop/WPF-styling-a-Window-in-fcf4e4ce
+
+Set colors via code for allowing users to change the color scheme of the app:
+https://stackoverflow.com/questions/36866005/binding-color-property-from-xaml-to-c-sharp

@@ -57,6 +57,7 @@
         </StackPanel>
         <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
         <Button Command="{Binding HideShowPopupCommand}" Content="popup" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
+        <Button Content="Testpage" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Width="75" Click="ClickTestpage"/>
 
 
         <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
@@ -64,7 +65,9 @@
             TimeSync - Account information
         </Label>
 
-        <!-- View account information button -->
+
+       
+            <!-- View account information button -->
         <Button Grid.Column="0" Grid.Row="1" Margin="0,0,0,0" Width="100"
                 Height="50" HorizontalAlignment="Right" Click="ClickUserAccount">
             <TextBlock>Account<LineBreak/>information</TextBlock>
@@ -81,7 +84,6 @@
                 Height="50" HorizontalAlignment="Right" Click="ClickTimeregistrations">
             <TextBlock>Timeregistrations</TextBlock>
         </Button>
-        
         <Grid.Background>
             <ImageBrush ImageSource="../watermark.png"/>
         </Grid.Background>
