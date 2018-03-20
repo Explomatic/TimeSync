@@ -43,5 +43,10 @@ namespace TimeSync.UI.View
             TimeregistrationsPage timeregistrationsPage = new TimeregistrationsPage(_timeManager);
             NavigationService.Navigate(timeregistrationsPage);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

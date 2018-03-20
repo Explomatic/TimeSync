@@ -11,12 +11,8 @@
     <Page.DataContext>
       <viewModel:ToolkitUserViewModel/>  
     </Page.DataContext>
-    
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
@@ -30,16 +26,18 @@
             
             <!--TODO Make this element a class or whatever somewhere so we can reuse the same code-->
             <Popup Name="Popup" IsOpen="{Binding PopupIsOpen, UpdateSourceTrigger=PropertyChanged}">
-                <StackPanel>
+                <Grid>
+                    <StackPanel>
                     <TextBox Text="{Binding PopupText, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Command="{Binding ClosePopupCommand}" Content="Okay fine go away"/>
-                </StackPanel>                
+                    </StackPanel>
+                </Grid>
             </Popup>
             
             
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -47,45 +45,32 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Right"/>
+                <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Right"
+                       Width="150"/>
                 <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3"
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="NCDMZ Password:" HorizontalAlignment="Right"/>
+                <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="NCDMZ Password:" HorizontalAlignment="Center" Width="150"/>
                 <PasswordBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" PasswordChanged="PasswordBox_PasswordChanged"></PasswordBox>
             </Grid>
         </StackPanel>
-        <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
-        <Button Command="{Binding HideShowPopupCommand}" Content="popup" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
-        <Button Content="Testpage" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Width="75" Click="ClickTestpage"/>
+        <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" 
+                Style="{StaticResource RegularButton}"/>
+        <Button Command="{Binding HideShowPopupCommand}" Content="popup" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center"
+                Style="{StaticResource RegularButton}"/>
+        <Button Content="Testpage" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Click="ClickTestpage" 
+                Style="{StaticResource RegularButton}"/>
 
 
         <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
-               FontWeight="Bold" FontSize="12" Foreground="#0066cc"  HorizontalAlignment="Center">
+               FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
             TimeSync - Account information
         </Label>
 
 
        
-            <!-- View account information button -->
-        <Button Grid.Column="0" Grid.Row="1" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ClickUserAccount">
-            <TextBlock>Account<LineBreak/>information</TextBlock>
-        </Button>
 
-        <!-- View Toolkits button -->
-        <Button Grid.Column="0" Grid.Row="2" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ClickToolkits">
-            <TextBlock>Toolkits</TextBlock>
-        </Button>
+     
 
-        <!-- View timme registrations button -->
-        <Button Grid.Column="0" Grid.Row="3" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ClickTimeregistrations">
-            <TextBlock>Timeregistrations</TextBlock>
-        </Button>
-        <Grid.Background>
-            <ImageBrush ImageSource="../watermark.png"/>
-        </Grid.Background>
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -49,17 +50,29 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(_userPage);
+            ContentGrid.Children.Clear();
+            var frame = new Frame();
+            frame.Navigate(_userPage);
+            ContentGrid.Children.Add(frame);
+            //NavigationService.Navigate(_userPage);
         }
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(_toolkitsPage);
+            ContentGrid.Children.Clear();
+            var frame = new Frame();
+            frame.Navigate(_toolkitsPage);
+            ContentGrid.Children.Add(frame);
+            //NavigationService.Navigate(_toolkitsPage);
         }
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(_timeregistrationsPage);
+            ContentGrid.Children.Clear();
+            var frame = new Frame();
+            frame.Navigate(_timeregistrationsPage);
+            ContentGrid.Children.Add(frame);
+            //NavigationService.Navigate(_timeregistrationsPage);
         }
     }
 }
