@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Client;
 using Newtonsoft.Json;
 using TimeSync.Model;
 using System.Security;
+using System.Text.RegularExpressions;
 using TimeSync.DataAccess;
 
 namespace TimeSync.Tests
@@ -336,6 +337,155 @@ namespace TimeSync.Tests
 
             var id = Convert.ToInt32(oListItem.Id.ToString());
             Assert.AreNotEqual(id, -1);
+        }
+
+        [TestMethod]
+        public void GetTopNTimeregsHkTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
+            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            var timeregId = 41327;
+            var timeSlotLookUp = "07:30-17:00";
+            var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            var N = 10;
+
+            CamlQuery query = new CamlQuery();
+            query.ViewXml = $@"
+                        <View>
+                            <Query>
+                                <Where>
+                                    <Eq>
+                                        <FieldRef Name='{timeSlotNavn}'/>
+                                        <Value Type='Text'>{timeSlotLookUp}</Value>
+                                    </Eq>
+                                </Where>
+                                <OrderBy>  
+                                    <FieldRef Name='ID' Ascending='FALSE'/>   
+                                </OrderBy>
+                            </Query>
+                            <RowLimit>{N}</RowLimit>
+                        </View>";
+
+            ListItemCollection collListItem = oList.GetItems(query);
+            clientContext.Load(collListItem);
+            clientContext.ExecuteQuery();
+
+            Assert.AreEqual(N, collListItem.Count);
+        }
+
+        [TestMethod]
+        public void GetAllTimeSlotsFromHkTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
+            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            var timeregId = 41327;
+            var timeSlotLookUp = "07:30-17:00";
+            var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            string timeSlotFieldName = "";
+            List<string> timeSlots = new List<string>();
+
+            var timeregsPerPage = 100;
+            ListItemCollectionPosition position = null;
+
+            CamlQuery query = new CamlQuery();
+            query.ViewXml = $@"
+                        <View>
+                            <Query>
+                                <OrderBy>  
+                                    <FieldRef Name='ID' Ascending='FALSE'/>   
+                                </OrderBy>
+                            </Query>
+                            <RowLimit>{timeregsPerPage}</RowLimit>
+                        </View>";
+
+            do
+            {
+                ListItemCollection listItems = null;
+                if (position != null)
+                {
+                    query.ListItemCollectionPosition = position;
+                }
+
+                listItems = oList.GetItems(query);
+                clientContext.Load(listItems);
+                clientContext.ExecuteQuery();
+
+                var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
+
+                foreach (var item in listItems)
+                {
+                    foreach (var field in item.FieldValues)
+                    {
+                        try
+                        {
+                            if ( field.Value.GetType() == typeof(FieldLookupValue) )
+                            {
+                                if (rx.IsMatch(((FieldLookupValue)field.Value).LookupValue))
+                                {
+                                    timeSlotFieldName = field.Key;
+                                    timeSlots.Add(field.Value.ToString());
+                                }
+                            }
+                            else
+                            {
+                                if (rx.IsMatch(field.Value.ToString()))
+                                {
+                                    timeSlotFieldName = field.Key;
+                                    if (!timeSlots.Contains(field.Value.ToString()))
+                                    {
+                                        timeSlots.Add(field.Value.ToString());
+                                    }
+                                    
+                                }
+                            }
+                            
+                            
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                        
+                    }   
+                }
+                position = listItems.ListItemCollectionPosition;
+                query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+            }
+            while (position != null);
+
+            Assert.AreEqual(4, timeSlots.Count);
+            Assert.AreEqual(timeSlotNavn, timeSlotFieldName);
+        }
+
+        private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
+        {
+
+            List<CamlQuery> subQueries = new List<CamlQuery>();
+            foreach (var timeSlot in timeSlots)
+            {
+                var subQuery = new CamlQuery()
+                {
+                    ViewXml = $@"
+                        <FieldRef Name='{fieldName}'/>
+                        <Value Type='Text'>{timeSlot}</Value>"
+                };
+            subQueries.Add(subQuery);
+            }
+
+            CamlQuery query = new CamlQuery();
+            return query;
         }
     }
 }
