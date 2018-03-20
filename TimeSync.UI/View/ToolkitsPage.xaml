@@ -12,12 +12,8 @@
         <viewModel:ToolkitInfoViewModel/>
     </Page.DataContext>
 
-    
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
@@ -56,34 +52,19 @@
             </ScrollViewer>
         </Grid>
 
-        <Button Command="{Binding AddNewToolkitCommand}" Content="Add row" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Width="75" Margin="0,0,50,0"/>
-        <Button Command="{Binding SaveToolkitsCommand}" Content="Save toolkits" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="75"/>
+        <Button Command="{Binding AddNewToolkitCommand}" Content="Add row" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
+                Style="{StaticResource RegularButton}" Click="Button_Click"/>
+        <Button Command="{Binding SaveToolkitsCommand}" Content="Save toolkits" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
+                Style="{StaticResource RegularButton}"/>
         
         <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
-               FontWeight="Bold" FontSize="12" Foreground="#0066cc"  HorizontalAlignment="Center">
+               FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
             TimeSync - Account information
         </Label>
 
-        <!-- View account information button -->
-        <Button Grid.Column="0" Grid.Row="1" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ButtonBase_OnClickUserAccount">
-            <TextBlock>Account<LineBreak/>information</TextBlock>
-        </Button>
 
         <!-- View Toolkits button -->
-        <Button Grid.Column="0" Grid.Row="2" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ButtonBase_OnClickToolkits">
-            <TextBlock>Toolkits</TextBlock>
-        </Button>
 
-        <!-- View timme registrations button -->
-        <Button Grid.Column="0" Grid.Row="3" Margin="0,0,0,0" Width="100"
-                Height="50" HorizontalAlignment="Right" Click="ButtonBase_OnClickTimeregistrations">
-            <TextBlock>Timeregistrations</TextBlock>
-        </Button>
 
-        <Grid.Background>
-            <ImageBrush ImageSource="../watermark.png"/>
-        </Grid.Background>
     </Grid>
 </Page>
