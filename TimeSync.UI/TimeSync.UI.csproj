@@ -90,7 +90,7 @@
     <Compile Include="IoC\WindsorInitializer.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\TimeregistrationViewModel.cs" />
-    <Compile Include="ViewModel\ToolkitInfoViewModel.cs" />
+    <Compile Include="ViewModel\ToolkitViewModel.cs" />
     <Compile Include="ViewModel\ToolkitUserViewModel.cs" />
     <Compile Include="View\Page1.xaml.cs">
       <DependentUpon>Page1.xaml</DependentUpon>

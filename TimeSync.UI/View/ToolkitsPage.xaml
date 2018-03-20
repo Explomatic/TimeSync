@@ -9,7 +9,7 @@
       Title="ToolkitsPage">
 
     <Page.DataContext>
-        <viewModel:ToolkitInfoViewModel/>
+        <viewModel:ToolkitViewModel/>
     </Page.DataContext>
 
     
@@ -50,7 +50,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <ItemsControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" ItemTemplate="{StaticResource ToolkitInfoDataTemplate}" ItemsSource ="{Binding ListOfToolkits}" />
+                        <ItemsControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" ItemTemplate="{StaticResource ToolkitDataTemplate}" ItemsSource ="{Binding ListOfToolkits}" />
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

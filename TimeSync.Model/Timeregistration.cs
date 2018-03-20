@@ -20,12 +20,13 @@ namespace TimeSync.Model
         public string Customer { get; set; }
         public double Hours { get; set; }
         public bool IsSynchronized { get; set; }
+        public string Duration { get; set; }
 
-        public ObservableCollection<string> ListOfToolkitNames { get; set; }
+        public List<Toolkit> ListOfToolkits { get; set; }
 
         public Timeregistration()
         {
-            ListOfToolkitNames = new ObservableCollection<string>();
+            ListOfToolkits = new List<Toolkit>();
             DoneDate = DateTime.Today;
         }
 

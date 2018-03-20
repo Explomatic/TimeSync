@@ -26,7 +26,7 @@ namespace TimeSync.UI.ViewModel
 
         public ObservableCollection<Timeregistration> Timeregistrations { get; set; }
 
-        public ObservableCollection<string> ListOfToolkitNames { get; set; }
+        public List<Toolkit> ListOfToolkits { get; set; }
         
 
         public TimeregistrationViewModel()
@@ -35,19 +35,10 @@ namespace TimeSync.UI.ViewModel
             Timeregistrations = new ObservableCollection<Timeregistration>();
             Timeregistrations = _timeregRepo.GetData();
 
-            ListOfToolkitNames = new ObservableCollection<string>();
-            IRepository<ToolkitInfo> toolkitInfoRepo = new Repository<ToolkitInfo>("ToolkitInfoSaveLocation");
-            PopulateListOfToolkits(toolkitInfoRepo.GetData());
+            IRepository<List<Toolkit>> toolkitRepo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
+            ListOfToolkits = toolkitRepo.GetData();
 
             //ListOfTimeregs = new List<Timeregistration>();
-        }
-
-        private void PopulateListOfToolkits(ToolkitInfo toolkitInfo)
-        {
-            foreach(KeyValuePair<string, Toolkit> entry in toolkitInfo.Toolkits)
-            {
-                ListOfToolkitNames.Add(entry.Key);
-            }
         }
 
         public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
@@ -73,7 +64,7 @@ namespace TimeSync.UI.ViewModel
         public void AddNewTimeregistration()
         {
             var timereg = new Timeregistration();
-            timereg.ListOfToolkitNames = ListOfToolkitNames;
+            timereg.ListOfToolkits = ListOfToolkits;
             Timeregistrations.Add(timereg);
 
         }

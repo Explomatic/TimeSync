@@ -31,13 +31,8 @@ namespace TimeSync.DataAccess
             return user.Id;
         }
 
-        public int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
+        public int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit)
         {
-            Toolkit toolkit;
-            var success = toolkitInfo.Toolkits.TryGetValue(timereg.Customer, out toolkit);
-            if (!success)
-                throw new Exception("Customer not found");
-
             _clientContext = new ClientContext(toolkit.Url);
             _clientContext.Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.Password, toolkitUser.Domain);
 
@@ -74,7 +69,7 @@ namespace TimeSync.DataAccess
             
         }
 
-        public void MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo)
+        public void MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
         {
             //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
             //Send to Toolkit -- SEE UNIT TEST PROJECT

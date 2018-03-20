@@ -11,6 +11,6 @@ namespace TimeSync.DataAccess
     {
         int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit);
 
-        int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, ToolkitInfo toolkitInfo);
+        int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit);
     }
 }

@@ -15,7 +15,7 @@
         
         <DataTemplate x:Key="TimeregDataTemplate"  DataType="{x:Type src:Timeregistration}">
             <StackPanel Orientation="Horizontal">
-                <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfToolkitNames}" SelectedItem="{Binding Customer}"/>
+                <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfToolkits}" SelectedItem="{Binding Customer}"/>
                 <TextBox Width="100" Margin="5,5,5,5" Text="{Binding CaseId}" VerticalAlignment="Center"/>
                 <TextBox Width="100" Margin="5,5,5,5" Text="{Binding Hours}" VerticalAlignment="Center"/>
                 <DatePicker Width="150" Margin="5,5,5,5" SelectedDate="{Binding DoneDate}" />
@@ -23,10 +23,10 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="ToolkitInfoDataTemplate"  DataType="{x:Type viewModels:ToolkitInfoViewModelWrapper}">
+        <DataTemplate x:Key="ToolkitDataTemplate"  DataType="{x:Type src:Toolkit}">
             <StackPanel Orientation="Horizontal">
-                <TextBox Width="110" Margin="5,5,5,5" Text="{Binding ToolkitName}" VerticalAlignment="Center"/>
-                <TextBox Width="340" Margin="5,5,5,5" Text="{Binding ToolkitUrl}" VerticalAlignment="Center"/>
+                <TextBox Width="110" Margin="5,5,5,5" Text="{Binding CustomerName}" VerticalAlignment="Center"/>
+                <TextBox Width="340" Margin="5,5,5,5" Text="{Binding Url}" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
     </Application.Resources>
