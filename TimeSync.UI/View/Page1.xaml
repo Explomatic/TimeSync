@@ -108,6 +108,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -119,7 +120,8 @@
             <!-- View Toolkits button -->
             <Button Margin="0,0,0,0" Width="150"
                 Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="1">
-                <Label Content="Toolkits" Foreground="sc#0.36,0.80,0.92"/>
+                <!--<Label Content="Toolkits" Foreground="sc#0.36,0.80,0.92"/>-->
+                <Label Content="Toolkits" Foreground="sc#0.95,0.15,0.0000"/>
 
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
@@ -170,7 +172,7 @@
                 </Button.Style>
             </Button>
 
-               
+
 
             <Button Margin="0,0,0,0" Width="150"
                 Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="4">
@@ -198,7 +200,6 @@
                     </Style>
                 </Button.Style>
             </Button>
-
 
         </Grid>
 

@@ -22,7 +22,7 @@ namespace TimeSync.UI.View
             InitializeComponent();
             _timeManager = timeManager;
 
-            var viewModel = this.DataContext as ToolkitInfoViewModel;
+            var viewModel = this.DataContext as ToolkitViewModel;
             viewModel.TimeManager = _timeManager;
         }
 

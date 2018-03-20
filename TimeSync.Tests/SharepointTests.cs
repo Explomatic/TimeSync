@@ -212,5 +212,130 @@ namespace TimeSync.Tests
 
             Assert.AreEqual(1,2);
         }
+
+        [TestMethod]
+        public void CheckTimeSlotTimeregFtfaTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
+            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            var timeregId = 10984;
+            var timeSlotLookUp = "08:30-16:30";
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            CamlQuery query = new CamlQuery();
+            query.ViewXml = $@"
+                        <View>
+                            <Query>
+                                <Where>
+                                    <And>
+                                        <Eq>
+                                            <FieldRef Name='ID'/>
+                                            <Value Type='Text'>{timeregId}</Value>
+                                        </Eq>
+                                        <Eq>
+                                            <FieldRef Name='TimeSlot'/>
+                                            <Value Type='Text'>{timeSlotLookUp}</Value>
+                                        </Eq>
+                                    </And>
+                                </Where>
+                            </Query>
+                        </View>";
+
+            ListItemCollection collListItem = oList.GetItems(query);
+            clientContext.Load(collListItem);
+            clientContext.ExecuteQuery();
+
+            var tmpItems = collListItem[0];
+
+            var timeSlot = new SPFieldLookupValue(4, "");
+            tmpItems["TimeSlots"] = timeSlot;
+
+            Assert.AreEqual(1, 2);
+        }
+
+        [TestMethod]
+        public void CheckTimeSlotTimeregHkTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
+            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            var timeregId = 41327;
+            var timeSlotLookUp = "07:30-17:00";
+            var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            CamlQuery query = new CamlQuery();
+            query.ViewXml = $@"
+                        <View>
+                            <Query>
+                                <Where>
+                                    <And>
+                                        <Eq>
+                                            <FieldRef Name='ID'/>
+                                            <Value Type='Text'>{timeregId}</Value>
+                                        </Eq>
+                                        <Eq>
+                                            <FieldRef Name='{timeSlotNavn}'/>
+                                            <Value Type='Text'>{timeSlotLookUp}</Value>
+                                        </Eq>
+                                    </And>
+                                </Where>
+                            </Query>
+                        </View>";
+
+            ListItemCollection collListItem = oList.GetItems(query);
+            clientContext.Load(collListItem);
+            clientContext.ExecuteQuery();
+
+            var tmpItems = collListItem[0];
+
+            Assert.AreEqual(1, 2);
+        }
+
+        [TestMethod]
+        public void MakeTimeregWithTimeSlotTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
+            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            var employeeName = "Morten Madsen";
+            var customer = "HKA";
+            int toolkitCaseId = 23217;
+            double hours = 0;
+            DateTime doneDate = DateTime.Now;
+            var timeSlotLookUp = "07:30-17:00";
+            var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            var doneBy = new SPFieldLookupValue(676, employeeName);
+            var author = new SPFieldLookupValue(676, employeeName);
+            var toolkitCase = new SPFieldLookupValue(toolkitCaseId, $"{customer}-{toolkitCaseId}");
+
+            ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+            ListItem oListItem = oList.AddItem(itemCreateInfo);
+
+            oListItem["Hours"] = hours;
+            oListItem["DoneBy"] = doneBy;
+            oListItem["Author"] = author;
+            oListItem["Case"] = toolkitCase;
+            oListItem["DoneDate"] = doneDate;
+            oListItem[timeSlotNavn] = timeSlotLookUp;
+
+            oListItem.Update();
+            clientContext.ExecuteQuery();
+
+            var id = Convert.ToInt32(oListItem.Id.ToString());
+            Assert.AreNotEqual(id, -1);
+        }
     }
 }
