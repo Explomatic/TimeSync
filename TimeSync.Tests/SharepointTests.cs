@@ -396,7 +396,7 @@ namespace TimeSync.Tests
             string timeSlotFieldName = "";
             List<string> timeSlots = new List<string>();
 
-            var timeregsPerPage = 100;
+            var timeregsPerPage = 5;
             ListItemCollectionPosition position = null;
 
             CamlQuery query = new CamlQuery();
@@ -484,7 +484,56 @@ namespace TimeSync.Tests
             subQueries.Add(subQuery);
             }
 
-            CamlQuery query = new CamlQuery();
+            CamlQuery query = new CamlQuery()
+            {
+                ViewXml = $@"
+                        <View>
+                            <Query>
+                                <Where>"
+                //            <Eq>
+                //                <FieldRef Name='{timeSlotNavn}'/>
+                //                <Value Type='Text'>{timeSlotLookUp}</Value>
+                //            </Eq>
+                //        </Where>
+                //        <OrderBy>  
+                //            <FieldRef Name='ID' Ascending='FALSE'/>   
+                //        </OrderBy>
+                //    </Query>
+                //    <RowLimit>{N}</RowLimit>
+                //</View>";
+            };
+
+            if (timeSlots.Count > 1)
+            {
+                query.ViewXml += "<And><Neq>";
+            }
+            else
+            {
+                query.ViewXml += "<Neq>";
+            }
+
+            foreach (var subQuery in subQueries)
+            {
+                query.ViewXml += subQuery.ViewXml;
+            }
+
+            if (timeSlots.Count > 1)
+            {
+                query.ViewXml += "</Neq></And>";
+            }
+            else
+            {
+                query.ViewXml += "</Neq>";
+            }
+
+            query.ViewXml += $@"</Where>
+                        <OrderBy>  
+                            <FieldRef Name='ID' Ascending='FALSE'/>   
+                        </OrderBy>
+                    </Query>
+                    <RowLimit>{rowLimit}</RowLimit>
+                </View>";
+
             return query;
         }
     }
