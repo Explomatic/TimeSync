@@ -6,7 +6,7 @@ https://stackoverflow.com/questions/36866005/binding-color-property-from-xaml-to
 --------------------------
 Style Popups to be nice
 --------------------------
-Set up ExceptionInterceptor to trigger popup
+Set up ExceptionInterceptor to trigger popup. Setup done. Messages need work.
 --------------------------
 Set up code to handle Toolkits with timeslots
 --------------------------

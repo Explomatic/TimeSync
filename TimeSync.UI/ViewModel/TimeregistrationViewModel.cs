@@ -7,12 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security;
 using System.Windows.Input;
+using Castle.Core;
 using TimeSync.DataAccess;
+using TimeSync.IoC;
 using TimeSync.Model;
 
 namespace TimeSync.UI.ViewModel
 {
-    class TimeregistrationViewModel : BaseViewModel
+    [Interceptor(typeof(ExceptionInterceptor))]
+    public class TimeregistrationViewModel : BaseViewModel
     {
         private readonly IRepository<ObservableCollection<Timeregistration>> _timeregRepo;
         private List<Timeregistration> ListOfTimeregs;
@@ -43,7 +46,7 @@ namespace TimeSync.UI.ViewModel
 
         public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
 
-        public void Synchronise()
+        public virtual void Synchronise()
         {
             _timeregRepo.SaveData(Timeregistrations);
             PopulateListOfTimeregs();
@@ -61,7 +64,7 @@ namespace TimeSync.UI.ViewModel
 
         public ICommand AddNewTimeregistrationCommand => new DelegateCommand(AddNewTimeregistration);
 
-        public void AddNewTimeregistration()
+        public virtual void AddNewTimeregistration()
         {
             var timereg = new Timeregistration();
             timereg.ListOfToolkits = ListOfToolkits;

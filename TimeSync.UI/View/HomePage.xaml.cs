@@ -33,9 +33,9 @@ namespace TimeSync.UI.View
             //var logger = log4net.LogManager.GetLogger("Test");
             //logger.Debug("It works!");
             _timeManager = _container.Resolve<TimeManager>();
-            _userPage = new UserPage(_timeManager);
-            _toolkitsPage = new ToolkitsPage(_timeManager);
-            _timeregistrationsPage = new TimeregistrationsPage(_timeManager);
+            _userPage = new UserPage(_timeManager, _container);
+            _toolkitsPage = new ToolkitsPage(_timeManager, _container);
+            _timeregistrationsPage = new TimeregistrationsPage(_timeManager, _container);
 
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
