@@ -1,5 +1,30 @@
 For UI we need to do this:
 https://code.msdn.microsoft.com/windowsdesktop/WPF-styling-a-Window-in-fcf4e4ce
-
+--------------------------
 Set colors via code for allowing users to change the color scheme of the app:
 https://stackoverflow.com/questions/36866005/binding-color-property-from-xaml-to-c-sharp
+--------------------------
+Style Popups to be nice
+--------------------------
+Set up ExceptionInterceptor to trigger popup
+--------------------------
+Set up code to handle Toolkits with timeslots
+--------------------------
+Set up queue system: "batch job" + some sort of queue. How do we handle errors? How often do we retry until we stop and inform user/throw an error?
+Do we start batch job each time app starts? Should we change workflow so TimeManager only save to DB and batch job does synching? Or should there be two ways of synching: "Sync now" and "Enqueue"?
+
+Maybe only start the background process if user explicitly enables it
+--------------------------
+Synching in general: Should it be done serially or concurrently?
+--------------------------
+Pre-alpha test: MOMA and ASRA
+
+Alpha test: Get people from office?
+
+Beta test: ?
+
+How do we handle error reporting during testing? Do we need a testcharter/test procedure?
+--------------------------
+Look into SQLLite which MOMA talked about
+--------------------------
+
