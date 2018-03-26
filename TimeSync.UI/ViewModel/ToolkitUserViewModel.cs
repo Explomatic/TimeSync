@@ -6,12 +6,15 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Castle.Core;
 using TimeSync.DataAccess;
+using TimeSync.IoC;
 using TimeSync.Model;
 
 namespace TimeSync.UI.ViewModel
 {
-    class ToolkitUserViewModel : BaseViewModel
+    [Interceptor(typeof(ExceptionInterceptor))]
+    public class ToolkitUserViewModel : BaseViewModel
     {
         private readonly IRepository<ToolkitUser> _repo;
         private readonly ToolkitUser _toolkitUser;
@@ -48,7 +51,7 @@ namespace TimeSync.UI.ViewModel
 
         public ICommand UpdateToolkitUserCommand => new DelegateCommand(UpdateToolkitUser);
 
-        public void UpdateToolkitUser()
+        public virtual void UpdateToolkitUser()
         {
             if (!string.IsNullOrWhiteSpace(Username))
             {

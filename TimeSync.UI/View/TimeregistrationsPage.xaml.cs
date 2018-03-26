@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Castle.Windsor;
 using TimeSync.DataAccess;
 using TimeSync.Model;
 using TimeSync.UI.ViewModel;
@@ -10,36 +11,21 @@ namespace TimeSync.UI.View
     public partial class TimeregistrationsPage : Page
     {
         private TimeManager _timeManager;
+
+        private IWindsorContainer _container;
         public TimeregistrationsPage()
         {
             InitializeComponent();
         }
 
-        public TimeregistrationsPage(TimeManager timeManager)
+        public TimeregistrationsPage(TimeManager timeManager, IWindsorContainer container)
         {
             InitializeComponent();
             _timeManager = timeManager;
+            _container = container;
+            this.DataContext = _container.Resolve<TimeregistrationViewModel>();
             var viewModel = this.DataContext as TimeregistrationViewModel;
             viewModel.TimeManager = _timeManager;
-        }
-
-
-        private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
-        {
-            UserPage userPage = new UserPage(_timeManager);
-            NavigationService.Navigate(userPage);
-        }
-
-        private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
-        {
-            ToolkitsPage toolkitsPage = new ToolkitsPage(_timeManager);
-            NavigationService.Navigate(toolkitsPage);
-        }
-
-        private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
-        {
-            TimeregistrationsPage timeregistrationsPage = new TimeregistrationsPage(_timeManager);
-            NavigationService.Navigate(timeregistrationsPage);
         }
     }
 }

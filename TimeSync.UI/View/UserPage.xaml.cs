@@ -2,26 +2,31 @@
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Castle.Windsor;
 using TimeSync.DataAccess;
 using TimeSync.Model;
 using TimeSync.UI.ViewModel;
 
 namespace TimeSync.UI.View
 {
+
     public partial class UserPage : Page
     {
         private TimeManager _timeManager;
-
+        private IWindsorContainer _container;
         public UserPage()
         {
             InitializeComponent();
         }
 
-        public UserPage(TimeManager timeManager)
+        public UserPage(TimeManager timeManager, IWindsorContainer container)
         {
             InitializeComponent();
             _timeManager = timeManager;
+            _container = container;
+            this.DataContext = _container.Resolve<ToolkitUserViewModel>();
             var viewModel = this.DataContext as ToolkitUserViewModel;
+            
             viewModel.TimeManager = _timeManager;
         }
 
@@ -31,23 +36,6 @@ namespace TimeSync.UI.View
             { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
         }
 
-        private void ClickUserAccount(object sender, RoutedEventArgs e)
-        {
-            UserPage userPage = new UserPage(_timeManager);
-            NavigationService.Navigate(userPage);
-        }
-
-        private void ClickToolkits(object sender, RoutedEventArgs e)
-        {
-            ToolkitsPage toolkitsPage = new ToolkitsPage(_timeManager);
-            NavigationService.Navigate(toolkitsPage);
-        }
-
-        private void ClickTimeregistrations(object sender, RoutedEventArgs e)
-        {
-            TimeregistrationsPage timeregistrationsPage = new TimeregistrationsPage(_timeManager);
-            NavigationService.Navigate(timeregistrationsPage);
-        }
         //
         private void ClickTestpage(object sender, RoutedEventArgs e)
         {

@@ -6,12 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Castle.Core;
 using TimeSync.DataAccess;
+using TimeSync.IoC;
 using TimeSync.Model;
 
 namespace TimeSync.UI.ViewModel
 {
-    class ToolkitViewModel : BaseViewModel
+    [Interceptor(typeof(ExceptionInterceptor))]
+    public class ToolkitViewModel : BaseViewModel
     {
         private readonly IRepository<List<Toolkit>> _repo;
         private List<Toolkit> _toolkits;
@@ -38,14 +41,14 @@ namespace TimeSync.UI.ViewModel
 
         public ICommand AddNewToolkitCommand => new DelegateCommand(AddNewToolkit);
 
-        public void AddNewToolkit()
+        public virtual void AddNewToolkit()
         {
             ListOfToolkits.Add(new Toolkit());
         }
 
         public ICommand SaveToolkitsCommand => new DelegateCommand(SaveToolkits);
 
-        public void SaveToolkits()
+        public virtual void SaveToolkits()
         {
             //PopulateToolkitInfoObject(ListOfToolkits);
             TimeManager.SaveToolkitInfo(TimeManager.UserInfo, _toolkits);
