@@ -3,3 +3,13 @@ https://code.msdn.microsoft.com/windowsdesktop/WPF-styling-a-Window-in-fcf4e4ce
 
 Set colors via code for allowing users to change the color scheme of the app:
 https://stackoverflow.com/questions/36866005/binding-color-property-from-xaml-to-c-sharp
+
+
+
+
+2018-03-20 TODOs:
+1) Update all views to conform with Page1.xaml looks
+2) Implement support for timeslot assignment
+	a) Advanced ToolkitInfoView
+3) Implementer GetSPQuery i TimeSlot klasse
+4) Update code to conform with changes to TimeSync.Model
