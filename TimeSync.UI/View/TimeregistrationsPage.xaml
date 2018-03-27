@@ -57,7 +57,7 @@
             </ScrollViewer>
         </Grid>
 
-        <Button Command="{Binding AddNewTimeregistrationCommnd}" Content="Add row" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
+        <Button Command="{Binding AddNewTimeregistrationCommand}" Content="Add row" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
                 Style="{StaticResource RegularButton}"/>
         <Button Command="{Binding SynchroniseCommand}" Content="Synchronise" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
                 Style="{StaticResource RegularButton}"/>
