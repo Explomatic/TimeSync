@@ -35,6 +35,7 @@ namespace TimeSync.UI.ViewModel
 
         public void HideShowPopup()
         {
+            PopupText = "Popup test bro";
             PopupIsOpen = !PopupIsOpen;
         }
 
