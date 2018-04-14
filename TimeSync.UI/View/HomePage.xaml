@@ -16,7 +16,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="sc#0.11,0.11,0.15">
+        <Grid Grid.Column="0" Background="{StaticResource WindowColor}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

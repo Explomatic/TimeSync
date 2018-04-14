@@ -1,9 +1,6 @@
 For UI we need to do this:
 https://code.msdn.microsoft.com/windowsdesktop/WPF-styling-a-Window-in-fcf4e4ce
 --------------------------
-Set colors via code for allowing users to change the color scheme of the app:
-https://stackoverflow.com/questions/36866005/binding-color-property-from-xaml-to-c-sharp
---------------------------
 Style Popups to be nice
 --------------------------
 Set up ExceptionInterceptor to trigger popup. Setup done. Messages need work.
@@ -25,6 +22,25 @@ Beta test: ?
 
 How do we handle error reporting during testing? Do we need a testcharter/test procedure?
 --------------------------
-Look into SQLLite which MOMA talked about
+Look into SQLite which MOMA talked about
 --------------------------
+Success-beskeder
+--------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+VERSION 2
+--------------------------
+Set colors via code for allowing users to change the color scheme of the app:
+https://stackoverflow.com/questions/36866005/binding-color-property-from-xaml-to-c-sharp
 

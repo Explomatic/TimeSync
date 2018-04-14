@@ -107,6 +107,14 @@
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\Presenter.cs" />
+    <Compile Include="WindowStyling\ControlDoubleClickBehavior.cs" />
+    <Compile Include="WindowStyling\ShowSystemMenuBehavior.cs" />
+    <Compile Include="WindowStyling\SystemMenuManager.cs" />
+    <Compile Include="WindowStyling\WindowCloseCommand.cs" />
+    <Compile Include="WindowStyling\WindowDragBehavior.cs" />
+    <Compile Include="WindowStyling\WindowMaximizeCommand.cs" />
+    <Compile Include="WindowStyling\WindowMinimizeCommand.cs" />
+    <Compile Include="WindowStyling\WindowResizeBehavior.cs" />
     <Page Include="View\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

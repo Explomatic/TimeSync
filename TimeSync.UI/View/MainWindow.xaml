@@ -5,5 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeSync.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="700" Source="HomePage.xaml">
+        Title="" Height="450" Width="700" Source="HomePage.xaml"
+                  Style="{StaticResource CustomWindow}"
+                  ShowsNavigationUI="False">
 </NavigationWindow>
