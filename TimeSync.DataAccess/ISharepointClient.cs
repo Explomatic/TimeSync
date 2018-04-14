@@ -12,5 +12,7 @@ namespace TimeSync.DataAccess
         int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit);
 
         int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit);
+
+        List<TimeSlot> GetTimeSlotsFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit);
     }
 }

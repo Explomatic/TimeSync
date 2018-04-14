@@ -58,7 +58,15 @@ namespace TimeSync.DataAccess
             {
                 if (tk.UserId == 0)
                     tk.UserId = _sharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
+
+                // Get timeSlots
+                if (tk.HasTimeSlots)
+                {
+                    tk.TimeSlots = _sharepointClient.GetTimeSlotsFromToolkit(toolkitUser, tk);
+                }
             }
+
+            
 
             //call repo to save
             _toolkitRepository.SaveData(toolkits);

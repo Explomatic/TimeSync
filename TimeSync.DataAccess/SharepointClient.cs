@@ -13,8 +13,6 @@ namespace TimeSync.DataAccess
 {
     public class SharepointClient : ISharepointClient
     {
-        private ClientContext _clientContext;
-
         public int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
         {
             ClientContext clientContext = new ClientContext(toolkit.Url);
@@ -33,13 +31,13 @@ namespace TimeSync.DataAccess
 
         public int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit)
         {
-            _clientContext = new ClientContext(toolkit.Url);
-            _clientContext.Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.Password, toolkitUser.Domain);
+            ClientContext clientContext = new ClientContext(toolkit.Url);
+            clientContext.Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.Password, toolkitUser.Domain);
 
             var timeregList = "tidsregistrering";
-            var sharepointList = _clientContext.Web.Lists.GetByTitle(timeregList);
-            _clientContext.Load(sharepointList);
-            _clientContext.ExecuteQuery();
+            var sharepointList = clientContext.Web.Lists.GetByTitle(timeregList);
+            clientContext.Load(sharepointList);
+            clientContext.ExecuteQuery();
 
             var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
             var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
@@ -57,16 +55,18 @@ namespace TimeSync.DataAccess
             try
             {
                 sharepointListItem.Update();
-                _clientContext.ExecuteQuery();
+                clientContext.ExecuteQuery();
                 return sharepointListItem.Id;
             }
             catch
             {
                 return -1;
             }
-            
+        }
 
-            
+        public List<TimeSlot> GetTimeSlotsFromToolkit(ToolkitUser tkUser, Toolkit tk)
+        {
+            throw new NotImplementedException();
         }
 
         public void MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)

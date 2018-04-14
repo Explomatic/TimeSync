@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using Microsoft.SharePoint;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -407,8 +408,8 @@ namespace TimeSync.Tests
                             <RowLimit>{timeregsPerPage}</RowLimit>
                         </View>";
 
-            var cnt = 0;
-            do
+            double timespan = 0;
+            while (timespan < 24)
             {
                 ListItemCollection listItems = null;
 
@@ -417,7 +418,6 @@ namespace TimeSync.Tests
                 clientContext.ExecuteQuery();
 
                 var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
-
                 foreach (var item in listItems)
                 {
                     foreach (var field in item.FieldValues)
@@ -426,58 +426,44 @@ namespace TimeSync.Tests
                         {
                             if ( field.Value.GetType() == typeof(FieldLookupValue) )
                             {
-                                if (rx.IsMatch(((FieldLookupValue)field.Value).LookupValue))
-                                {
-                                    timeSlotFieldName = field.Key;
-                                    timeSlots.Add(field.Value.ToString());
-                                }
+                                if (!rx.IsMatch(((FieldLookupValue) field.Value).LookupValue)) continue;
+                                timeSlotFieldName = field.Key;
+                                timeSlots.Add(field.Value.ToString());
                             }
                             else
                             {
-                                if (rx.IsMatch(field.Value.ToString()))
+                                if (!rx.IsMatch(field.Value.ToString())) continue;
+                                timeSlotFieldName = field.Key;
+                                if (!timeSlots.Contains(field.Value.ToString()))
                                 {
-                                    timeSlotFieldName = field.Key;
-                                    if (!timeSlots.Contains(field.Value.ToString()))
-                                    {
-                                        timeSlots.Add(field.Value.ToString());
-                                    }
-                                    
+                                    timeSlots.Add(field.Value.ToString());
                                 }
-                            }
-                            
-                            
+                            }   
                         }
                         catch
                         {
                             continue;
                         }
-                        
                     }   
                 }
+                timespan = timeSlots.Sum((Func<string, double>) CalculateTimespan);
                 query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
-                cnt++;
+                //cnt++;
             }
-            while (cnt < 5);
+            //while (cnt < 5);
 
+            Assert.AreEqual(24, timespan);
             Assert.AreEqual(4, timeSlots.Count);
             Assert.AreEqual(timeSlotNavn, timeSlotFieldName);
         }
 
         private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
         { 
-            List<CamlQuery> subQueries = new List<CamlQuery>();
-            foreach (var timeSlot in timeSlots)
-            {
-                var subQuery = new CamlQuery()
+            List<CamlQuery> subQueries = timeSlots.Select(timeSlot => new CamlQuery()
                 {
-                    ViewXml = $@"
-                    <Neq>
-                        <FieldRef Name='{fieldName}'/>
-                        <Value Type='Text'>{timeSlot}</Value>
-                    </Neq>"
-                };
-                subQueries.Add(subQuery);
-            }
+                    ViewXml = $@"<Neq><FieldRef Name='{fieldName}'/><Value Type='Text'>{timeSlot}</Value></Neq>"
+                })
+                .ToList();
 
             subQueries.Add(new CamlQuery(){ViewXml = $@"<IsNotNull><FieldRef Name=""{fieldName}""/></IsNotNull>"});
 
@@ -501,10 +487,7 @@ namespace TimeSync.Tests
                 query.ViewXml = subQuery.ViewXml + query.ViewXml;
                 cnt++;
             }
-
             query.ViewXml = @"<View><Query><Where><And>" + query.ViewXml;
-
-
             return query;
         }
 
@@ -572,28 +555,30 @@ namespace TimeSync.Tests
                 "06:00-07:00"
             };
 
-            var timespan = 0;
-            var now = DateTime.Now;
-            foreach (var timeslot in timeSlots)
-            {
-                DateTime time1 = new DateTime();
-                DateTime time2 = new DateTime();
-                var rx = new Regex(@"((\d{2})\:(\d{2}))\s{0,1}\-\s{0,1}((\d{2})\:(\d{2}))");
-                var matches = rx.Matches(timeslot);
-                foreach (Match match in matches)
-                {
-                    var hour1 = int.Parse(match.Groups[2].Value);
-                    var min1 = int.Parse(match.Groups[3].Value);
-                    time1 = new DateTime(now.Year, now.Month, now.Day, hour1, min1, 0);
-
-                    var hour2 = int.Parse(match.Groups[5].Value);
-                    var min2 = int.Parse(match.Groups[6].Value);
-                    time2 = hour2 > hour1 ? new DateTime(now.Year, now.Month, now.Day, hour2, min2, 0) : new DateTime(now.Year, now.Month, now.Day+1, hour2, min2, 0);
-                }
-                timespan += time2.Subtract(time1).Hours;
-            }
+            double timespan = timeSlots.Sum((Func<string, double>) CalculateTimespan);
 
             Assert.AreEqual(24, timespan);
+        }
+
+        private double CalculateTimespan(string timeslot)
+        {
+            var now = DateTime.Now;
+            DateTime time1 = new DateTime();
+            DateTime time2 = new DateTime();
+            var rx = new Regex(@"((\d{2})\:(\d{2}))\s{0,1}\-\s{0,1}((\d{2})\:(\d{2}))");
+            var matches = rx.Matches(timeslot);
+            foreach (Match match in matches)
+            {
+                var hour1 = int.Parse(match.Groups[2].Value);
+                var min1 = int.Parse(match.Groups[3].Value);
+                time1 = new DateTime(now.Year, now.Month, now.Day, hour1, min1, 0);
+
+                var hour2 = int.Parse(match.Groups[5].Value);
+                var min2 = int.Parse(match.Groups[6].Value);
+                time2 = hour2 > hour1 ? new DateTime(now.Year, now.Month, now.Day, hour2, min2, 0) : new DateTime(now.Year, now.Month, now.Day + 1, hour2, min2, 0);
+            }
+
+            return time2.Subtract(time1).TotalHours;
         }
     }
 }
