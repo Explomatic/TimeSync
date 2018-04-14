@@ -218,7 +218,7 @@ namespace TimeSync.Tests
         public void CheckTimeSlotTimeregFtfaTest()
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
-            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
             var timeregId = 10984;
             var timeSlotLookUp = "08:30-16:30";
 
@@ -262,7 +262,7 @@ namespace TimeSync.Tests
         public void CheckTimeSlotTimeregHkTest()
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
             var timeregId = 41327;
             var timeSlotLookUp = "07:30-17:00";
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
@@ -304,7 +304,7 @@ namespace TimeSync.Tests
         public void MakeTimeregWithTimeSlotTest()
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
             var employeeName = "Morten Madsen";
             var customer = "HKA";
             int toolkitCaseId = 23217;
@@ -343,7 +343,7 @@ namespace TimeSync.Tests
         public void GetTopNTimeregsHkTest()
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
+            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
             var timeregId = 41327;
             var timeSlotLookUp = "07:30-17:00";
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
@@ -383,9 +383,7 @@ namespace TimeSync.Tests
         public void GetAllTimeSlotsFromHkTest()
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"k3zhVa7\@/q?6QT^f4'I", "NCDMZ");
-            var timeregId = 41327;
-            var timeSlotLookUp = "07:30-17:00";
+            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
 
             var list = "tidsregistrering";
@@ -397,7 +395,6 @@ namespace TimeSync.Tests
             List<string> timeSlots = new List<string>();
 
             var timeregsPerPage = 5;
-            ListItemCollectionPosition position = null;
 
             CamlQuery query = new CamlQuery();
             query.ViewXml = $@"
@@ -410,13 +407,10 @@ namespace TimeSync.Tests
                             <RowLimit>{timeregsPerPage}</RowLimit>
                         </View>";
 
+            var cnt = 0;
             do
             {
                 ListItemCollection listItems = null;
-                if (position != null)
-                {
-                    query.ListItemCollectionPosition = position;
-                }
 
                 listItems = oList.GetItems(query);
                 clientContext.Load(listItems);
@@ -460,81 +454,146 @@ namespace TimeSync.Tests
                         
                     }   
                 }
-                position = listItems.ListItemCollectionPosition;
                 query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+                cnt++;
             }
-            while (position != null);
+            while (cnt < 5);
 
             Assert.AreEqual(4, timeSlots.Count);
             Assert.AreEqual(timeSlotNavn, timeSlotFieldName);
         }
 
         private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
-        {
-
+        { 
             List<CamlQuery> subQueries = new List<CamlQuery>();
             foreach (var timeSlot in timeSlots)
             {
                 var subQuery = new CamlQuery()
                 {
                     ViewXml = $@"
+                    <Neq>
                         <FieldRef Name='{fieldName}'/>
-                        <Value Type='Text'>{timeSlot}</Value>"
+                        <Value Type='Text'>{timeSlot}</Value>
+                    </Neq>"
                 };
-            subQueries.Add(subQuery);
+                subQueries.Add(subQuery);
             }
+
+            subQueries.Add(new CamlQuery(){ViewXml = $@"<IsNotNull><FieldRef Name=""{fieldName}""/></IsNotNull>"});
 
             CamlQuery query = new CamlQuery()
             {
-                ViewXml = $@"
-                        <View>
-                            <Query>
-                                <Where>"
-                //            <Eq>
-                //                <FieldRef Name='{timeSlotNavn}'/>
-                //                <Value Type='Text'>{timeSlotLookUp}</Value>
-                //            </Eq>
-                //        </Where>
-                //        <OrderBy>  
-                //            <FieldRef Name='ID' Ascending='FALSE'/>   
-                //        </OrderBy>
-                //    </Query>
-                //    <RowLimit>{N}</RowLimit>
-                //</View>";
+                ViewXml = $@"</Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><RowLimit>{rowLimit}</RowLimit></View>"
             };
 
-            if (timeSlots.Count > 1)
+            for (int i=0; i < subQueries.Count-1; i++)
             {
-                query.ViewXml += "<And><Neq>";
-            }
-            else
-            {
-                query.ViewXml += "<Neq>";
+                query.ViewXml = @"</And>" + query.ViewXml;
             }
 
+            var cnt = 0;
             foreach (var subQuery in subQueries)
             {
-                query.ViewXml += subQuery.ViewXml;
+                if (cnt >= 2)
+                {
+                    query.ViewXml = @"<And>" + query.ViewXml;
+                }
+                query.ViewXml = subQuery.ViewXml + query.ViewXml;
+                cnt++;
             }
 
-            if (timeSlots.Count > 1)
-            {
-                query.ViewXml += "</Neq></And>";
-            }
-            else
-            {
-                query.ViewXml += "</Neq>";
-            }
+            query.ViewXml = @"<View><Query><Where><And>" + query.ViewXml;
 
-            query.ViewXml += $@"</Where>
-                        <OrderBy>  
-                            <FieldRef Name='ID' Ascending='FALSE'/>   
-                        </OrderBy>
-                    </Query>
-                    <RowLimit>{rowLimit}</RowLimit>
-                </View>";
 
             return query;
+        }
+
+        [TestMethod]
+        public void UpdateCamlQueryTest()
+        {
+            string fieldName = "Periode_x0020_for_x0020_tidsregi";
+            List<string> timeSlots = new List<string>
+            {
+                "07:00-17:00",
+                "17:00-22:00",
+                "22:00-04:00",
+                "04:00-06:00",
+                "06:00-07:00"
+            };
+            var rowLimit=5;
+            CamlQuery query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+
+            timeSlots = new List<string>
+            {
+                "07:00-17:00",
+                "17:00-22:00",
+                "22:00-04:00",
+                "04:00-06:00"
+            };
+            rowLimit = 5;
+            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+
+            timeSlots = new List<string>
+            {
+                "07:00-17:00",
+                "17:00-22:00",
+                "22:00-04:00"
+            };
+            rowLimit = 5;
+            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+
+            timeSlots = new List<string>
+            {
+                "07:00-17:00",
+                "17:00-22:00"
+            };
+            rowLimit = 5;
+            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+
+            timeSlots = new List<string>
+            {
+                "07:00-17:00"
+            };
+            rowLimit = 5;
+            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+
+            Assert.AreEqual(1, 2);       
+        }
+
+        [TestMethod]
+        public void AnyMissingTimeslotsTest()
+        {
+            List<string> timeSlots = new List<string>
+            {
+                "07:00-17:00",
+                "17:00-22:00",
+                "22:00-04:00",
+                "04:00-06:00",
+                "06:00-07:00"
+            };
+
+            var timespan = 0;
+            var now = DateTime.Now;
+            foreach (var timeslot in timeSlots)
+            {
+                DateTime time1 = new DateTime();
+                DateTime time2 = new DateTime();
+                var rx = new Regex(@"((\d{2})\:(\d{2}))\s{0,1}\-\s{0,1}((\d{2})\:(\d{2}))");
+                var matches = rx.Matches(timeslot);
+                foreach (Match match in matches)
+                {
+                    var hour1 = int.Parse(match.Groups[2].Value);
+                    var min1 = int.Parse(match.Groups[3].Value);
+                    time1 = new DateTime(now.Year, now.Month, now.Day, hour1, min1, 0);
+
+                    var hour2 = int.Parse(match.Groups[5].Value);
+                    var min2 = int.Parse(match.Groups[6].Value);
+                    time2 = hour2 > hour1 ? new DateTime(now.Year, now.Month, now.Day, hour2, min2, 0) : new DateTime(now.Year, now.Month, now.Day+1, hour2, min2, 0);
+                }
+                timespan += time2.Subtract(time1).Hours;
+            }
+
+            Assert.AreEqual(24, timespan);
         }
     }
 }
