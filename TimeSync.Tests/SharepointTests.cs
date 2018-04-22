@@ -448,9 +448,82 @@ namespace TimeSync.Tests
                 }
                 timespan = timeSlots.Sum((Func<string, double>) CalculateTimespan);
                 query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
-                //cnt++;
             }
-            //while (cnt < 5);
+
+            Assert.AreEqual(24, timespan);
+            Assert.AreEqual(4, timeSlots.Count);
+            Assert.AreEqual(timeSlotNavn, timeSlotFieldName);
+        }
+
+        [TestMethod]
+        public void GetAllTimeSlotsFromFtfaTest()
+        {
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
+            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            var timeSlotNavn = "TimeSlots";
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            string timeSlotFieldName = "";
+            List<string> timeSlots = new List<string>();
+
+            var timeregsPerPage = 5;
+
+            CamlQuery query = new CamlQuery();
+            query.ViewXml = $@"
+                        <View>
+                            <Query>
+                                <OrderBy>  
+                                    <FieldRef Name='ID' Ascending='FALSE'/>   
+                                </OrderBy>
+                            </Query>
+                            <RowLimit>{timeregsPerPage}</RowLimit>
+                        </View>";
+
+            double timespan = 0;
+            while (timespan < 24)
+            {
+                ListItemCollection listItems = null;
+
+                listItems = oList.GetItems(query);
+                clientContext.Load(listItems);
+                clientContext.ExecuteQuery();
+
+                var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
+                foreach (var item in listItems)
+                {
+                    foreach (var field in item.FieldValues)
+                    {
+                        try
+                        {
+                            if (field.Value.GetType() == typeof(FieldLookupValue))
+                            {
+                                if (!rx.IsMatch(((FieldLookupValue)field.Value).LookupValue)) continue;
+                                timeSlotFieldName = field.Key;
+                                timeSlots.Add(field.Value.ToString());
+                            }
+                            else
+                            {
+                                if (!rx.IsMatch(field.Value.ToString())) continue;
+                                timeSlotFieldName = field.Key;
+                                if (!timeSlots.Contains(field.Value.ToString()))
+                                {
+                                    timeSlots.Add(field.Value.ToString());
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                }
+                timespan = timeSlots.Sum((Func<string, double>)CalculateTimespan);
+                query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+            }
 
             Assert.AreEqual(24, timespan);
             Assert.AreEqual(4, timeSlots.Count);

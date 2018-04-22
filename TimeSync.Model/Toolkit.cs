@@ -21,7 +21,7 @@ namespace TimeSync.Model
     {
         public bool IsFieldLookup { get; set; }
         public string FieldName { get; set; }
-        public List<TimeInterval> TimeIntervals { get; set; }
+        public TimeInterval TimeInterval { get; set; }
 
         public void GetSPQuery(ListItem listItem, TimeInterval timeInterval)
         {
@@ -31,7 +31,7 @@ namespace TimeSync.Model
 
     public struct TimeInterval
     {
-        public string Id;
+        public int Id;
         public string Interval;
     }
 }
