@@ -22,6 +22,7 @@ namespace TimeSync.Tests
         private string _toolkitUsername;
         private string _toolkitPassword;
         private string _toolkitDomain;
+        private SharepointClient _sharepointClient;
 
         [TestInitialize]
         public void Init()
@@ -32,6 +33,8 @@ namespace TimeSync.Tests
             _toolkitUsername = toolkitUser.Name;
             _toolkitPassword = $@"{toolkitUser.Password}";
             _toolkitDomain = toolkitUser.Domain;
+
+            _sharepointClient = new SharepointClient();
 
             _clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO22/NCMOD");
             _clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
@@ -459,7 +462,7 @@ namespace TimeSync.Tests
         public void GetAllTimeSlotsFromFtfaTest()
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
-            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            clientContext.Credentials = new NetworkCredential("moma", @"=%6pTT|m9~lw5`b::wkn", "NCDMZ");
             var timeSlotNavn = "TimeSlots";
 
             var list = "tidsregistrering";
@@ -484,6 +487,7 @@ namespace TimeSync.Tests
                         </View>";
 
             double timespan = 0;
+            var count = 0;
             while (timespan < 24)
             {
                 ListItemCollection listItems = null;
@@ -502,8 +506,9 @@ namespace TimeSync.Tests
                             if (field.Value.GetType() == typeof(FieldLookupValue))
                             {
                                 if (!rx.IsMatch(((FieldLookupValue)field.Value).LookupValue)) continue;
+                                FieldLookupValue fvl = (FieldLookupValue)field.Value;
                                 timeSlotFieldName = field.Key;
-                                timeSlots.Add(field.Value.ToString());
+                                timeSlots.Add(fvl.LookupValue);
                             }
                             else
                             {
@@ -521,8 +526,28 @@ namespace TimeSync.Tests
                         }
                     }
                 }
+
                 timespan = timeSlots.Sum((Func<string, double>)CalculateTimespan);
-                query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+                if (timeSlots.Count > 0)
+                {
+                    query.ListItemCollectionPosition = null;
+                    query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+                }
+                else
+                {
+                    query.ListItemCollectionPosition = listItems.ListItemCollectionPosition;
+                }
+                count++;
+
+                if (count * timeregsPerPage >= 30)
+                {
+                    var letMeBreak = 0;
+                }
+
+                if (count > 50)
+                {
+                    break;
+                }
             }
 
             Assert.AreEqual(24, timespan);
@@ -530,7 +555,7 @@ namespace TimeSync.Tests
             Assert.AreEqual(timeSlotNavn, timeSlotFieldName);
         }
 
-        private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
+         private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
         { 
             List<CamlQuery> subQueries = timeSlots.Select(timeSlot => new CamlQuery()
                 {
@@ -619,16 +644,43 @@ namespace TimeSync.Tests
         [TestMethod]
         public void AnyMissingTimeslotsTest()
         {
-            List<string> timeSlots = new List<string>
+            List<TimeSlot> timeSlots = new List<TimeSlot>
             {
-                "07:00-17:00",
-                "17:00-22:00",
-                "22:00-04:00",
-                "04:00-06:00",
-                "06:00-07:00"
+                new TimeSlot()
+                {
+                    TimeInterval = new TimeInterval()
+                    {
+                        Id = -1,
+                        Interval = "17:00-22:00"
+                    }
+                },
+                new TimeSlot()
+                {
+                    TimeInterval = new TimeInterval()
+                    {
+                        Id = -1,
+                        Interval = "22:00-04:00"
+                    }
+                },
+                new TimeSlot()
+                {
+                    TimeInterval = new TimeInterval()
+                    {
+                        Id = -1,
+                        Interval = "04:00-06:00"
+                    }
+                },
+                new TimeSlot()
+                {
+                    TimeInterval = new TimeInterval()
+                    {
+                        Id = -1,
+                        Interval = "06:00-07:00"
+                    }
+                }
             };
 
-            double timespan = timeSlots.Sum((Func<string, double>) CalculateTimespan);
+            var timespan = timeSlots.Sum((Func<TimeSlot, double>) _sharepointClient.CalculateTimespan);
 
             Assert.AreEqual(24, timespan);
         }
@@ -652,6 +704,47 @@ namespace TimeSync.Tests
             }
 
             return time2.Subtract(time1).TotalHours;
+        }
+
+        [TestMethod]
+        public void FindAllTeamsTest()
+        {
+
+            var tk = new Toolkit()
+            {
+                Url = "https://goto.netcompany.com/cases/GTO60/Akapedia"
+            };
+
+            var tkUser = new ToolkitUser()
+            {
+                Name = "MOMA",
+                Password = @"=%6pTT|m9~lw5`b::wkn"
+            };
+
+            tk.Teams = _sharepointClient.GetTeamsFromToolkit(tkUser, tk);
+
+            Assert.AreEqual(5, tk.Teams.Count);
+        }
+
+        [TestMethod]
+        public void FindTimeSlotInfoForAllTeamsTest()
+        {
+            var tk = new Toolkit()
+            {
+                Url = "https://goto.netcompany.com/cases/GTO627/FTFA"
+            };
+
+            var tkUser = new ToolkitUser()
+            {
+                Name = "MOMA",
+                Password = @"=%6pTT|m9~lw5`b::wkn"
+            };
+
+            tk.Teams = _sharepointClient.GetTeamsFromToolkit(tkUser, tk);
+            tk.Teams = _sharepointClient.CheckForTimeSlots(tkUser, tk);
+
+            Assert.AreEqual(5, tk.Teams.Count);
+            Assert.AreEqual(1, tk.Teams.Count(team => team.UsesTimeSlots));
         }
     }
 }

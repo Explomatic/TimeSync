@@ -82,7 +82,6 @@ namespace TimeSync.Tests
                 new Toolkit()
                 {
                     CustomerName = "AKA",
-                    HasTimeSlots = false,
                     Url = "Test",
                     UserId = 1
                 },

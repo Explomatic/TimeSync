@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -81,7 +82,6 @@ namespace TimeSync.DataAccess
             clientContext.Load(oList);
             clientContext.ExecuteQuery();
 
-            string timeSlotFieldName = "";
             List<TimeSlot> timeslots = new List<TimeSlot>();
 
             var timeregsPerPage = 5;
@@ -117,19 +117,24 @@ namespace TimeSync.DataAccess
                             if (field.Value.GetType() == typeof(FieldLookupValue))
                             {
                                 if (!rx.IsMatch(((FieldLookupValue)field.Value).LookupValue)) continue;
-                                timeslot.FieldName = field.Key;
+                                tk.Teams[0].TimeSlotFieldName = field.Key;
                                 timeslot.IsFieldLookup = true;
                                 FieldLookupValue fvl = (FieldLookupValue)field.Value;
                                 timeslot.TimeInterval = new TimeInterval() { Id = fvl.LookupId, Interval = fvl.LookupValue };
-                                timeslots.Add(timeslot);
+                                if (timeslots.All(ts => ts.TimeInterval.Interval != timeslot.TimeInterval.Interval))
+                                {
+                                    timeslots.Add(timeslot);
+                                }
                             }
                             else
                             {
                                 if (!rx.IsMatch(field.Value.ToString())) continue;
-                                timeSlotFieldName = field.Key;
-                                if (!timeslots.Contains(field.Value.ToString()))
+                                //timeslot.FieldName = field.Key;
+                                timeslot.IsFieldLookup = false;
+                                timeslot.TimeInterval = new TimeInterval() { Id = -1, Interval = field.Value.ToString() };
+                                if (timeslots.All(ts => ts.TimeInterval.Interval != timeslot.TimeInterval.Interval))
                                 {
-                                    timeslots.Add(field.Value.ToString());
+                                    timeslots.Add(timeslot);
                                 }
                             }
                         }
@@ -139,16 +144,220 @@ namespace TimeSync.DataAccess
                         }
                     }
                 }
-                timespan = timeslots.Sum((Func<string, double>)CalculateTimespan);
-                query = UpdateCamlQuery(timeSlotFieldName, timeslots, timeregsPerPage);
+
+                timespan = timeslots.Sum((Func<TimeSlot, double>)CalculateTimespan);
+                //query = UpdateCamlQuery(timeSlotFieldName, timeslots, timeregsPerPage);
             }
+
+            return timeslots;
         }
 
-        private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
+        public List<Team> GetTeamsFromToolkit(ToolkitUser tkUser, Toolkit tk)
+        {
+            var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.Password, tkUser.Domain) };
+
+            var list = "SLA";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            var query = new CamlQuery
+            {
+                ViewXml = @"
+                        <View>
+                            <Query>
+                                <Where>
+                                    <Eq>
+                                        <FieldRef Name='Status'></FieldRef>
+                                        <Value Type ='Text'>10 - Aktiv</Value>
+                                    </Eq>
+                                </Where>
+                            </Query>
+                            <ViewFields>
+                                <FieldRef Name='Team'></FieldRef>
+                            </ViewFields>
+                        </View>"
+            };
+
+            var listItems = oList.GetItems(query);
+            clientContext.Load(listItems);
+            clientContext.ExecuteQuery();
+
+            var teams = new List<Team>();
+
+            foreach (var item in listItems)
+            {
+                foreach (var fv in item.FieldValues)
+                {
+                    if (fv.Key != "Team") continue;
+                    try
+                    {
+                        teams.AddRange(from FieldLookupValue fvl in (IEnumerable) fv.Value
+                            select new Team()
+                            {
+                                Name = fvl.LookupValue
+                            });
+                    }
+                    catch (Exception e)
+                    {
+                        var fvl = (FieldLookupValue) fv.Value;
+                        var team = new Team()
+                        {
+                            Name = fvl.LookupValue
+                        };
+                        teams.Add(team);
+                    }
+                }
+            }
+
+            return teams;
+        }
+
+        public List<Team> CheckForTimeSlots(ToolkitUser tkUser, Toolkit tk)
+        {
+            var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.Password, tkUser.Domain) };
+
+            var list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            List<TimeSlot> timeslots = new List<TimeSlot>();
+
+            var timeregsPerPage = 1;
+
+            for (var i=0; i<tk.Teams.Count-1; i++)
+            {
+                var team = tk.Teams[i];
+                var query = team.GetSPQuery(timeregsPerPage);
+                var listItems = oList.GetItems(query);
+                clientContext.Load(listItems);
+                clientContext.ExecuteQuery();
+
+                if (!TeamUsesTimeSlots(listItems))
+                {
+                    team.UsesTimeSlots = false;
+                    continue;
+                }
+                team.UsesTimeSlots = true;
+                team = GetTimeSlotInfo(clientContext, oList, team);
+                tk.Teams[i] = team;
+            }
+
+            
+
+            throw new NotImplementedException();
+        }
+
+        private bool TeamUsesTimeSlots(ListItemCollection listItems)
+        {
+            var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
+            foreach (var item in listItems)
+            {
+                foreach (var field in item.FieldValues)
+                {
+                    try
+                    {
+                        if (field.Value.GetType() == typeof(FieldLookupValue))
+                        {
+                            if (!rx.IsMatch(((FieldLookupValue) field.Value).LookupValue)) continue;
+                            return true;
+                        }
+                        if (!rx.IsMatch(field.Value.ToString())) continue;
+                        return true;   
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                }
+            }
+            return false;
+        }
+
+        private Team GetTimeSlotInfo(ClientContext clientContext, List spList, Team team)
+        {
+            List<TimeSlot> timeslots = new List<TimeSlot>();
+
+            var timeregsPerPage = 1;
+
+            CamlQuery query = new CamlQuery
+            {
+                ViewXml = $@"
+                        <View>
+                            <Query>
+                                <OrderBy>  
+                                    <FieldRef Name='ID' Ascending='FALSE'/>   
+                                </OrderBy>
+                            </Query>
+                            <RowLimit>{timeregsPerPage}</RowLimit>
+                        </View>"
+            };
+
+            double timespan = 0;
+            var cnt = 0;
+            while (timespan < 24 || cnt <= 20)
+            {
+                var listItems = spList.GetItems(query);
+                clientContext.Load(listItems);
+                clientContext.ExecuteQuery();
+
+                var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
+                foreach (var item in listItems)
+                {
+                    foreach (var field in item.FieldValues)
+                    {
+                        var timeslot = new TimeSlot();
+                        try
+                        {
+                            if (field.Value.GetType() == typeof(FieldLookupValue))
+                            {
+                                if (!rx.IsMatch(((FieldLookupValue)field.Value).LookupValue)) continue;
+                                team.TimeSlotFieldName = field.Key;
+
+                                timeslot.IsFieldLookup = true;
+                                FieldLookupValue fvl = (FieldLookupValue)field.Value;
+                                timeslot.TimeInterval = new TimeInterval() { Id = fvl.LookupId, Interval = fvl.LookupValue };
+                                if (timeslots.All(ts => ts.TimeInterval.Interval != timeslot.TimeInterval.Interval))
+                                {
+                                    timeslots.Add(timeslot);
+                                }
+                            }
+                            else
+                            {
+                                if (!rx.IsMatch(field.Value.ToString())) continue;
+                                team.TimeSlotFieldName = field.Key;
+
+                                timeslot.IsFieldLookup = false;
+                                timeslot.TimeInterval = new TimeInterval() { Id = -1, Interval = field.Value.ToString() };
+                                if (timeslots.All(ts => ts.TimeInterval.Interval != timeslot.TimeInterval.Interval))
+                                {
+                                    timeslots.Add(timeslot);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                }
+
+                query = UpdateCamlQuery(team.TimeSlotFieldName, timeslots, timeregsPerPage);
+                timespan = timeslots.Sum((Func<TimeSlot, double>)CalculateTimespan);
+                cnt++;
+            }
+
+            team.TimeSlots = timeslots;
+
+            return team;
+        }
+
+        private CamlQuery UpdateCamlQuery(string fieldName, List<TimeSlot> timeSlots, int rowLimit)
         {
             List<CamlQuery> subQueries = timeSlots.Select(timeSlot => new CamlQuery()
                 {
-                    ViewXml = $@"<Neq><FieldRef Name='{fieldName}'/><Value Type='Text'>{timeSlot}</Value></Neq>"
+                    ViewXml = $@"<Neq><FieldRef Name='{fieldName}'/><Value Type='Text'>{timeSlot.TimeInterval.Interval}</Value></Neq>"
                 })
                 .ToList();
 
@@ -156,7 +365,8 @@ namespace TimeSync.DataAccess
 
             CamlQuery query = new CamlQuery()
             {
-                ViewXml = $@"</Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><RowLimit>{rowLimit}</RowLimit></View>"
+                ViewXml = $@"</Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query>" +
+                $@"<ViewFields><FieldRef Name='{fieldName}'></FieldRef></ViewFields><RowLimit>{rowLimit}</RowLimit></View>"
             };
 
             for (int i = 0; i < subQueries.Count - 1; i++)
@@ -178,13 +388,13 @@ namespace TimeSync.DataAccess
             return query;
         }
 
-        private double CalculateTimespan(string timeslot)
+        public double CalculateTimespan(TimeSlot timeslot)
         {
             var now = DateTime.Now;
             DateTime time1 = new DateTime();
             DateTime time2 = new DateTime();
             var rx = new Regex(@"((\d{2})\:(\d{2}))\s{0,1}\-\s{0,1}((\d{2})\:(\d{2}))");
-            var matches = rx.Matches(timeslot);
+            var matches = rx.Matches(timeslot.TimeInterval.Interval);
             foreach (Match match in matches)
             {
                 var hour1 = int.Parse(match.Groups[2].Value);
