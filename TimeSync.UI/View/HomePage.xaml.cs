@@ -21,6 +21,7 @@ namespace TimeSync.UI.View
         private UserPage _userPage;
         private ToolkitsPage _toolkitsPage;
         private TimeregistrationsPage _timeregistrationsPage;
+        private BugReportPage _bugReportPage;
         private IWindsorContainer _container;
 
         public HomePage()
@@ -36,6 +37,7 @@ namespace TimeSync.UI.View
             _userPage = new UserPage(_timeManager, _container);
             _toolkitsPage = new ToolkitsPage(_timeManager, _container);
             _timeregistrationsPage = new TimeregistrationsPage(_timeManager, _container);
+            _bugReportPage = new BugReportPage(_timeManager, _container);
 
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
@@ -54,7 +56,6 @@ namespace TimeSync.UI.View
             var frame = new Frame();
             frame.Navigate(_userPage);
             ContentGrid.Children.Add(frame);
-            //NavigationService.Navigate(_userPage);
         }
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
@@ -63,7 +64,6 @@ namespace TimeSync.UI.View
             var frame = new Frame();
             frame.Navigate(_toolkitsPage);
             ContentGrid.Children.Add(frame);
-            //NavigationService.Navigate(_toolkitsPage);
         }
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
@@ -72,7 +72,14 @@ namespace TimeSync.UI.View
             var frame = new Frame();
             frame.Navigate(_timeregistrationsPage);
             ContentGrid.Children.Add(frame);
-            //NavigationService.Navigate(_timeregistrationsPage);
+        }
+
+        private void ButtonBase_OnClickBugReport(object sender, RoutedEventArgs e)
+        {
+            ContentGrid.Children.Clear();
+            var frame = new Frame();
+            frame.Navigate(_bugReportPage);
+            ContentGrid.Children.Add(frame);
         }
     }
 }

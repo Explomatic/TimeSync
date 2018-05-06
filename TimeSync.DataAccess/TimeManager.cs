@@ -54,13 +54,19 @@ namespace TimeSync.DataAccess
         public virtual void SaveToolkitInfo(ToolkitUser toolkitUser, List<Toolkit> toolkits)
         {
             //Get user ids
-            foreach (var tk in toolkits)
+            //foreach (var tk in toolkits)
+
+            for (var i=0; i < toolkits.Count(); i++)
             {
+                var tk = toolkits[i];
+
                 if (tk.UserId == 0)
                     tk.UserId = _sharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
 
                 tk.Teams = _sharepointClient.GetTeamsFromToolkit(toolkitUser, tk);
-                tk.Teams = _sharepointClient.CheckForTimeSlots(toolkitUser, tk);
+                tk = _sharepointClient.GetTimeslotInformationFromToolkit(toolkitUser, tk);
+
+                toolkits[i] = tk;
             }
 
             
@@ -77,13 +83,24 @@ namespace TimeSync.DataAccess
         /// </summary>
         public virtual void Sync(List<Timeregistration> timeregs)
         {
+            //TODO: Add logging + give user feedback when timeregs are synchronised.
             //Logging?
-            //Get stored timeregs //TODO Maybe get from ViewModel instead?
-            //var timeregs = _timeregistrationRepository.GetData();
             _toolkitUser = _toolkitUser ?? _toolkitUserRepository.GetData();
             //var toolkitInfo = _toolkitInfo ?? _toolkitInfoRepository.GetData();
             _toolkits = _toolkits ?? _toolkitRepository.GetData();
 
+            var uniqueToolkitNames = new List<string>();
+            foreach (var timereg in timeregs)
+            {
+                if (uniqueToolkitNames.Contains(timereg.Customer)) continue;
+                uniqueToolkitNames.Add(timereg.Customer);
+            }
+
+            foreach (var toolkitName in uniqueToolkitNames)
+            {
+                var tkTimeregs = (from timereg in timeregs where timereg.Customer == toolkitName select timereg).ToList();
+                _sharepointClient.MakeTimeregistrations(tkTimeregs, _toolkitUser, _toolkits.Single(tk => tk.CustomerName == toolkitName));
+            }
 
             //Send to Sharepoint
             foreach (var timereg in timeregs.Where(tr => !tr.IsSynchronized))

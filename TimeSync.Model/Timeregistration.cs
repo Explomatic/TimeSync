@@ -16,17 +16,23 @@ namespace TimeSync.Model
     {
         //TODO: Supporting setting a specified time slot for a given toolkit. E.g. at FTFA the can be queried, but not at HK.
         public int CaseId { get; set; }
+
         public DateTime DoneDate { get; set; }
         public string Customer { get; set; }
+        public string Team { get; set; }
         public double Hours { get; set; }
         public bool IsSynchronized { get; set; }
         public string Duration { get; set; }
+        public string Timeslot { get; set; }
 
         public List<Toolkit> ListOfToolkits { get; set; }
+        public List<string> ListOfToolkitNames { get; set; }
+        public ObservableCollection<string> ListOfTeams { get; set; }
+        public ObservableCollection<string> ListOfTimeslots { get; set; }
 
         public Timeregistration()
         {
-            ListOfToolkits = new List<Toolkit>();
+            ListOfToolkitNames = new List<string>();
             DoneDate = DateTime.Today;
         }
 
@@ -47,7 +53,6 @@ namespace TimeSync.Model
 
             Hours = hours;
             return stringFormattedAsExpected;
-
         }
 
         private bool CheckIfDurationIsNumberOfHours(string duration)
@@ -61,22 +66,17 @@ namespace TimeSync.Model
             hours = 0;
             // expected string format "08(:,.)00 - 08(:,.)30"
             var result = Regex.Matches(duration, @"([\d]+)[\:\,\.]([\d]+)|([\d]+)");
-            if (result.Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                var fromTime = result[0].Value;
-                var toTime = result[1].Value;
+            if (result.Count == 0) return false;
 
-                DateTime from = ConvertToDateTime(fromTime);
-                DateTime to = ConvertToDateTime(toTime);
-                var timespan = to.Subtract(from);
-                hours = timespan.TotalHours;
+            var fromTime = result[0].Value;
+            var toTime = result[1].Value;
 
-                return true;
-            }
+            DateTime from = ConvertToDateTime(fromTime);
+            DateTime to = ConvertToDateTime(toTime);
+            var timespan = to.Subtract(from);
+            hours = timespan.TotalHours;
+
+            return true;
         }
 
         private DateTime ConvertToDateTime(string time)

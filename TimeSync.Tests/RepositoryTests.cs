@@ -23,9 +23,8 @@ namespace TimeSync.Tests
         [TestMethod]
         public void GetUserInfoFromRepoTest()
         {
-            Model.ToolkitUser userInfo;
             _repo = new Repository<ToolkitUser>("TestRetrieveLocation");
-            userInfo = _repo.GetData();
+            var userInfo = _repo.GetData();
 
             Assert.AreEqual(userInfo.Name, "MOMA");
             Assert.AreEqual(userInfo.Password, "");
@@ -36,18 +35,34 @@ namespace TimeSync.Tests
         public void SaveUserInfoToRepoTest()
         {
             _repo = new Repository<ToolkitUser>("TestSaveLocation");
-            Model.ToolkitUser userInfo = new Model.ToolkitUser();
-
-
-            userInfo.Name = "MOMA";
-            userInfo.Password = "blablabla";
-;
+            var userInfo = new ToolkitUser
+            {
+                Name = "MOMA",
+                Password = @"blablabla"
+            };
 
             var success = _repo.SaveData(userInfo);
 
             Assert.IsTrue(success);
+        }
 
+        [TestMethod]
+        public void SaveAndGetUserInfoToRepoTest()
+        {
+            _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
+            var userInfo = new ToolkitUser
+            {
+                Name = "Testname",
+                Password = @"o_v2\J;CRpiR/mx:hx1/3d=PveE&LijSr,+k@PXL'UTH)"
+            };
 
+            var success = _repo.SaveData(userInfo);
+
+            var retrievedUser = _repo.GetData();
+
+            Assert.IsTrue(success);
+            Assert.AreEqual(userInfo.Name, retrievedUser.Name);
+            Assert.AreEqual(userInfo.Password, retrievedUser.Password);
         }
     }
 }

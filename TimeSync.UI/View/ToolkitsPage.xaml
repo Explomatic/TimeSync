@@ -21,10 +21,11 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0">
+        <Grid Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="325"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -34,37 +35,35 @@
 
             <Label Content="Toolkit name" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"/>
             <Label Content="URL" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"/>
+            <Label Content="All teams" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"/>
             <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="325"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <ItemsControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" ItemTemplate="{StaticResource ToolkitDataTemplate}" ItemsSource ="{Binding ListOfToolkits}" />
+                        <ItemsControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Center" ItemTemplate="{StaticResource ToolkitDataTemplate}" ItemsSource ="{Binding ListOfToolkits}" />
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
 
-        <Button Command="{Binding AddNewToolkitCommand}" Content="Add row" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
+        <Button Command="{Binding AddNewToolkitCommand}" Content=" Add toolkit " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
                 Style="{StaticResource RegularButton}" Click="Button_Click"/>
-        <Button Command="{Binding SaveToolkitsCommand}" Content="Save toolkits" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
+        <Button Command="{Binding SaveToolkitsCommand}" Content=" Save toolkits " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
                 Style="{StaticResource RegularButton}"/>
         
-        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
+        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync - Account information
+            TimeSync (BETA) - Toolkit information
         </Label>
-
-
-        <!-- View Toolkits button -->
-
-
     </Grid>
 </Page>

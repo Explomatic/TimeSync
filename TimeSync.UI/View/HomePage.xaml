@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TimeSync.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="700"
+      d:DesignHeight="450" d:DesignWidth="850"
       Title="Homepage">
 
 
@@ -23,26 +23,33 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Button Margin="0,0,0,0" Width="150"
                         Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="0"
                     Click="ButtonBase_OnClickUserAccount">
-                <Label >Account information</Label>
+                <Label Content="Account information"/>
             </Button>
-            <!-- View Toolkits button -->
+
             <Button Margin="0,0,0,0" Width="150"
                         Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="1"
                     Click="ButtonBase_OnClickToolkits">
                 <Label Content="Toolkits"/>
-
             </Button>
-            <!-- View timme registrations button -->
+            
             <Button Margin="0,0,0,0" Width="150"
                         Height="50" HorizontalAlignment="Right"  BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="2"
                     Click="ButtonBase_OnClickTimeregistrations">
                 <Label Content="Timeregistrations" />
             </Button>
+
+            <Button Margin="0,0,0,0" Width="150"
+                    Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="3"
+                    Click="ButtonBase_OnClickBugReport">
+                <Label Content="Bug report"/>
+            </Button>
+
             <Button Margin="0,0,0,0" Width="150"
                         Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="4">
                 <Label Content="Settings"/>
@@ -55,8 +62,7 @@
         <!--Background="sc#0.18,0.36,0.4"-->
         <!--Background="DarkTurqoise"-->
         <Grid Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20">
-            <Label Content="Welcome to TimeSync" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman"></Label>
-
+            <Label Content="Welcome to TimeSync (BETA)" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman"></Label>
         </Grid>
 
 

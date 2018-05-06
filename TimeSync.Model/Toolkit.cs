@@ -13,51 +13,37 @@ namespace TimeSync.Model
         public int UserId { get; set; }
         public string Url { get; set; }
         public List<Team> Teams { get; set; }
+        public bool GetTeamsWithoutSLA { get; set; }
+        public string TimeslotFieldName { get; set; }
+        public bool TimeslotIsFieldLookup { get; set; }
+        public List<Timeslot> Timeslots { get; set; }
         public string CustomerName { get; set; }
     }
-    //ReSharper disable InconsistentNaming
     public class Team
     {
         public string Name { get; set; }
-        public bool UsesTimeSlots { get; set; }
-        public string TimeSlotFieldName { get; set; }
-        public List<TimeSlot> TimeSlots { get; set; }
-        public CamlQuery GetSPQuery(int rowLimit)
-        {
-            var query = new CamlQuery()
-            {
-                ViewXml = $@"
-                        <View>
-                            <Query>
-                                <Where>
-                                    <Eq>
-                                        <FieldRef Name='Team'></FieldRef>
-                                        <Value Type ='Text'>{Name}</Value>
-                                    </Eq>
-                                </Where>
-                                <OrderBy>  
-                                    <FieldRef Name='ID' Ascending='FALSE'/>   
-                                </OrderBy>
-                            </Query>
-                            <RowLimit>{rowLimit}</RowLimit>
-                        </View>"
-            };
-
-            return query;
-        }
+        public bool UsesTimeslots { get; set; } = false;
     }
-    public class TimeSlot
+    public class Timeslot
     {
-        public bool IsFieldLookup { get; set; }
         public TimeInterval TimeInterval { get; set; }
-        public void GetSPQuery(ListItem listItem, TimeInterval timeInterval)
-        {
-            throw new NotImplementedException();
-        }
     }
     public struct TimeInterval
     {
         public int Id;
         public string Interval;
+    }
+
+    public class TimeregWithTimeslot
+    {
+        public int CaseId { get; set; }
+        public string Timeslot { get; set; }
+        public int TimeslotId { get; set; }
+    }
+
+    public class ToolkitCase
+    {
+        public int CaseId { get; set; }
+        public string Team { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace TimeSync.UI.ViewModel
             get { return _password; }
             set
             {
-                _password = value;
+                _password = $@"{value}";
                 RaisePropertyChangedEvent("Password");
             }
         }

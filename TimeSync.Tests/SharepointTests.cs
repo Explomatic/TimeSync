@@ -19,25 +19,21 @@ namespace TimeSync.Tests
     {
         private IRepository<ToolkitUser> _toolkitUserRepository;
         private ClientContext _clientContext = null;
-        private string _toolkitUsername;
-        private string _toolkitPassword;
-        private string _toolkitDomain;
         private SharepointClient _sharepointClient;
+        private ToolkitUser _toolkitUser;
 
         [TestInitialize]
         public void Init()
         {
             _toolkitUserRepository = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
 
-            var toolkitUser = _toolkitUserRepository.GetData();
-            _toolkitUsername = toolkitUser.Name;
-            _toolkitPassword = $@"{toolkitUser.Password}";
-            _toolkitDomain = toolkitUser.Domain;
+            _toolkitUser = _toolkitUserRepository.GetData();
 
             _sharepointClient = new SharepointClient();
-
-            _clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO22/NCMOD");
-            _clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
+            _clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO22/NCMOD")
+            {
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+            };
         }
 
         [TestMethod]
@@ -189,8 +185,10 @@ namespace TimeSync.Tests
         [TestMethod]
         public void CheckTimeSlotDefinitionTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
-            clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA")
+            {
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+            };
             var list = "Time Slots";
             var oList = clientContext.Web.Lists.GetByTitle(list);
             clientContext.Load(oList);
@@ -204,8 +202,10 @@ namespace TimeSync.Tests
         {
             var ftfa = "https://goto.netcompany.com/cases/GTO627/FTFA";
             var hk = "https://goto.netcompany.com/cases/GTO170/HKA";
-            var clientContext = new ClientContext(hk);
-            clientContext.Credentials = new NetworkCredential(_toolkitUsername, _toolkitPassword, _toolkitDomain);
+            var clientContext = new ClientContext(hk)
+            {
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+            };
             var allLists = _clientContext.Web.Lists;
             _clientContext.Load(allLists);
             _clientContext.ExecuteQuery();
@@ -221,8 +221,11 @@ namespace TimeSync.Tests
         [TestMethod]
         public void CheckTimeSlotTimeregFtfaTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
-            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            var clientContext =
+                new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA")
+                {
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                };
             var timeregId = 10984;
             var timeSlotLookUp = "08:30-16:30";
 
@@ -265,8 +268,11 @@ namespace TimeSync.Tests
         [TestMethod]
         public void CheckTimeSlotTimeregHkTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            var clientContext =
+                new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
+                {
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                };
             var timeregId = 41327;
             var timeSlotLookUp = "07:30-17:00";
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
@@ -307,8 +313,11 @@ namespace TimeSync.Tests
         [TestMethod]
         public void MakeTimeregWithTimeSlotTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            var clientContext =
+                new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
+                {
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                };
             var employeeName = "Morten Madsen";
             var customer = "HKA";
             int toolkitCaseId = 23217;
@@ -346,8 +355,11 @@ namespace TimeSync.Tests
         [TestMethod]
         public void GetTopNTimeregsHkTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            var clientContext =
+                new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
+                {
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                };
             var timeregId = 41327;
             var timeSlotLookUp = "07:30-17:00";
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
@@ -386,8 +398,11 @@ namespace TimeSync.Tests
         [TestMethod]
         public void GetAllTimeSlotsFromHkTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA");
-            clientContext.Credentials = new NetworkCredential("moma", @"", "NCDMZ");
+            var clientContext =
+                new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
+                {
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                };
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
 
             var list = "tidsregistrering";
@@ -461,12 +476,14 @@ namespace TimeSync.Tests
         [TestMethod]
         public void GetAllTimeSlotsFromFtfaTest()
         {
-            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA");
-            clientContext.Credentials = new NetworkCredential("moma", @"=%6pTT|m9~lw5`b::wkn", "NCDMZ");
+            var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA")
+            {
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+            };
             var timeSlotNavn = "TimeSlots";
 
             var list = "tidsregistrering";
-            var oList = clientContext.Web.Lists.GetByTitle(list);
+            var oList = _clientContext.Web.Lists.GetByTitle(list);
             clientContext.Load(oList);
             clientContext.ExecuteQuery();
 
@@ -475,8 +492,9 @@ namespace TimeSync.Tests
 
             var timeregsPerPage = 5;
 
-            CamlQuery query = new CamlQuery();
-            query.ViewXml = $@"
+            var query = new CamlQuery
+            {
+                ViewXml = $@"
                         <View>
                             <Query>
                                 <OrderBy>  
@@ -484,7 +502,8 @@ namespace TimeSync.Tests
                                 </OrderBy>
                             </Query>
                             <RowLimit>{timeregsPerPage}</RowLimit>
-                        </View>";
+                        </View>"
+            };
 
             double timespan = 0;
             var count = 0;
@@ -506,7 +525,7 @@ namespace TimeSync.Tests
                             if (field.Value.GetType() == typeof(FieldLookupValue))
                             {
                                 if (!rx.IsMatch(((FieldLookupValue)field.Value).LookupValue)) continue;
-                                FieldLookupValue fvl = (FieldLookupValue)field.Value;
+                                var fvl = (FieldLookupValue)field.Value;
                                 timeSlotFieldName = field.Key;
                                 timeSlots.Add(fvl.LookupValue);
                             }
@@ -644,9 +663,9 @@ namespace TimeSync.Tests
         [TestMethod]
         public void AnyMissingTimeslotsTest()
         {
-            List<TimeSlot> timeSlots = new List<TimeSlot>
+            List<Timeslot> timeSlots = new List<Timeslot>
             {
-                new TimeSlot()
+                new Timeslot()
                 {
                     TimeInterval = new TimeInterval()
                     {
@@ -654,7 +673,7 @@ namespace TimeSync.Tests
                         Interval = "17:00-22:00"
                     }
                 },
-                new TimeSlot()
+                new Timeslot()
                 {
                     TimeInterval = new TimeInterval()
                     {
@@ -662,7 +681,7 @@ namespace TimeSync.Tests
                         Interval = "22:00-04:00"
                     }
                 },
-                new TimeSlot()
+                new Timeslot()
                 {
                     TimeInterval = new TimeInterval()
                     {
@@ -670,7 +689,7 @@ namespace TimeSync.Tests
                         Interval = "04:00-06:00"
                     }
                 },
-                new TimeSlot()
+                new Timeslot()
                 {
                     TimeInterval = new TimeInterval()
                     {
@@ -680,12 +699,12 @@ namespace TimeSync.Tests
                 }
             };
 
-            var timespan = timeSlots.Sum((Func<TimeSlot, double>) _sharepointClient.CalculateTimespan);
+            var timespan = timeSlots.Sum((Func<Timeslot, double>) _sharepointClient.CalculateTimespan);
 
             Assert.AreEqual(24, timespan);
         }
 
-        private double CalculateTimespan(string timeslot)
+        private static double CalculateTimespan(string timeslot)
         {
             var now = DateTime.Now;
             DateTime time1 = new DateTime();
@@ -709,42 +728,66 @@ namespace TimeSync.Tests
         [TestMethod]
         public void FindAllTeamsTest()
         {
-
             var tk = new Toolkit()
             {
                 Url = "https://goto.netcompany.com/cases/GTO60/Akapedia"
             };
 
-            var tkUser = new ToolkitUser()
-            {
-                Name = "MOMA",
-                Password = @"=%6pTT|m9~lw5`b::wkn"
-            };
-
-            tk.Teams = _sharepointClient.GetTeamsFromToolkit(tkUser, tk);
+            tk.Teams = _sharepointClient.GetTeamsFromToolkit(_toolkitUser, tk);
 
             Assert.AreEqual(5, tk.Teams.Count);
         }
 
         [TestMethod]
-        public void FindTimeSlotInfoForAllTeamsTest()
+        public void FindTimeSlotInfoForTeamsWithSLAFtfaTest()
         {
             var tk = new Toolkit()
             {
                 Url = "https://goto.netcompany.com/cases/GTO627/FTFA"
             };
 
-            var tkUser = new ToolkitUser()
+            tk.Teams = _sharepointClient.GetTeamsFromToolkit(_toolkitUser, tk);
+            tk = _sharepointClient.GetTimeslotInformationFromToolkit(_toolkitUser, tk);
+
+            Assert.AreEqual(3, tk.Teams.Count);
+            Assert.AreEqual(3, tk.Teams.Count(team => team.UsesTimeslots));
+            Assert.AreEqual(4, tk.Timeslots.Count);
+            Assert.AreEqual(24, tk.Timeslots.Sum((Func<Timeslot, double>)_sharepointClient.CalculateTimespan));
+        }
+
+        [TestMethod]
+        public void FindTimeSlotInfoForAllTeamsFtfaTest()
+        {
+            var tk = new Toolkit()
             {
-                Name = "MOMA",
-                Password = @"=%6pTT|m9~lw5`b::wkn"
+                Url = "https://goto.netcompany.com/cases/GTO627/FTFA",
+                GetTeamsWithoutSLA = true
             };
 
-            tk.Teams = _sharepointClient.GetTeamsFromToolkit(tkUser, tk);
-            tk.Teams = _sharepointClient.CheckForTimeSlots(tkUser, tk);
+            tk.Teams = _sharepointClient.GetTeamsFromToolkit(_toolkitUser, tk);
+            tk = _sharepointClient.GetTimeslotInformationFromToolkit(_toolkitUser, tk);
 
-            Assert.AreEqual(5, tk.Teams.Count);
-            Assert.AreEqual(1, tk.Teams.Count(team => team.UsesTimeSlots));
+            Assert.AreEqual(8, tk.Teams.Count);
+            Assert.AreEqual(6, tk.Teams.Count(team => team.UsesTimeslots));
+            Assert.AreEqual(4, tk.Timeslots.Count);
+            Assert.AreEqual(24, tk.Timeslots.Sum((Func<Timeslot, double>)_sharepointClient.CalculateTimespan));
+        }
+
+        [TestMethod]
+        public void FindTimeSlotInfoForAllTeamsHkTest()
+        {
+            var tk = new Toolkit()
+            {
+                Url = "https://goto.netcompany.com/cases/GTO170/HKA"
+            };
+
+            tk.Teams = _sharepointClient.GetTeamsFromToolkit(_toolkitUser, tk);
+            tk = _sharepointClient.GetTimeslotInformationFromToolkit(_toolkitUser, tk);
+
+            Assert.AreEqual(8, tk.Teams.Count);
+            Assert.AreEqual(8, tk.Teams.Count(team => team.UsesTimeslots));
+            Assert.IsFalse(tk.TimeslotIsFieldLookup);
+            Assert.AreEqual("Periode_x0020_for_x0020_tidsregi", tk.TimeslotFieldName);
         }
     }
 }

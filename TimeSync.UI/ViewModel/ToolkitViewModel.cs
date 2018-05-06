@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Castle.Core;
 using TimeSync.DataAccess;
@@ -16,7 +17,7 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class ToolkitViewModel : BaseViewModel
     {
-        private readonly IRepository<List<Toolkit>> _repo;
+        private readonly IRepository<ObservableCollection<Toolkit>> _repo;
         private List<Toolkit> _toolkits;
 
         public ObservableCollection<Toolkit> ListOfToolkits { get; set; }
@@ -25,19 +26,9 @@ namespace TimeSync.UI.ViewModel
 
         public ToolkitViewModel()
         {
-            _repo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
-            ListOfToolkits = new ObservableCollection<Toolkit>();
-            _toolkits = _repo.GetData();
-            //PopulateWrapperClass(_toolkitInfo);
+            _repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
+            ListOfToolkits = _repo.GetData();
         }
-
-        //private void PopulateWrapperClass(ToolkitInfo toolkitInfo)
-        //{
-        //    foreach (KeyValuePair<string, Toolkit> entry in toolkitInfo.Toolkits)
-        //    {
-        //        ListOfToolkits.Add(new ToolkitInfoViewModelWrapper { ToolkitName = entry.Key, ToolkitUrl = entry.Value.Url });
-        //    }
-        //}
 
         public ICommand AddNewToolkitCommand => new DelegateCommand(AddNewToolkit);
 
@@ -50,24 +41,8 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void SaveToolkits()
         {
-            //PopulateToolkitInfoObject(ListOfToolkits);
-            TimeManager.SaveToolkitInfo(TimeManager.UserInfo, _toolkits);
+            TimeManager.SaveToolkitInfo(TimeManager.UserInfo, ListOfToolkits.ToList());
         }
-
-    //    private void PopulateToolkitInfoObject(ObservableCollection<ToolkitInfoViewModelWrapper> listOfToolkits)
-    //    {
-    //        foreach (var toolkitInfoWrapper in listOfToolkits)
-    //        {
-    //            Toolkit toolkit = new Toolkit()
-    //            {
-    //                Url = toolkitInfoWrapper.ToolkitUrl
-    //            };
-    //            if ( !_toolkitInfo.Toolkits.ContainsKey(toolkitInfoWrapper.ToolkitName) )
-    //            {
-    //                _toolkitInfo.Toolkits.Add(toolkitInfoWrapper.ToolkitName, toolkit);
-    //            }
-    //        }     
-    //    }
     }
 
     class ToolkitInfoViewModelWrapper

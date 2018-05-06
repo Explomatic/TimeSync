@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         
 
-        <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" 
+        <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-50,0,0,0">
             
             <!--TODO Make this element a class or whatever somewhere so we can reuse the same code-->
@@ -54,23 +54,17 @@
                 <PasswordBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" PasswordChanged="PasswordBox_PasswordChanged"></PasswordBox>
             </Grid>
         </StackPanel>
-        <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" 
+        <Button Command="{Binding UpdateToolkitUserCommand}" Content="Save data" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" 
                 Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding HideShowPopupCommand}" Content="popup" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center"
+        <Button Command="{Binding HideShowPopupCommand}" Content="popup" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center"
                 Style="{StaticResource RegularButton}"/>
-        <Button Content="Testpage" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Click="ClickTestpage" 
+        <Button Content="Testpage" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Click="ClickTestpage" 
                 Style="{StaticResource RegularButton}"/>
 
 
-        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
+        <Label Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync - Account information
+            TimeSync (BETA) - Account information
         </Label>
-
-
-       
-
-     
-
     </Grid>
 </Page>
