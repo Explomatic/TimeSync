@@ -14,8 +14,6 @@
             </StackPanel>
         </DataTemplate>
         
-        
-
         <DataTemplate x:Key="ToolkitDataTemplate"  DataType="{x:Type src:Toolkit}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -28,7 +26,6 @@
                 <CheckBox Grid.Column="2" IsChecked="{Binding GetTeamsWithoutSLA}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
         </DataTemplate>
-
 
         <Style TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -56,12 +53,17 @@
             <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"></Setter>
         </Style>
         
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"/> 
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        
         <Style TargetType="Button" x:Key="RegularButton">
             <Setter Property="Background" Value="sc#0.11,0.11,0.15"/>
-            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"></Setter>
-            <Setter Property="FontSize" Value="20"></Setter>
-            <Setter Property="BorderThickness" Value="1"></Setter>
-            <Setter Property="BorderBrush" Value="Black"></Setter>
+            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">

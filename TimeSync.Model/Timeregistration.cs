@@ -36,32 +36,32 @@ namespace TimeSync.Model
             DoneDate = DateTime.Today;
         }
 
-        public bool AddHours(string duration)
+        public bool CouldConvertDurationToHours()
         {
-            var durationIsNumberOfHours = CheckIfDurationIsNumberOfHours(duration);
+            var durationIsNumberOfHours = DurationIsNumberOfHours(Duration);
             double hours;
             bool stringFormattedAsExpected;
             if (durationIsNumberOfHours)
             {
-                duration = duration.Replace(',', '.');
-                stringFormattedAsExpected = double.TryParse(duration, NumberStyles.Any, CultureInfo.InvariantCulture, out hours);
+                Duration = Duration.Replace(',', '.');
+                stringFormattedAsExpected = double.TryParse(Duration, NumberStyles.Any, CultureInfo.InvariantCulture, out hours);
             }
             else
             {
-                stringFormattedAsExpected = ParseTimeIntervalString(duration, out hours);
+                stringFormattedAsExpected = DurationIsTimeInterval(Duration, out hours);
             }
 
-            Hours = hours;
+            if (stringFormattedAsExpected) Hours = hours;
             return stringFormattedAsExpected;
         }
 
-        private bool CheckIfDurationIsNumberOfHours(string duration)
+        private static bool DurationIsNumberOfHours(string duration)
         {
             return duration.Trim().Length < 5;
         }
 
 
-        private bool ParseTimeIntervalString(string duration, out double hours)
+        private static bool DurationIsTimeInterval(string duration, out double hours)
         {
             hours = 0;
             // expected string format "08(:,.)00 - 08(:,.)30"
@@ -79,7 +79,7 @@ namespace TimeSync.Model
             return true;
         }
 
-        private DateTime ConvertToDateTime(string time)
+        private static DateTime ConvertToDateTime(string time)
         {
             DateTime dt;
             if (time.Contains(":"))

@@ -30,7 +30,7 @@ namespace TimeSync.UI.View
             viewModel.TimeManager = _timeManager;
         }
 
-        public void cboxToolkitSelected(object sender, EventArgs eventArgs)
+        public void CboxToolkitSelected(object sender, EventArgs eventArgs)
         {
             var cbox = sender as ComboBox;
             var timereg = (Timeregistration) cbox.DataContext;
@@ -38,6 +38,7 @@ namespace TimeSync.UI.View
             foreach (var tk in timereg.ListOfToolkits)
             {
                 if (tk.CustomerName != timereg.Customer) continue;
+                timereg.ListOfTeams.Clear();
                 foreach (var team in tk.Teams)
                 {
                     if(timereg.ListOfTeams.Contains(team.Name)) continue;
@@ -46,7 +47,7 @@ namespace TimeSync.UI.View
             }
         }
 
-        public void cboxTeamSelected(object sender, EventArgs eventArgs)
+        public void CboxTeamSelected(object sender, EventArgs eventArgs)
         {
             var cbox = sender as ComboBox;
             var timereg = (Timeregistration)cbox.DataContext;

@@ -12,6 +12,7 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class TimeregistrationViewModel : BaseViewModel
     {
+        private IRepository<List<Toolkit>> _toolkitRepo;
         public TimeManager TimeManager { get; set; }
         public ObservableCollection<Timeregistration> Timeregistrations { get; set; }
         public List<Toolkit> ListOfToolkits { get; set; }
@@ -24,8 +25,8 @@ namespace TimeSync.UI.ViewModel
             Timeregistrations = new ObservableCollection<Timeregistration>();
             Timeregistrations = timeregRepo.GetData();
 
-            IRepository<List<Toolkit>> toolkitRepo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
-            ListOfToolkits = toolkitRepo.GetData();
+            _toolkitRepo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
+            ListOfToolkits = _toolkitRepo.GetData();
             ListOfToolkitNames = (from tk in ListOfToolkits select tk.CustomerName).ToList();
         }
 
@@ -40,6 +41,7 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void AddNewTimeregistration()
         {
+            UpdateLists();
             Timeregistrations.Add(new Timeregistration
             {
                 ListOfToolkitNames = ListOfToolkitNames,
@@ -47,6 +49,12 @@ namespace TimeSync.UI.ViewModel
                 ListOfTeams = new ObservableCollection<string>(),
                 ListOfTimeslots = new ObservableCollection<string>()
             });
+        }
+
+        private void UpdateLists()
+        {
+            ListOfToolkits = _toolkitRepo.GetData();
+            ListOfToolkitNames = (from tk in ListOfToolkits select tk.CustomerName).ToList();
         }
     }
 }

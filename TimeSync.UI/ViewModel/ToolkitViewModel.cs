@@ -17,17 +17,13 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class ToolkitViewModel : BaseViewModel
     {
-        private readonly IRepository<ObservableCollection<Toolkit>> _repo;
-        private List<Toolkit> _toolkits;
-
         public ObservableCollection<Toolkit> ListOfToolkits { get; set; }
-
         public TimeManager TimeManager { get; set; }
 
         public ToolkitViewModel()
         {
-            _repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
-            ListOfToolkits = _repo.GetData();
+            IRepository<ObservableCollection<Toolkit>> repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
+            ListOfToolkits = repo.GetData();
         }
 
         public ICommand AddNewToolkitCommand => new DelegateCommand(AddNewToolkit);
@@ -43,11 +39,5 @@ namespace TimeSync.UI.ViewModel
         {
             TimeManager.SaveToolkitInfo(TimeManager.UserInfo, ListOfToolkits.ToList());
         }
-    }
-
-    class ToolkitInfoViewModelWrapper
-    {
-        public string ToolkitName { get; set; }
-        public string ToolkitUrl { get; set; }
     }
 }

@@ -13,7 +13,7 @@
     </Page.DataContext>
 
 
-    <Grid>
+    <Grid Background="sc#0.15,0.15,0.20">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
@@ -57,7 +57,7 @@
         </Grid>
 
         <Button Command="{Binding AddNewToolkitCommand}" Content=" Add toolkit " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
-                Style="{StaticResource RegularButton}" Click="Button_Click"/>
+                Style="{StaticResource RegularButton}"/>
         <Button Command="{Binding SaveToolkitsCommand}" Content=" Save toolkits " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
                 Style="{StaticResource RegularButton}"/>
         

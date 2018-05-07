@@ -16,8 +16,8 @@
     <Page.Resources>
         <DataTemplate x:Key="TimeregDataTemplate"  DataType="{x:Type src:Timeregistration}">
             <StackPanel Orientation="Horizontal">
-                <ComboBox Width="60" Margin="5,5,5,5" ItemsSource="{Binding ListOfToolkitNames}" SelectedItem="{Binding Customer}" DropDownClosed="cboxToolkitSelected"/>
-                <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfTeams}" SelectedItem="{Binding Team}" DropDownClosed="cboxTeamSelected"/>
+                <ComboBox Width="60" Margin="5,5,5,5" ItemsSource="{Binding ListOfToolkitNames}" SelectedItem="{Binding Customer}" DropDownClosed="CboxToolkitSelected"/>
+                <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfTeams}" SelectedItem="{Binding Team}" DropDownClosed="CboxTeamSelected"/>
                 <TextBox Width="65" Margin="5,5,5,5" Text="{Binding CaseId}" VerticalAlignment="Center"/>
                 <TextBox Width="100" Margin="5,5,5,5" Text="{Binding Duration}" VerticalAlignment="Center"/>
                 <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfTimeslots}" SelectedItem="{Binding Timeslot}" VerticalAlignment="Center"/>
@@ -27,7 +27,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid>
+    <Grid Background="sc#0.15,0.15,0.20">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
@@ -78,9 +78,9 @@
             </ScrollViewer>
         </Grid>
 
-        <Button Command="{Binding AddNewTimeregistrationCommand}" Content="Add timereg" HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
-                Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding SynchroniseCommand}" Content="Synchronise" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
+        <Button Command="{Binding AddNewTimeregistrationCommand}" Content=" Add timereg " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
+                Style="{StaticResource RegularButton}" />
+        <Button Command="{Binding SynchroniseCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
                 Style="{StaticResource RegularButton}"/>
 
 

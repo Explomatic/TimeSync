@@ -36,12 +36,12 @@ namespace TimeSync.Tests
             var timereg6 = new Timeregistration();
 
             //Act
-            var result1 = timereg1.AddHours(duration1);
-            var result2 = timereg2.AddHours(duration2);
-            var result3 = timereg3.AddHours(duration3);
-            var result4 = timereg4.AddHours(duration4);
-            var result5 = timereg5.AddHours(duration5);
-            var result6 = timereg6.AddHours(duration6);
+            var result1 = timereg1.ConvertDurationToHours(duration1);
+            var result2 = timereg2.ConvertDurationToHours(duration2);
+            var result3 = timereg3.ConvertDurationToHours(duration3);
+            var result4 = timereg4.ConvertDurationToHours(duration4);
+            var result5 = timereg5.ConvertDurationToHours(duration5);
+            var result6 = timereg6.ConvertDurationToHours(duration6);
 
             //Assert
             Assert.IsTrue(result1);

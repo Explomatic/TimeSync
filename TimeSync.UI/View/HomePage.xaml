@@ -8,8 +8,6 @@
       d:DesignHeight="450" d:DesignWidth="850"
       Title="Homepage">
 
-
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
