@@ -18,14 +18,13 @@ namespace TimeSync.DataAccess
     {
         public int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
         {
-            ClientContext clientContext = new ClientContext(toolkit.Url);
-            UserCollection userCollection = clientContext.Web.SiteUsers;
+            var clientContext = new ClientContext(toolkit.Url);
+            var userCollection = clientContext.Web.SiteUsers;
             clientContext.Load(userCollection);
             clientContext.ExecuteQuery();
 
-
             var email = $"{toolkitUser.Name}@netcompany.com";
-            User user = userCollection.GetByEmail(email);
+            var user = userCollection.GetByEmail(email);
             clientContext.Load(user);
             clientContext.ExecuteQuery();
 
@@ -36,7 +35,7 @@ namespace TimeSync.DataAccess
         {
             var clientContext = new ClientContext(toolkit.Url)
             {
-                Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.Password, toolkitUser.Domain)
+                Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.SecurePassword, toolkitUser.Domain)
             };
 
             const string timeregList = "tidsregistrering";
@@ -71,11 +70,12 @@ namespace TimeSync.DataAccess
 
         public List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
         {
+            //TODO: Add support for multiple timeregs per day for a case (i.e. group them by case id)
             //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
             //Send to Toolkit -- SEE UNIT TEST PROJECT
             var clientContext = new ClientContext(toolkit.Url)
             {
-                Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.Password, toolkitUser.Domain)
+                Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.SecurePassword, toolkitUser.Domain)
             };
 
             const string timeregList = "tidsregistrering";
@@ -93,6 +93,11 @@ namespace TimeSync.DataAccess
                 var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
 
                 var sharepointListItem = sharepointList.AddItem(itemCreateInfo);
+
+                if (!timereg.CouldConvertDurationToHours())
+                {
+                    return new List<ListItem>();
+                }
 
                 sharepointListItem["Hours"] = timereg.Hours;
                 sharepointListItem["DoneBy"] = doneBy;
@@ -117,7 +122,7 @@ namespace TimeSync.DataAccess
 
         public List<Team> GetTeamsFromToolkit(ToolkitUser tkUser, Toolkit tk)
         {
-            var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.Password, tkUser.Domain) };
+            var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.SecurePassword, tkUser.Domain) };
 
             return tk.GetTeamsWithoutSLA ?  GetAllTeams(clientContext) : GetTeamsWithActiveSLA(clientContext);
         }
@@ -125,8 +130,8 @@ namespace TimeSync.DataAccess
         public double CalculateTimespan(Timeslot timeslot)
         {
             var now = DateTime.Now;
-            DateTime time1 = new DateTime();
-            DateTime time2 = new DateTime();
+            var time1 = new DateTime();
+            var time2 = new DateTime();
             var rx = new Regex(@"((\d{2})\:(\d{2}))\s{0,1}\-\s{0,1}((\d{2})\:(\d{2}))");
             var matches = rx.Matches(timeslot.TimeInterval.Interval);
             foreach (Match match in matches)
@@ -145,7 +150,7 @@ namespace TimeSync.DataAccess
 
         public Toolkit GetTimeslotInformationFromToolkit(ToolkitUser tkUser, Toolkit tk)
         {
-            var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.Password, tkUser.Domain) };
+            var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.SecurePassword, tkUser.Domain) };
 
             const string list = "tidsregistrering";
             var oList = clientContext.Web.Lists.GetByTitle(list);
@@ -159,7 +164,7 @@ namespace TimeSync.DataAccess
             var listOfTimregsWithTimeslot = GetTop250TimeregsWithTimeslot(clientContext, oList, tk);
 
             var listOfCasesForTimeregsWithTimeslot =
-                GetCasesForTimeregsWithTimeslot(clientContext, tk, listOfTimregsWithTimeslot);
+                GetCasesForTimeregsWithTimeslot(clientContext, listOfTimregsWithTimeslot);
 
             var listOfTeamsUsingTimeslots = listOfCasesForTimeregsWithTimeslot.GroupBy(tkCase => tkCase.Team)
                 .Select(tkCase => tkCase.First()).OrderBy(tkCase => tkCase.Team).ToList();
@@ -309,7 +314,7 @@ namespace TimeSync.DataAccess
             };
         }
 
-        private static List<ToolkitCase> GetCasesForTimeregsWithTimeslot(ClientContext clientContext, Toolkit tk, List<TimeregWithTimeslot> listOfTimregsWithTimeslot)
+        private static IEnumerable<ToolkitCase> GetCasesForTimeregsWithTimeslot(ClientContext clientContext, IEnumerable<TimeregWithTimeslot> listOfTimregsWithTimeslot)
         {
             const string list = "sager";
             var spList = clientContext.Web.Lists.GetByTitle(list);
@@ -318,10 +323,10 @@ namespace TimeSync.DataAccess
 
             //.GroupBy(team => team.Name).Select(g => g.First()).OrderBy(team => team.Name).ToList();
 
-            var listOfUniqueTimregsWithTimeslot = listOfTimregsWithTimeslot.GroupBy(timereg => timereg.CaseId)
+            var listOfUniqueTimeregsWithTimeslot = listOfTimregsWithTimeslot.GroupBy(timereg => timereg.CaseId)
                 .Select(g => g.First()).OrderBy(timereg => timereg.CaseId).ToList();
 
-            var listOfUniqueCaseIds = (from uniqueCaseId in listOfUniqueTimregsWithTimeslot select uniqueCaseId.CaseId).ToList();
+            var listOfUniqueCaseIds = (from uniqueCaseId in listOfUniqueTimeregsWithTimeslot select uniqueCaseId.CaseId).ToList();
 
             var query = GenereateCamlQueryForIds(listOfUniqueCaseIds);
 
@@ -355,7 +360,7 @@ namespace TimeSync.DataAccess
             //    .ToList();
         }
 
-        private static List<TimeregWithTimeslot> GetTop250TimeregsWithTimeslot(ClientContext clientContext, List spList, Toolkit tk)
+        private static List<TimeregWithTimeslot> GetTop250TimeregsWithTimeslot(ClientRuntimeContext clientContext, List spList, Toolkit tk)
         {
             var query = new CamlQuery()
             {
@@ -374,24 +379,36 @@ namespace TimeSync.DataAccess
                     Timeslot = tk.TimeslotIsFieldLookup
                         ? (from field in item.FieldValues
                             where field.Key == tk.TimeslotFieldName
-                            select ((FieldLookupValue) field.Value).LookupValue).Single()
+                            select ((FieldLookupValue)field.Value).LookupValue).Single()
                         : (from field in item.FieldValues
                             where field.Key == tk.TimeslotFieldName
                             select field.Value.ToString()).Single(),
                     TimeslotId = tk.TimeslotIsFieldLookup
                         ? (from field in item.FieldValues
                             where field.Key == tk.TimeslotFieldName
-                            select ((FieldLookupValue) field.Value).LookupId).Single()
+                            select ((FieldLookupValue)field.Value).LookupId).Single()
                         : -1,
                     CaseId = (from field in item.FieldValues
                         where field.Key == "Sag_x003a_Sags_x0020_Id"
-                        select ExtractCaseIdFromField(((FieldLookupValue) field.Value).LookupValue)).Single()
+                        select ExtractCaseIdFromField(((FieldLookupValue)field.Value).LookupValue)).Single()
                 };
 
                 listOfTimeregsWithTimelots.Add(timeregWithTimeslot);
             }
 
             return listOfTimeregsWithTimelots;
+
+            //return listItems.Select(item => new TimeregWithTimeslot
+            //    {
+            //        Timeslot = tk.TimeslotIsFieldLookup
+            //            ? (from field in item.FieldValues where field.Key == tk.TimeslotFieldName select ((FieldLookupValue) field.Value).LookupValue).Single()
+            //            : (from field in item.FieldValues where field.Key == tk.TimeslotFieldName select field.Value.ToString()).Single(),
+            //        TimeslotId = tk.TimeslotIsFieldLookup
+            //            ? (from field in item.FieldValues where field.Key == tk.TimeslotFieldName select ((FieldLookupValue) field.Value).LookupId).Single()
+            //            : -1,
+            //        CaseId = (from field in item.FieldValues where field.Key == "Sag_x003a_Sags_x0020_Id" select ExtractCaseIdFromField(((FieldLookupValue) field.Value).LookupValue)).Single()
+            //    })
+            //    .ToList();
         }
 
         private static int ExtractCaseIdFromField(string spCaseId)
@@ -436,7 +453,7 @@ namespace TimeSync.DataAccess
 
         private static bool CheckIfToolkitUsesTimeslots(ClientContext clientContext, List spList, Toolkit tk)
         {
-            var usesDefaultTimeSlotList = CheckForDefaultTimeSlotList(clientContext, spList, tk);
+            var usesDefaultTimeSlotList = CheckForDefaultTimeSlotList(clientContext, spList);
 
             if (usesDefaultTimeSlotList)
             {
@@ -459,7 +476,7 @@ namespace TimeSync.DataAccess
             };
 
             var counter = 0;
-            while (counter*timeregsPerPage < 1000)
+            while (counter < 4)
             {
                 var listItems = spList.GetItems(query);
                 clientContext.Load(listItems);
@@ -498,7 +515,7 @@ namespace TimeSync.DataAccess
             return false;
         }
 
-        private static bool CheckForDefaultTimeSlotList(ClientRuntimeContext clientContext, List spList, Toolkit tk)
+        private static bool CheckForDefaultTimeSlotList(ClientRuntimeContext clientContext, List spList)
         {
             var query = new CamlQuery()
             {

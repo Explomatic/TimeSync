@@ -29,10 +29,13 @@ namespace TimeSync.Tests
 
             _toolkitUser = _toolkitUserRepository.GetData();
 
+            _toolkitUser.SecurePassword = new NetworkCredential("", _toolkitUser.Password).SecurePassword;
+            _toolkitUser.Password = "";
+
             _sharepointClient = new SharepointClient();
             _clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO22/NCMOD")
             {
-                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
             };
         }
 
@@ -187,7 +190,7 @@ namespace TimeSync.Tests
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA")
             {
-                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
             };
             var list = "Time Slots";
             var oList = clientContext.Web.Lists.GetByTitle(list);
@@ -204,7 +207,7 @@ namespace TimeSync.Tests
             var hk = "https://goto.netcompany.com/cases/GTO170/HKA";
             var clientContext = new ClientContext(hk)
             {
-                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
             };
             var allLists = _clientContext.Web.Lists;
             _clientContext.Load(allLists);
@@ -224,7 +227,7 @@ namespace TimeSync.Tests
             var clientContext =
                 new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA")
                 {
-                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
                 };
             var timeregId = 10984;
             var timeSlotLookUp = "08:30-16:30";
@@ -271,7 +274,7 @@ namespace TimeSync.Tests
             var clientContext =
                 new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
                 {
-                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
                 };
             var timeregId = 41327;
             var timeSlotLookUp = "07:30-17:00";
@@ -316,7 +319,7 @@ namespace TimeSync.Tests
             var clientContext =
                 new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
                 {
-                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
                 };
             var employeeName = "Morten Madsen";
             var customer = "HKA";
@@ -358,7 +361,7 @@ namespace TimeSync.Tests
             var clientContext =
                 new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
                 {
-                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
                 };
             var timeregId = 41327;
             var timeSlotLookUp = "07:30-17:00";
@@ -401,7 +404,7 @@ namespace TimeSync.Tests
             var clientContext =
                 new ClientContext("https://goto.netcompany.com/cases/GTO170/HKA")
                 {
-                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                    Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
                 };
             var timeSlotNavn = "Periode_x0020_for_x0020_tidsregi";
 
@@ -478,7 +481,7 @@ namespace TimeSync.Tests
         {
             var clientContext = new ClientContext("https://goto.netcompany.com/cases/GTO627/FTFA")
             {
-                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.Password, _toolkitUser.Domain)
+                Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
             };
             var timeSlotNavn = "TimeSlots";
 

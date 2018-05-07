@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,21 @@ namespace TimeSync.UI.ViewModel
         private readonly ToolkitUser _toolkitUser;
         private string _name;
         private string _password;
+        private SecureString _securePassword;
+        private bool _clearPasswordBox = false;
+
+
+        public bool ClearPasswordBox
+        {
+            get { return _clearPasswordBox; }
+            set
+            {
+                _clearPasswordBox = value;
+                if (_clearPasswordBox) RaisePropertyChangedEvent("ClearPasswordBox");
+            }
+        }
+
+        public bool ToSavePassword { get; set; } = false;
 
         public TimeManager TimeManager { get; set; }
 
@@ -27,7 +43,7 @@ namespace TimeSync.UI.ViewModel
         {
             _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
             _toolkitUser = _repo.GetData();
-            Username = _toolkitUser.Name;            
+            Username = _toolkitUser.Name;
         }
         public string Username
         {
@@ -55,17 +71,20 @@ namespace TimeSync.UI.ViewModel
         {
             if (!string.IsNullOrWhiteSpace(Username))
             {
-                _toolkitUser.Name = _name;
+                _toolkitUser.Name = Username;
             }
 
-            if (Password.Length > 0)
-            {
-                _toolkitUser.Password = _password;
-            }
+            _toolkitUser.ToSavePassword = ToSavePassword;
+
+            _toolkitUser.Password = _toolkitUser.ToSavePassword ? Password : "";
+            _toolkitUser.SecurePassword = new NetworkCredential("", Password).SecurePassword;
+            Password = _toolkitUser.ToSavePassword ? Password : "";
+
             //TODO Fix these lines. Roll into one function on TimeManager. ViewModel shouldn't think/know about how TimeManager's data/fields look
             TimeManager.UserInfo = _toolkitUser; 
             _repo.SaveData(_toolkitUser);
 
+            ClearPasswordBox = !ToSavePassword;
         }
     }
 }
