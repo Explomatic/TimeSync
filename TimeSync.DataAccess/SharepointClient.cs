@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -476,37 +477,53 @@ namespace TimeSync.DataAccess
             };
 
             var counter = 0;
+            //var whileLoopWatch = new Stopwatch();
+            //whileLoopWatch.Stop();
             while (counter < 4)
             {
+                //whileLoopWatch.Start();
                 var listItems = spList.GetItems(query);
                 clientContext.Load(listItems);
                 clientContext.ExecuteQuery();
-                
+                //whileLoopWatch.Stop();
+                //var toolkitQueryDuration = whileLoopWatch.Elapsed;
+
+                //var firstForeachLoopWatch = new Stopwatch();
+                //firstForeachLoopWatch.Start();
+                //var secondForeachLoopDurations = new List<TimeSpan>();
+
                 var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
                 foreach (var item in listItems)
                 {
+                    //var secondForeachLoopWatch = new Stopwatch();
+                    //secondForeachLoopWatch.Start();
                     foreach (var field in item.FieldValues)
                     {
-                        try
+                        if (field.Value == null) continue;
+                        if (field.Value is FieldUserValue) continue;
+                        var value = field.Value as FieldLookupValue;
+                        if (value != null)
                         {
-                            if (field.Value.GetType() == typeof(FieldLookupValue))
-                            {
-                                if (!rx.IsMatch(((FieldLookupValue)field.Value).LookupValue)) continue;
-                                tk.TimeslotFieldName = field.Key;
-                                tk.TimeslotIsFieldLookup = true;
-                                return true;
-                            }
-                            if (!rx.IsMatch(field.Value.ToString())) continue;
+                            if (value.LookupValue == null) continue;
+                            if (!rx.IsMatch(value.LookupValue)) continue;
                             tk.TimeslotFieldName = field.Key;
-                            tk.TimeslotIsFieldLookup = false;
+                            tk.TimeslotIsFieldLookup = true;
                             return true;
                         }
-                        catch (Exception e)
-                        {
-                        }
-                    }
-                }
+                        if (!rx.IsMatch(field.Value.ToString())) continue;
+                        tk.TimeslotFieldName = field.Key;
+                        tk.TimeslotIsFieldLookup = false;
+                        return true;
 
+                    }
+                    //secondForeachLoopWatch.Stop();
+                    //var secondForeachLoopDuration = secondForeachLoopWatch.Elapsed;
+                    //secondForeachLoopDurations.Add(secondForeachLoopDuration);
+                }
+                //firstForeachLoopWatch.Stop();
+                //var firstForeachLoopDuration = firstForeachLoopWatch.Elapsed;
+                //var avgSecondDuration = secondForeachLoopDurations.Average(duration => duration.TotalMilliseconds);
+                //var totalSecondDuration = secondForeachLoopDurations.Sum(duration => duration.TotalMilliseconds);
                 query.ListItemCollectionPosition = listItems.ListItemCollectionPosition;
 
                 counter++;
