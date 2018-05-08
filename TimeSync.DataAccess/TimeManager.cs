@@ -63,19 +63,26 @@ namespace TimeSync.DataAccess
                 if (tk.UserId == 0)
                     tk.UserId = _sharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
 
-                tk.Teams = _sharepointClient.GetTeamsFromToolkit(toolkitUser, tk);
-                tk = _sharepointClient.GetTimeslotInformationFromToolkit(toolkitUser, tk);
+                if (ToolkitInfoChanged(tk,_toolkits))
+                {
+                    tk.Teams = _sharepointClient.GetTeamsFromToolkit(toolkitUser, tk);
+                    tk = _sharepointClient.GetTimeslotInformationFromToolkit(toolkitUser, tk);
+                }
 
                 toolkits[i] = tk;
             }
-
-            
 
             //call repo to save
             _toolkitRepository.SaveData(toolkits);
 
             _toolkits = toolkits;
             _toolkitUser = toolkitUser;
+        }
+
+        private static bool ToolkitInfoChanged(Toolkit newTk, List<Toolkit> tks)
+        {
+            var currTk = tks.SingleOrDefault(tk => tk.Url == newTk.Url);
+            return currTk?.GetTeamsWithoutSLA != newTk.GetTeamsWithoutSLA;
         }
 
         /// <summary>
