@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Castle.Windsor;
 using TimeSync.DataAccess;
@@ -27,6 +28,7 @@ namespace TimeSync.UI.View
             this.DataContext = _container.Resolve<ToolkitViewModel>();
             var viewModel = this.DataContext as ToolkitViewModel;
             viewModel.TimeManager = _timeManager;
+
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
