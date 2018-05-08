@@ -5,8 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:viewModel="clr-namespace:TimeSync.UI.ViewModel"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="600"
+      d:DesignHeight="450" d:DesignWidth="700"
       Title="User account information">
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </Page.Resources>
 
     <Page.DataContext>
       <viewModel:ToolkitUserViewModel/>  
@@ -22,7 +26,7 @@
         
 
         <StackPanel x:Name="UserInfoBox" Grid.Row="1" Grid.RowSpan="2"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-50,0,0,0">
+                    HorizontalAlignment="Center" Margin="-50,100,0,0">
             
             <!--TODO Make this element a class or whatever somewhere so we can reuse the same code-->
             <Popup Name="Popup" IsOpen="{Binding PopupIsOpen, UpdateSourceTrigger=PropertyChanged}">
@@ -44,6 +48,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Left"
@@ -56,14 +61,17 @@
 
                     <!--<Label Grid.Column="0" Grid.Row="2" Margin="4" Content="Save password:" HorizontalAlignment="Left" />-->
                 <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" IsChecked="{Binding ToSavePassword}" 
-                          Content="Save password"/>
+                          Content="Save password" FontSize="12"/>
+                <Label Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,30,0,0" Grid.Row="3" Content="Account information saved!" Visibility="{Binding Path=IsDataSaved, Converter={StaticResource booleanToVisibilityConverter}, Mode=TwoWay}"/>
             </Grid>
         </StackPanel>
         <Button Command="{Binding UpdateToolkitUserCommand}" Content=" Save data " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" 
-                Style="{StaticResource RegularButton}"> 
+                Style="{StaticResource RegularButton}">
         </Button>
-        <Button Command="{Binding HideShowPopupCommand}" Content=" popup " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center"
-                Style="{StaticResource RegularButton}"/>
+        
+        
+        <!--<Button Command="{Binding HideShowPopupCommand}" Content=" popup " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center"
+                Style="{StaticResource RegularButton}"/>-->
         <!--<Button Content="Testpage" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Click="ClickTestpage" 
                 Style="{StaticResource RegularButton}"/>-->
 

@@ -22,7 +22,8 @@ namespace TimeSync.UI.ViewModel
         private string _name;
         private string _password;
         private SecureString _securePassword;
-        private bool _clearPasswordBox = false;
+        private bool _clearPasswordBox;
+        private bool _isDataSaved;
 
 
         public bool ClearPasswordBox
@@ -38,6 +39,16 @@ namespace TimeSync.UI.ViewModel
         public bool ToSavePassword { get; set; } = false;
 
         public TimeManager TimeManager { get; set; }
+
+        public bool IsDataSaved
+        {
+            get { return _isDataSaved; }
+            set
+            {
+                _isDataSaved = value;
+                RaisePropertyChangedEvent("IsDataSaved");
+            }
+        }
 
         public ToolkitUserViewModel()
         {
@@ -82,9 +93,11 @@ namespace TimeSync.UI.ViewModel
 
             //TODO Fix these lines. Roll into one function on TimeManager. ViewModel shouldn't think/know about how TimeManager's data/fields look
             TimeManager.UserInfo = _toolkitUser; 
-            _repo.SaveData(_toolkitUser);
+            var success = _repo.SaveData(_toolkitUser);
 
+            if (!success) return;
             ClearPasswordBox = !ToSavePassword;
+            IsDataSaved = true;
         }
     }
 }

@@ -50,14 +50,19 @@
         </Style>
 
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"></Setter>
+            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000" />
+        </Style>
+        
+        <Style TargetType="Label" x:Key="TextLabel">
+            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000" />
+            <Setter Property="FontSize" Value="16"/>
         </Style>
         
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"/> 
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        
+
         <Style TargetType="Button" x:Key="RegularButton">
             <Setter Property="Background" Value="sc#0.11,0.11,0.15"/>
             <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"/>

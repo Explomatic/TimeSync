@@ -28,20 +28,20 @@ namespace TimeSync.Tests
             string duration4 = "0800-1000";
             string duration5 = "2.5";
             string duration6 = "3,0";
-            var timereg1 = new Timeregistration();
-            var timereg2 = new Timeregistration();
-            var timereg3 = new Timeregistration();
-            var timereg4 = new Timeregistration();
-            var timereg5 = new Timeregistration();
-            var timereg6 = new Timeregistration();
+            var timereg1 = new Timeregistration {Duration = duration1};
+            var timereg2 = new Timeregistration {Duration = duration2};
+            var timereg3 = new Timeregistration {Duration = duration3};
+            var timereg4 = new Timeregistration {Duration = duration4};
+            var timereg5 = new Timeregistration {Duration = duration5};
+            var timereg6 = new Timeregistration {Duration = duration6};
 
             //Act
-            var result1 = timereg1.ConvertDurationToHours(duration1);
-            var result2 = timereg2.ConvertDurationToHours(duration2);
-            var result3 = timereg3.ConvertDurationToHours(duration3);
-            var result4 = timereg4.ConvertDurationToHours(duration4);
-            var result5 = timereg5.ConvertDurationToHours(duration5);
-            var result6 = timereg6.ConvertDurationToHours(duration6);
+            var result1 = timereg1.CouldConvertDurationToHours();
+            var result2 = timereg2.CouldConvertDurationToHours();
+            var result3 = timereg3.CouldConvertDurationToHours();
+            var result4 = timereg4.CouldConvertDurationToHours();
+            var result5 = timereg5.CouldConvertDurationToHours();
+            var result6 = timereg6.CouldConvertDurationToHours();
 
             //Assert
             Assert.IsTrue(result1);
