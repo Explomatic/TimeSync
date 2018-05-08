@@ -21,7 +21,7 @@
                     <ColumnDefinition Width="325"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" Width="80" Margin="5,5,5,5" Text="{Binding CustomerName}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="0" Width="80" Margin="5,5,5,5" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="1"  Width="305" Margin="15,5,5,5" Text="{Binding Url}" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="2" IsChecked="{Binding GetTeamsWithoutSLA}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>

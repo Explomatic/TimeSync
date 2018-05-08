@@ -14,10 +14,10 @@
             Please visit us at our GitHub in order to submit an issue.<LineBreak/><LineBreak/>
             GitHub: 
                 <Hyperlink
-                    NavigateUri="https://github.com/Explomatic/TimeSync"
+                    NavigateUri="https://github.com/NCTimeSync/TimeSync"
                     RequestNavigate="Hyperlink_RequestNavigate"
                     Foreground="sc#0.95,0.15,0.0000">
-                    https://github.com/Explomatic/TimeSync
+                    https://github.com/NCTimeSync/TimeSync
                 </Hyperlink>
         </TextBlock>
 

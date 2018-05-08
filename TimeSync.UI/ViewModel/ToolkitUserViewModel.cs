@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Castle.Core;
 using TimeSync.DataAccess;
@@ -22,6 +25,7 @@ namespace TimeSync.UI.ViewModel
         private string _name;
         private string _password;
         private SecureString _securePassword;
+        private bool _toSavePassword;
         private bool _clearPasswordBox;
         private bool _isDataSaved;
 
@@ -36,7 +40,18 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public bool ToSavePassword { get; set; } = false;
+        public bool ToSavePassword
+        {
+            get
+            {
+                return _toSavePassword;
+            }
+            set
+            {
+                _toSavePassword = value;
+                RaisePropertyChangedEvent("ToSavePassword");
+            }
+        }
 
         public TimeManager TimeManager { get; set; }
 
@@ -100,4 +115,37 @@ namespace TimeSync.UI.ViewModel
             IsDataSaved = true;
         }
     }
+
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public sealed class BoolToVisibilityConverter : IValueConverter
+    {
+        public Visibility TrueValue { get; set; }
+        public Visibility FalseValue { get; set; }
+
+        public BoolToVisibilityConverter()
+        {
+            // set defaults
+            TrueValue = Visibility.Visible;
+            FalseValue = Visibility.Collapsed;
+        }
+
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (!(value is bool))
+                return null;
+            return (bool)value ? TrueValue : FalseValue;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (Equals(value, TrueValue))
+                return true;
+            if (Equals(value, FalseValue))
+                return false;
+            return null;
+        }
+    }
 }
+
