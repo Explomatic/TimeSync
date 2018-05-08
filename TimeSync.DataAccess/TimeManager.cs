@@ -5,6 +5,7 @@ using System.Linq;
 using TimeSync.IoC;
 using TimeSync.Model;
 using System;
+using Castle.Core.Internal;
 
 namespace TimeSync.DataAccess
 {
@@ -29,6 +30,7 @@ namespace TimeSync.DataAccess
             _sharepointClient = new SharepointClient();
 
             UserInfo = _toolkitUserRepository.GetData();
+            _toolkits = _toolkitRepository.GetData();
         }
 
         public TimeManager(IRepository<ToolkitUser> userRepo, IRepository<List<Toolkit>> toolkitRepo,
@@ -60,6 +62,8 @@ namespace TimeSync.DataAccess
             {
                 var tk = toolkits[i];
 
+                tk.CustomerName = GetCustomerNameFromUrl(tk);
+
                 if (tk.UserId == 0)
                     tk.UserId = _sharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
 
@@ -79,6 +83,12 @@ namespace TimeSync.DataAccess
             _toolkitUser = toolkitUser;
         }
 
+        private static string GetCustomerNameFromUrl(Toolkit tk)
+        {
+            var customerName = tk.DisplayName.Split('/');
+            return customerName.Last().IsNullOrEmpty() ? customerName[customerName.Length - 2] : customerName.Last();
+        }
+
         private static bool ToolkitInfoChanged(Toolkit newTk, List<Toolkit> tks)
         {
             var currTk = tks.SingleOrDefault(tk => tk.Url == newTk.Url);
@@ -96,18 +106,18 @@ namespace TimeSync.DataAccess
             //var toolkitInfo = _toolkitInfo ?? _toolkitInfoRepository.GetData();
             _toolkits = _toolkits ?? _toolkitRepository.GetData();
 
-            var uniqueToolkitNames = new List<string>();
-            foreach (var timereg in timeregs)
-            {
-                if (uniqueToolkitNames.Contains(timereg.Customer)) continue;
-                uniqueToolkitNames.Add(timereg.Customer);
-            }
+            //var uniqueToolkitNames = new List<string>();
+            //foreach (var timereg in timeregs)
+            //{
+            //    if (uniqueToolkitNames.Contains(timereg.Customer)) continue;
+            //    uniqueToolkitNames.Add(timereg.Customer);
+            //}
 
-            foreach (var toolkitName in uniqueToolkitNames)
-            {
-                var tkTimeregs = (from timereg in timeregs where timereg.Customer == toolkitName select timereg).ToList();
-                _sharepointClient.MakeTimeregistrations(tkTimeregs, _toolkitUser, _toolkits.Single(tk => tk.CustomerName == toolkitName));
-            }
+            //foreach (var toolkitName in uniqueToolkitNames)
+            //{
+            //    var tkTimeregs = (from timereg in timeregs where timereg.Customer == toolkitName select timereg).ToList();
+            //    _sharepointClient.MakeTimeregistrations(tkTimeregs, _toolkitUser, _toolkits.Single(tk => tk.CustomerName == toolkitName));
+            //}
 
             //Send to Sharepoint
             foreach (var timereg in timeregs.Where(tr => !tr.IsSynchronized))

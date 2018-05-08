@@ -18,6 +18,7 @@ namespace TimeSync.Model
         public bool TimeslotIsFieldLookup { get; set; }
         public List<Timeslot> Timeslots { get; set; }
         public string CustomerName { get; set; }
+        public string DisplayName { get; set; }
     }
     public class Team
     {

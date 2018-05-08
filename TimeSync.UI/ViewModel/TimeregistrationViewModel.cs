@@ -27,7 +27,7 @@ namespace TimeSync.UI.ViewModel
 
             _toolkitRepo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
             ListOfToolkits = _toolkitRepo.GetData();
-            ListOfToolkitNames = (from tk in ListOfToolkits select tk.CustomerName).ToList();
+            ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
         }
 
         public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
@@ -54,7 +54,7 @@ namespace TimeSync.UI.ViewModel
         private void UpdateLists()
         {
             ListOfToolkits = _toolkitRepo.GetData();
-            ListOfToolkitNames = (from tk in ListOfToolkits select tk.CustomerName).ToList();
+            ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
         }
     }
 }
