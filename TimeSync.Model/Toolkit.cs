@@ -31,8 +31,8 @@ namespace TimeSync.Model
     }
     public struct TimeInterval
     {
-        public int Id;
-        public string Interval;
+        public int Id { get; set; }
+        public string Interval { get; set; }
     }
 
     public class TimeregWithTimeslot

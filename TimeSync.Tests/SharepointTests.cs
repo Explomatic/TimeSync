@@ -205,13 +205,14 @@ namespace TimeSync.Tests
         {
             var ftfa = "https://goto.netcompany.com/cases/GTO627/FTFA";
             var hk = "https://goto.netcompany.com/cases/GTO170/HKA";
-            var clientContext = new ClientContext(hk)
+            var dame = "https://goto.netcompany.com/cases/GTO20/DAMECRM1";
+            var clientContext = new ClientContext(dame)
             {
                 Credentials = new NetworkCredential(_toolkitUser.Name, _toolkitUser.SecurePassword, _toolkitUser.Domain)
             };
-            var allLists = _clientContext.Web.Lists;
-            _clientContext.Load(allLists);
-            _clientContext.ExecuteQuery();
+            var allLists = clientContext.Web.Lists;
+            clientContext.Load(allLists);
+            clientContext.ExecuteQuery();
             var blah = new List<string>();
             foreach (var listitem in allLists)
             {
@@ -468,7 +469,7 @@ namespace TimeSync.Tests
                     }   
                 }
                 timespan = timeSlots.Sum((Func<string, double>) CalculateTimespan);
-                query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+                query = UpdateCamlQueryForTesting(timeSlotFieldName, timeSlots, timeregsPerPage);
             }
 
             Assert.AreEqual(24, timespan);
@@ -553,7 +554,7 @@ namespace TimeSync.Tests
                 if (timeSlots.Count > 0)
                 {
                     query.ListItemCollectionPosition = null;
-                    query = UpdateCamlQuery(timeSlotFieldName, timeSlots, timeregsPerPage);
+                    query = UpdateCamlQueryForTesting(timeSlotFieldName, timeSlots, timeregsPerPage);
                 }
                 else
                 {
@@ -577,7 +578,7 @@ namespace TimeSync.Tests
             Assert.AreEqual(timeSlotNavn, timeSlotFieldName);
         }
 
-         private CamlQuery UpdateCamlQuery(string fieldName, List<string> timeSlots, int rowLimit)
+         private CamlQuery UpdateCamlQueryForTesting(string fieldName, List<string> timeSlots, int rowLimit)
         { 
             List<CamlQuery> subQueries = timeSlots.Select(timeSlot => new CamlQuery()
                 {
@@ -624,7 +625,7 @@ namespace TimeSync.Tests
                 "06:00-07:00"
             };
             var rowLimit=5;
-            CamlQuery query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+            CamlQuery query = UpdateCamlQueryForTesting(fieldName, timeSlots, rowLimit);
 
             timeSlots = new List<string>
             {
@@ -634,7 +635,7 @@ namespace TimeSync.Tests
                 "04:00-06:00"
             };
             rowLimit = 5;
-            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+            query = UpdateCamlQueryForTesting(fieldName, timeSlots, rowLimit);
 
             timeSlots = new List<string>
             {
@@ -643,7 +644,7 @@ namespace TimeSync.Tests
                 "22:00-04:00"
             };
             rowLimit = 5;
-            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+            query = UpdateCamlQueryForTesting(fieldName, timeSlots, rowLimit);
 
             timeSlots = new List<string>
             {
@@ -651,14 +652,14 @@ namespace TimeSync.Tests
                 "17:00-22:00"
             };
             rowLimit = 5;
-            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+            query = UpdateCamlQueryForTesting(fieldName, timeSlots, rowLimit);
 
             timeSlots = new List<string>
             {
                 "07:00-17:00"
             };
             rowLimit = 5;
-            query = UpdateCamlQuery(fieldName, timeSlots, rowLimit);
+            query = UpdateCamlQueryForTesting(fieldName, timeSlots, rowLimit);
 
             Assert.AreEqual(1, 2);       
         }
@@ -791,6 +792,59 @@ namespace TimeSync.Tests
             Assert.AreEqual(8, tk.Teams.Count(team => team.UsesTimeslots));
             Assert.IsFalse(tk.TimeslotIsFieldLookup);
             Assert.AreEqual("Periode_x0020_for_x0020_tidsregi", tk.TimeslotFieldName);
+        }
+
+        [TestMethod]
+        public void UpdateSPCamlQueryTest()
+        {
+            const string fieldName = "Periode_x0020_for_x0020_tidsregi";
+            CamlQuery query;
+            var timeSlots = new List<Timeslot>
+            {
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "07:00-17:00"}}
+            };
+            var rowLimit = 5;
+            query = SharepointClient.UpdateCamlQuery(timeSlots, fieldName, rowLimit);
+
+            timeSlots = new List<Timeslot>
+            {
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "07:00-17:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "17:00-22:00"}}
+            };
+            rowLimit = 5;
+            query = SharepointClient.UpdateCamlQuery(timeSlots, fieldName, rowLimit);
+
+            timeSlots = new List<Timeslot>
+            {
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "07:00-17:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "17:00-22:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "22:00-04:00"}}
+            };
+            rowLimit = 5;
+            query = SharepointClient.UpdateCamlQuery(timeSlots, fieldName, rowLimit);
+
+            timeSlots = new List<Timeslot>
+            {
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "07:00-17:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "17:00-22:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "22:00-04:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "04:00-06:00"}}
+            };
+            rowLimit = 5;
+            query = SharepointClient.UpdateCamlQuery(timeSlots, fieldName, rowLimit);
+
+            timeSlots = new List<Timeslot>
+            {
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "07:00-17:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "17:00-22:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "22:00-04:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "04:00-06:00"}},
+                new Timeslot {TimeInterval = new TimeInterval {Interval = "06:00-07:00"}}
+            };
+            rowLimit = 5;
+            query = SharepointClient.UpdateCamlQuery(timeSlots, fieldName, rowLimit);
+
+            Assert.AreEqual(1, 2);
         }
     }
 }

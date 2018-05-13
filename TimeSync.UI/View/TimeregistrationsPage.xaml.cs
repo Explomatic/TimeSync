@@ -37,7 +37,7 @@ namespace TimeSync.UI.View
 
             foreach (var tk in timereg.ListOfToolkits)
             {
-                if (tk.CustomerName != timereg.Customer) continue;
+                if (tk.DisplayName != timereg.ToolkitDisplayName) continue;
                 timereg.ListOfTeams.Clear();
                 foreach (var team in tk.Teams)
                 {
@@ -56,7 +56,7 @@ namespace TimeSync.UI.View
 
             foreach (var tk in timereg.ListOfToolkits)
             {
-                if (tk.CustomerName != timereg.Customer) continue;
+                if (tk.DisplayName != timereg.ToolkitDisplayName) continue;
                 foreach (var team in tk.Teams)
                 {
                     if (team.Name != timereg.Team) continue;

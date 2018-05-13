@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.ApplicationPages.Calendar.Exchange;
 using Microsoft.SharePoint.Client;
@@ -46,7 +47,7 @@ namespace TimeSync.DataAccess
 
             var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
             var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
-            var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
+            var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{toolkit.CustomerName}-{timereg.CaseId}");
 
             var itemCreateInfo = new ListItemCreationInformation();
             var sharepointListItem = sharepointList.AddItem(itemCreateInfo);
@@ -91,7 +92,7 @@ namespace TimeSync.DataAccess
             var itemCreateInfo = new ListItemCreationInformation();
             foreach (var timereg in timeregs)
             {
-                var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{timereg.Customer}-{timereg.CaseId}");
+                var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{toolkit.CustomerName}-{timereg.CaseId}");
 
                 var sharepointListItem = sharepointList.AddItem(itemCreateInfo);
 
@@ -162,15 +163,15 @@ namespace TimeSync.DataAccess
 
             if (!usesTimeslots) return tk;
 
-            var listOfTimregsWithTimeslot = GetTop250TimeregsWithTimeslot(clientContext, oList, tk);
+            var timeregsWithTimeslot = GetTopTimeregsWithTimeslot(clientContext, oList, tk);
 
-            var listOfCasesForTimeregsWithTimeslot =
-                GetCasesForTimeregsWithTimeslot(clientContext, listOfTimregsWithTimeslot);
+            var casesForTimeregsWithTimeslot =
+                GetCasesForTimeregsWithTimeslot(clientContext, timeregsWithTimeslot);
 
-            var listOfTeamsUsingTimeslots = listOfCasesForTimeregsWithTimeslot.GroupBy(tkCase => tkCase.Team)
+            var teamsUsingTimeslots = casesForTimeregsWithTimeslot.GroupBy(tkCase => tkCase.Team)
                 .Select(tkCase => tkCase.First()).OrderBy(tkCase => tkCase.Team).ToList();
 
-            foreach (var tkCase in listOfTeamsUsingTimeslots)
+            foreach (var tkCase in teamsUsingTimeslots)
             {
                 foreach (var team in tk.Teams)
                 {
@@ -178,14 +179,61 @@ namespace TimeSync.DataAccess
                 }
             }
 
-            tk.Timeslots = ExtractTimeslots(listOfTimregsWithTimeslot, tk);
+            tk.Timeslots = tk.TimeslotFieldName == "TimeSlot" ? ExtractTimeslotsFromTimeslotList(clientContext) : ExtractTimeslotsFromTimeregList(clientContext, tk);
 
             return tk;
         }
 
+        private static List<Timeslot> ExtractTimeslotsFromTimeslotList(ClientContext clientContext)
+        {
+            const string list = "Time Slots";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            var query = new CamlQuery
+            {
+                ViewXml = @"<View><Query><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><ViewFields><FieldRef Name='ID'/><FieldRef Name='Title'/></ViewFields></View>"
+            };
+
+            var listItems = oList.GetItems(query);
+            clientContext.Load(listItems);
+            clientContext.ExecuteQuery();
+
+            var timeslots = new List<Timeslot>();
+
+            //return listItems.Select(item => new Timeslot
+            //    {
+            //        TimeInterval = new TimeInterval
+            //        {
+            //            Id = (from field in item.FieldValues where field.Key == "ID" select (int) field.Value).Single(),
+            //            Interval = (from field in item.FieldValues where field.Key == "Title" select (string) field.Value).Single()
+            //        }
+            //    })
+            //    .ToList();
+
+            foreach (var item in listItems)
+            {
+                var timeslot = new Timeslot
+                {
+                    TimeInterval = new TimeInterval
+                    {
+                        Id = (from field in item.FieldValues where field.Key == "ID" select (int)field.Value).Single(),
+                        Interval = (from field in item.FieldValues
+                                    where field.Key == "Title"
+                                    select (string)field.Value)
+                            .Single()
+                    }
+                };
+                timeslots.Add(timeslot);
+            }
+
+            return timeslots.OrderBy(ts => ts.TimeInterval.Id).ToList();
+        }
+
         private static List<Team> GetTeamsWithActiveSLA(ClientContext clientContext)
         {
-            var list = "SLA";
+            const string list = "SLA";
             var oList = clientContext.Web.Lists.GetByTitle(list);
 
             clientContext.Load(oList);
@@ -220,25 +268,29 @@ namespace TimeSync.DataAccess
                 foreach (var fv in item.FieldValues)
                 {
                     if (fv.Key != "Team") continue;
-                    try
+
+                    var enumFlv = (IEnumerable) fv.Value;
+
+                    if (enumFlv != null)
                     {
-                        teams.AddRange(from FieldLookupValue fvl in (IEnumerable)fv.Value
-                                       select new Team()
-                                       {
-                                           Name = fvl.LookupValue
-                                       });
+                        teams.AddRange(from FieldLookupValue flv in enumFlv
+                            select new Team()
+                            {
+                                Name = flv.LookupValue
+                            });
                     }
-                    catch (Exception e)
+                    else
                     {
-                        var fvl = (FieldLookupValue)fv.Value;
+                        var flv = (FieldLookupValue)fv.Value;
                         var team = new Team()
                         {
-                            Name = fvl.LookupValue
+                            Name = flv.LookupValue
                         };
                         teams.Add(team);
                     }
                 }
             }
+
             return teams.GroupBy(team => team.Name).Select(g => g.First()).OrderBy(team => team.Name).ToList();
         }
 
@@ -279,6 +331,98 @@ namespace TimeSync.DataAccess
             return teams.GroupBy(team => team.Name).Select(g => g.First()).OrderBy(team => team.Name).ToList();
         }
 
+        private static List<Timeslot> ExtractTimeslotsFromTimeregList(ClientContext clientContext, Toolkit tk)
+        {
+            var timeslots = new List<Timeslot>();
+            const string list = "tidsregistrering";
+            var oList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(oList);
+            clientContext.ExecuteQuery();
+
+            var rowLimit = 5;
+            var loopCounter = 0;
+            double timespan = 0;
+
+            var query = new CamlQuery
+            {
+                ViewXml =
+                    $@"<View><Query><Where><IsNotNull><FieldRef Name='{
+                            tk.TimeslotFieldName
+                        }'/></IsNotNull></Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><ViewFields><FieldRef Name='{
+                            tk.TimeslotFieldName
+                        }' /></ViewFields><RowLimit>{rowLimit}</RowLimit></View>"
+            };
+
+            while (timespan < 24 && loopCounter < 10)
+            {
+                var listItems = oList.GetItems(query);
+                clientContext.Load(listItems);
+                clientContext.ExecuteQuery();
+
+                foreach (var item in listItems)
+                {
+                    if (tk.TimeslotIsFieldLookup)
+                    {
+                        var timeInterval = (
+                            from field in item.FieldValues
+                            where field.Key == tk.TimeslotFieldName
+                            select new TimeInterval
+                            {
+                                Id = ((FieldLookupValue)field.Value).LookupId,
+                                Interval = ((FieldLookupValue)field.Value).LookupValue
+                            }
+                            ).Single();
+
+                        if (timeslots.All(ti => ti.TimeInterval.Id != timeInterval.Id))
+                            timeslots.Add(new Timeslot {TimeInterval = timeInterval});
+                    }
+                    else
+                    {
+                        var timeInterval = (
+                            from field in item.FieldValues
+                            where field.Key == tk.TimeslotFieldName
+                            select new TimeInterval
+                            {
+                                Id = -1,
+                                Interval = (string) field.Value
+                            }
+                        ).Single();
+                        if (timeslots.All(ti => ti.TimeInterval.Interval != timeInterval.Interval))
+                            timeslots.Add(new Timeslot { TimeInterval = timeInterval });
+                    }
+                }
+
+                query = UpdateCamlQuery(timeslots, tk.TimeslotFieldName, rowLimit);
+
+                loopCounter++;
+            }
+
+            return timeslots;
+        }
+
+        public static CamlQuery UpdateCamlQuery(List<Timeslot> timeslots, string tkTimeslotFieldName, int rowLimit)
+        {
+            var equalsQuery = timeslots.Select(timeslot => TextNotEquals(tkTimeslotFieldName, timeslot.TimeInterval.Interval))
+                .Aggregate(WrapInAnd);
+
+            var equalsNotNullQuery = WrapInAnd(equalsQuery, $@"<IsNotNull><FieldRef Name='{tkTimeslotFieldName}'/></IsNotNull>");
+
+            return new CamlQuery
+            {
+                ViewXml =
+                    $@"<View><Query><Where>{
+                            equalsNotNullQuery
+                        }</Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><ViewFields><FieldRef Name='{
+                            tkTimeslotFieldName
+                        }' /></ViewFields><RowLimit>{rowLimit}</RowLimit></View>"
+            };
+        }
+
+        private static string WrapInAnd(string first, string second)
+        {
+            return $"<And>{first}{second}</And>";
+        }
+
         private static List<Timeslot> ExtractTimeslots(IEnumerable<TimeregWithTimeslot> listOfTimregsWithTimeslot, Toolkit tk)
         {
             var timeslots = new List<Timeslot>();
@@ -289,7 +433,7 @@ namespace TimeSync.DataAccess
                     .Select(t => t.First()).OrderBy(t => t.TimeslotId).ToList();
                 foreach (var tkTimeslot in uniqueTimeslots)
                 {
-                    var timeslot = new Timeslot {TimeInterval = ExtractTimeIntervalFromTimeslot(tkTimeslot)};
+                    var timeslot = new Timeslot { TimeInterval = ExtractTimeIntervalFromTimeslot(tkTimeslot) };
                     timeslots.Add(timeslot);
                 }
             }
@@ -298,7 +442,7 @@ namespace TimeSync.DataAccess
                 foreach (var tkTimeslot in listOfTimregsWithTimeslot)
                 {
                     if (timeslots.Any(ts => ts.TimeInterval.Interval == tkTimeslot.Timeslot)) continue;
-                    var timeslot = new Timeslot {TimeInterval = ExtractTimeIntervalFromTimeslot(tkTimeslot)};
+                    var timeslot = new Timeslot { TimeInterval = ExtractTimeIntervalFromTimeslot(tkTimeslot) };
                     timeslots.Add(timeslot);
                 }
             }
@@ -315,7 +459,7 @@ namespace TimeSync.DataAccess
             };
         }
 
-        private static IEnumerable<ToolkitCase> GetCasesForTimeregsWithTimeslot(ClientContext clientContext, IEnumerable<TimeregWithTimeslot> listOfTimregsWithTimeslot)
+        private static IEnumerable<ToolkitCase> GetCasesForTimeregsWithTimeslot(ClientContext clientContext, IEnumerable<TimeregWithTimeslot> timeregsWithTimeslot)
         {
             const string list = "sager";
             var spList = clientContext.Web.Lists.GetByTitle(list);
@@ -324,12 +468,12 @@ namespace TimeSync.DataAccess
 
             //.GroupBy(team => team.Name).Select(g => g.First()).OrderBy(team => team.Name).ToList();
 
-            var listOfUniqueTimeregsWithTimeslot = listOfTimregsWithTimeslot.GroupBy(timereg => timereg.CaseId)
+            var uniqueTimeregsWithTimeslot = timeregsWithTimeslot.GroupBy(timereg => timereg.CaseId)
                 .Select(g => g.First()).OrderBy(timereg => timereg.CaseId).ToList();
 
-            var listOfUniqueCaseIds = (from uniqueCaseId in listOfUniqueTimeregsWithTimeslot select uniqueCaseId.CaseId).ToList();
+            var uniqueCaseIds = (from uniqueTimereg in uniqueTimeregsWithTimeslot select uniqueTimereg.CaseId).ToList();
 
-            var query = GenereateCamlQueryForIds(listOfUniqueCaseIds);
+            var query = GenereateCamlQueryForIds(uniqueCaseIds);
 
             var listItems = spList.GetItems(query);
             clientContext.Load(listItems);
@@ -361,11 +505,12 @@ namespace TimeSync.DataAccess
             //    .ToList();
         }
 
-        private static List<TimeregWithTimeslot> GetTop250TimeregsWithTimeslot(ClientRuntimeContext clientContext, List spList, Toolkit tk)
+        private static List<TimeregWithTimeslot> GetTopTimeregsWithTimeslot(ClientRuntimeContext clientContext, List spList, Toolkit tk)
         {
+            var rowLimit = 250;
             var query = new CamlQuery()
             {
-                ViewXml = $@"<View><Query><Where><IsNotNull><FieldRef Name='{tk.TimeslotFieldName}'/></IsNotNull></Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy><ViewFields><FieldRef Name='Sag_x003a_Sags_x0020_Id' /><FieldRef Name='{tk.TimeslotFieldName}' /></ViewFields></Query><RowLimit>250</RowLimit></View>"
+                ViewXml = $@"<View><Query><Where><IsNotNull><FieldRef Name='{tk.TimeslotFieldName}'/></IsNotNull></Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><ViewFields><FieldRef Name='Sag_x003a_Sags_x0020_Id' /><FieldRef Name='{tk.TimeslotFieldName}' /></ViewFields><RowLimit>{rowLimit}</RowLimit></View>"
             };
 
             var listItems = spList.GetItems(query);
@@ -415,7 +560,7 @@ namespace TimeSync.DataAccess
         private static int ExtractCaseIdFromField(string spCaseId)
         {
             if (spCaseId == "Beregnes") return -1;
-            var rx = new Regex(@"([a-zA-Z]+)\-(\d+)");
+            var rx = new Regex(@"(\w+)\-(\d+)");
             var matches = rx.Matches(spCaseId);
 
             int caseId;
@@ -430,13 +575,38 @@ namespace TimeSync.DataAccess
 
         private static CamlQuery GenereateCamlQueryForIds(IEnumerable<int> listOfCaseIds)
         {
-            var values = listOfCaseIds.Aggregate("", (current, caseId) => current + IdAsValueType(caseId));
-            return new CamlQuery()
+            //var values = listOfCaseIds.Aggregate("", (current, caseId) => current + IdAsValueType(caseId));
+            var values = listOfCaseIds.Select(caseId => TextEquals("ID", caseId)).Aggregate(WrapInOr);
+
+            return new CamlQuery
             {
-                ViewXml = $"<View><Where><Or><In><FieldRef Name='ID'/><Values>{values}</Values></In></Or></Where></View>"
+                ViewXml =
+                    $@"<View><Query><Where>{
+                            values
+                        }</Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Team' /></ViewFields></View>"
             };
         }
 
+        private static string WrapInOr(string first, string second)
+        {
+            return $"<Or>{first}{second}</Or>";
+            throw new NotImplementedException();
+        }
+
+        private static string TextEquals(string column, int value)
+        {
+            return $"<Eq><FieldRef Name='{column}' /><Value Type='Text'>{value}</Value></Eq>";
+        }
+
+        private static string TextNotEquals(string column, string value)
+        {
+            return $"<Neq><FieldRef Name='{column}' /><Value Type='Text'>{value}</Value></Neq>";
+        }
+
+        private static string TextEquals(string column, string value)
+        {
+            return $"<Eq><FieldRef Name='{column}' /><Value Type='Text'>{value}</Value></Eq>";
+        }
         //private static string IdAsValueType(string customer, int value)
         //{
         //    return $"<Value Type='Text'>{customer}-{value}</Value>";
@@ -544,7 +714,5 @@ namespace TimeSync.DataAccess
 
             return listItems.Count != 0;
         }
-    }
-
-    
+    }   
 }

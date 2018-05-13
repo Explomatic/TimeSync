@@ -18,7 +18,7 @@ namespace TimeSync.Model
         public int CaseId { get; set; }
 
         public DateTime DoneDate { get; set; }
-        public string Customer { get; set; }
+        public string ToolkitDisplayName { get; set; }
         public string Team { get; set; }
         public double Hours { get; set; }
         public bool IsSynchronized { get; set; }

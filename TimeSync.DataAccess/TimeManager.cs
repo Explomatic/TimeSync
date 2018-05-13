@@ -58,7 +58,7 @@ namespace TimeSync.DataAccess
             //Get user ids
             //foreach (var tk in toolkits)
 
-            for (var i=0; i < toolkits.Count(); i++)
+            for (var i=0; i < toolkits.Count; i++)
             {
                 var tk = toolkits[i];
 
@@ -67,7 +67,7 @@ namespace TimeSync.DataAccess
                 if (tk.UserId == 0)
                     tk.UserId = _sharepointClient.GetUserIdFromToolkit(toolkitUser, tk);
 
-                if (ToolkitInfoChanged(tk,_toolkits))
+                if (_toolkits.IsNullOrEmpty() || ToolkitInfoChanged(tk,_toolkits))
                 {
                     tk.Teams = _sharepointClient.GetTeamsFromToolkit(toolkitUser, tk);
                     tk = _sharepointClient.GetTimeslotInformationFromToolkit(toolkitUser, tk);
@@ -85,14 +85,15 @@ namespace TimeSync.DataAccess
 
         private static string GetCustomerNameFromUrl(Toolkit tk)
         {
-            var customerName = tk.DisplayName.Split('/');
+            var customerName = tk.Url.Split('/');
             return customerName.Last().IsNullOrEmpty() ? customerName[customerName.Length - 2] : customerName.Last();
         }
 
-        private static bool ToolkitInfoChanged(Toolkit newTk, List<Toolkit> tks)
+        private static bool ToolkitInfoChanged(Toolkit newTk, IEnumerable<Toolkit> tks)
         {
-            var currTk = tks.SingleOrDefault(tk => tk.Url == newTk.Url);
+            var currTk = tks?.SingleOrDefault(tk => tk.Url == newTk.Url);
             return currTk?.GetTeamsWithoutSLA != newTk.GetTeamsWithoutSLA;
+
         }
 
         /// <summary>
@@ -109,13 +110,13 @@ namespace TimeSync.DataAccess
             //var uniqueToolkitNames = new List<string>();
             //foreach (var timereg in timeregs)
             //{
-            //    if (uniqueToolkitNames.Contains(timereg.Customer)) continue;
-            //    uniqueToolkitNames.Add(timereg.Customer);
+            //    if (uniqueToolkitNames.Contains(timereg.ToolkitDisplayName)) continue;
+            //    uniqueToolkitNames.Add(timereg.ToolkitDisplayName);
             //}
 
             //foreach (var toolkitName in uniqueToolkitNames)
             //{
-            //    var tkTimeregs = (from timereg in timeregs where timereg.Customer == toolkitName select timereg).ToList();
+            //    var tkTimeregs = (from timereg in timeregs where timereg.ToolkitDisplayName == toolkitName select timereg).ToList();
             //    _sharepointClient.MakeTimeregistrations(tkTimeregs, _toolkitUser, _toolkits.Single(tk => tk.CustomerName == toolkitName));
             //}
 
@@ -140,9 +141,9 @@ namespace TimeSync.DataAccess
 
         private Toolkit GetRelevantToolkit(Timeregistration timereg)
         {
-            var toolkit = _toolkits.SingleOrDefault(tk => tk.CustomerName == timereg.Customer);
+            var toolkit = _toolkits.SingleOrDefault(tk => tk.DisplayName == timereg.ToolkitDisplayName);
             if (toolkit == null)
-                throw new Exception("Customer not found");
+                throw new Exception("Toolkit not found");
 
             return toolkit;
         }
