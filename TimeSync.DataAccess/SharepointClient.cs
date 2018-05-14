@@ -45,17 +45,30 @@ namespace TimeSync.DataAccess
             clientContext.Load(sharepointList);
             clientContext.ExecuteQuery();
 
-            var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
-            var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
-            var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{toolkit.CustomerName}-{timereg.CaseId}");
-
             var itemCreateInfo = new ListItemCreationInformation();
             var sharepointListItem = sharepointList.AddItem(itemCreateInfo);
 
+            var success = timereg.CouldConvertDurationToHours();
+            if (!success) return -1;
+
+            var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
+            var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
+            if (timereg.IsWorkPackage)
+            {
+                sharepointListItem["Case"] = FindRelatedCaseForWorkPackage(clientContext, timereg.CaseId);
+                var toolkitWorkPackage = new SPFieldLookupValue(timereg.CaseId, "");
+                sharepointListItem["WorkPackage"] = toolkitWorkPackage;
+            }
+            else
+            {
+                var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{toolkit.CustomerName}-{timereg.CaseId}");
+                sharepointListItem["Case"] = toolkitCase;
+            }
+
+            //sharepointListItem["Hours"] = timereg.Hours;
             sharepointListItem["Hours"] = timereg.Hours;
             sharepointListItem["DoneBy"] = doneBy;
             sharepointListItem["Author"] = author;
-            sharepointListItem["Case"] = toolkitCase;
             sharepointListItem["DoneDate"] = timereg.DoneDate;
 
             try
@@ -68,6 +81,31 @@ namespace TimeSync.DataAccess
             {
                 return -1;
             }
+        }
+
+        public FieldLookupValue FindRelatedCaseForWorkPackage(ClientContext clientContext, int timeregCaseId)
+        {
+            const string list = "Arbejdspakker";
+            var sharepointList = clientContext.Web.Lists.GetByTitle(list);
+            clientContext.Load(sharepointList);
+            clientContext.ExecuteQuery();
+
+            var query = new CamlQuery
+            {
+                ViewXml =
+                    $@"<View><Query><Where><Eq><FieldRef Name='ID' /><Value Type='Text'>{
+                            timeregCaseId
+                        }</Value></Eq></Where></Query><ViewFields><FieldRef Name='RelatedCase' /></ViewFields></View>"
+            };
+
+            //
+
+            var listItems = sharepointList.GetItems(query);
+            clientContext.Load(listItems);
+            clientContext.ExecuteQuery();
+
+            var item = listItems[0];
+            return (FieldLookupValue) item.FieldValues.Single(field => field.Key == "RelatedCase").Value;
         }
 
         public List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)

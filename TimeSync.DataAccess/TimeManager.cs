@@ -126,14 +126,7 @@ namespace TimeSync.DataAccess
                 var toolkit = GetRelevantToolkit(timereg);
                 var id = _sharepointClient.MakeTimeregistration(timereg, _toolkitUser, toolkit);
 
-                if (id == -1)
-                {
-                    timereg.IsSynchronized = false;
-                }
-                else
-                {
-                    timereg.IsSynchronized = true;
-                }
+                timereg.IsSynchronized = id != -1;
             }
 
             _timeregistrationRepository.SaveData(timeregs);

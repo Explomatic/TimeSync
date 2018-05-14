@@ -846,5 +846,32 @@ namespace TimeSync.Tests
 
             Assert.AreEqual(1, 2);
         }
+
+        [TestMethod]
+        public void TimeregWorkPackageTest()
+        {
+            var timereg = new Timeregistration
+            {
+                CaseId = 21,
+                DoneDate = new DateTime(2018, 5, 7),
+                Duration = "11:00-20:00",
+                IsWorkPackage = true,
+                Team = "Operations",
+                ToolkitDisplayName = "ATEAM"
+            };
+
+            var toolkit = new Toolkit
+            {
+                CustomerName = "NCOPEATEAM",
+                DisplayName = "ATEAM",
+                Url = "https://goto.netcompany.com/cases/GTO539/NCOPEATEAM",
+                UserId = 43,
+                Teams = new List<Team> {new Team {Name = "Operations", UsesTimeslots = false}}
+            };
+
+            var id = _sharepointClient.MakeTimeregistration(timereg, _toolkitUser, toolkit);
+
+            Assert.AreNotEqual(-1, id);
+        }
     }
 }

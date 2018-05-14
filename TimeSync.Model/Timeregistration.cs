@@ -15,7 +15,6 @@ namespace TimeSync.Model
     public class Timeregistration
     {
         public int CaseId { get; set; }
-
         public DateTime DoneDate { get; set; }
         public string ToolkitDisplayName { get; set; }
         public string Team { get; set; }
