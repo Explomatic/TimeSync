@@ -13,19 +13,6 @@
                 <TextBox Width="250" Margin="20,5,20,5" Text="{Binding Password}" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
-        
-        <DataTemplate x:Key="ToolkitDataTemplate"  DataType="{x:Type src:Toolkit}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="325"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" Width="80" Margin="5,5,5,5" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1"  Width="305" Margin="15,5,5,5" Text="{Binding Url}" VerticalAlignment="Center"/>
-                <CheckBox Grid.Column="2" IsChecked="{Binding GetTeamsWithoutSLA}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Grid>
-        </DataTemplate>
 
         <Style TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -150,6 +137,35 @@
             <Setter Property="Width" Value="25"/>
         </Style>
 
+        <Style TargetType="{x:Type Button}" x:Key="DeleteButton" BasedOn="{StaticResource RegularButton}">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Grid Width="15" Height="15">
+                        <Path Margin="3"
+                              Stroke="#FFF"
+                              StrokeThickness="1.5"
+                              StrokeStartLineCap="Square"
+                              StrokeEndLineCap="Square"
+                              Stretch="Uniform"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathGeometry.Figures>
+                                        <PathFigure StartPoint="0,0">
+                                            <LineSegment Point="25,25"/>
+                                        </PathFigure>
+                                        <PathFigure StartPoint="0,25">
+                                            <LineSegment Point="25,0"/>
+                                        </PathFigure>
+                                    </PathGeometry.Figures>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Grid>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <ControlTemplate x:Key="WindowTemplate" TargetType="{x:Type Window}">
             <Grid Background="{StaticResource WindowBackColor}">

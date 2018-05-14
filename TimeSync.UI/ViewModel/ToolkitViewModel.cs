@@ -17,27 +17,45 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class ToolkitViewModel : BaseViewModel
     {
-        public ObservableCollection<Toolkit> ListOfToolkits { get; set; }
+        private ObservableCollection<Toolkit> _toolkits;
+
+        public ObservableCollection<Toolkit> Toolkits
+        {
+            get { return _toolkits; }
+            set
+            {
+                _toolkits = value;
+                RaisePropertyChangedEvent("Toolkits");
+            }
+        }
+
         public TimeManager TimeManager { get; set; }
 
         public ToolkitViewModel()
         {
             IRepository<ObservableCollection<Toolkit>> repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
-            ListOfToolkits = repo.GetData();
+            Toolkits = repo.GetData();
         }
 
         public ICommand AddNewToolkitCommand => new DelegateCommand(AddNewToolkit);
 
         public virtual void AddNewToolkit()
         {
-            ListOfToolkits.Add(new Toolkit());
+            Toolkits.Add(new Toolkit());
         }
 
         public ICommand SaveToolkitsCommand => new DelegateCommand(SaveToolkits);
 
         public virtual void SaveToolkits()
         {
-            TimeManager.SaveToolkitInfo(TimeManager.UserInfo, ListOfToolkits.ToList());
+            TimeManager.SaveToolkitInfo(TimeManager.UserInfo, Toolkits.ToList());
+        }
+
+        public ICommand DeleteSelectedToolkitsCommand => new DelegateCommand(DeleteSelectedToolkits);
+
+        public virtual void DeleteSelectedToolkits()
+        {
+            Toolkits = new ObservableCollection<Toolkit>(Toolkits.Where(x => !x.ToBeDeleted));
         }
     }
 }

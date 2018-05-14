@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -12,9 +13,17 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class TimeregistrationViewModel : BaseViewModel
     {
+        private ObservableCollection<Timeregistration> _timeregistrations;
         private IRepository<List<Toolkit>> _toolkitRepo;
         public TimeManager TimeManager { get; set; }
-        public ObservableCollection<Timeregistration> Timeregistrations { get; set; }
+        public ObservableCollection<Timeregistration> Timeregistrations {
+            get { return _timeregistrations; }
+            set
+            {
+                _timeregistrations = value;
+                RaisePropertyChangedEvent("Timeregistrations");
+            } 
+        }
         public List<Toolkit> ListOfToolkits { get; set; }
         public List<string> ListOfToolkitNames { get; set; }
         public List<string> ListOfTeams { get; set; }
@@ -49,6 +58,13 @@ namespace TimeSync.UI.ViewModel
                 ListOfTeams = new ObservableCollection<string>(),
                 ListOfTimeslots = new ObservableCollection<string>()
             });
+        }
+
+        public ICommand DeleteSelectedTimeregsCommand => new DelegateCommand(DeleteSelectedTimeregs);
+
+        public virtual void DeleteSelectedTimeregs()
+        {
+            Timeregistrations = new ObservableCollection<Timeregistration>(Timeregistrations.Where(x => !x.ToBeDeleted));
         }
 
         private void UpdateLists()

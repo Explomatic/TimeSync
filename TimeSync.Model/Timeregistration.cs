@@ -14,7 +14,6 @@ namespace TimeSync.Model
 {
     public class Timeregistration
     {
-        //TODO: Supporting setting a specified time slot for a given toolkit. E.g. at FTFA the can be queried, but not at HK.
         public int CaseId { get; set; }
 
         public DateTime DoneDate { get; set; }
@@ -24,6 +23,8 @@ namespace TimeSync.Model
         public bool IsSynchronized { get; set; }
         public string Duration { get; set; }
         public string Timeslot { get; set; }
+        public bool ToBeDeleted { get; set; }
+        public bool IsWorkPackage { get; set; }
 
         public List<Toolkit> ListOfToolkits { get; set; }
         public List<string> ListOfToolkitNames { get; set; }
