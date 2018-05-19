@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,18 @@ namespace TimeSync.UI.ViewModel
 {
     public class BaseViewModel : ObservableObject
     {
+        private string _versionNumber = ConfigurationManager.AppSettings["VersionNumber"];
+
+        public string VersionNumber
+        {
+            get { return _versionNumber; }
+            set
+            {
+                _versionNumber = value;
+                RaisePropertyChangedEvent("VersionNumber");
+            }
+        } 
+
         protected bool pop;
         public bool PopupIsOpen
         {

@@ -14,16 +14,16 @@
             Please visit us at our GitHub in order to submit an issue.<LineBreak/><LineBreak/>
             GitHub: 
                 <Hyperlink
-                    NavigateUri="https://github.com/NCTimeSync/TimeSync"
+                    NavigateUri="https://github.com/NCTimeSync/TimeSync/issues"
                     RequestNavigate="Hyperlink_RequestNavigate"
                     Foreground="sc#0.95,0.15,0.0000">
-                    https://github.com/NCTimeSync/TimeSync
+                    https://github.com/NCTimeSync/TimeSync/issues
                 </Hyperlink>
         </TextBlock>
 
         <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync (BETA)- Bug report
+            TimeSync (BETA) - Bug report
         </Label>
     </Grid>
 </Page>
