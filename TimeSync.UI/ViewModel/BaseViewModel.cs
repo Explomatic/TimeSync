@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TimeSync.UI.View;
 
 namespace TimeSync.UI.ViewModel
 {
@@ -44,6 +45,12 @@ namespace TimeSync.UI.ViewModel
         public void ClosePopup()
         {
             PopupIsOpen = false;
+        }
+
+        public void OpenExceptionViewer(string message, Exception e)
+        {
+            var ev = new ExceptionViewer(message, e);
+            ev.ShowDialog();
         }
     }
 }

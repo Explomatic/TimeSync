@@ -14,6 +14,7 @@ using Castle.Core;
 using TimeSync.DataAccess;
 using TimeSync.IoC;
 using TimeSync.Model;
+using TimeSync.UI.View;
 
 namespace TimeSync.UI.ViewModel
 {
@@ -99,6 +100,8 @@ namespace TimeSync.UI.ViewModel
             {
                 _toolkitUser.Name = Username;
             }
+
+            throw new Exception("asdjls");
 
             _toolkitUser.ToSavePassword = ToSavePassword;
 

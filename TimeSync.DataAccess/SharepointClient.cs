@@ -18,7 +18,7 @@ namespace TimeSync.DataAccess
 {
     public class SharepointClient : ISharepointClient
     {
-        public int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
+        public virtual int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit)
         {
             var clientContext = new ClientContext(toolkit.Url);
             var userCollection = clientContext.Web.SiteUsers;
@@ -33,7 +33,7 @@ namespace TimeSync.DataAccess
             return user.Id;
         }
 
-        public int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit)
+        public virtual int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit)
         {
             var clientContext = new ClientContext(toolkit.Url)
             {
@@ -83,7 +83,7 @@ namespace TimeSync.DataAccess
             }
         }
 
-        public FieldLookupValue FindRelatedCaseForWorkPackage(ClientContext clientContext, int timeregCaseId)
+        public virtual FieldLookupValue FindRelatedCaseForWorkPackage(ClientContext clientContext, int timeregCaseId)
         {
             const string list = "Arbejdspakker";
             var sharepointList = clientContext.Web.Lists.GetByTitle(list);
@@ -108,7 +108,7 @@ namespace TimeSync.DataAccess
             return (FieldLookupValue) item.FieldValues.Single(field => field.Key == "RelatedCase").Value;
         }
 
-        public List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
+        public virtual List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
         {
             //TODO: Add support for multiple timeregs per day for a case (i.e. group them by case id)
             //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
@@ -160,14 +160,14 @@ namespace TimeSync.DataAccess
             }
         }
 
-        public List<Team> GetTeamsFromToolkit(ToolkitUser tkUser, Toolkit tk)
+        public virtual List<Team> GetTeamsFromToolkit(ToolkitUser tkUser, Toolkit tk)
         {
             var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.SecurePassword, tkUser.Domain) };
 
             return tk.GetTeamsWithoutSLA ?  GetAllTeams(clientContext) : GetTeamsWithActiveSLA(clientContext);
         }
 
-        public double CalculateTimespan(Timeslot timeslot)
+        public virtual double CalculateTimespan(Timeslot timeslot)
         {
             var now = DateTime.Now;
             var time1 = new DateTime();
@@ -188,7 +188,7 @@ namespace TimeSync.DataAccess
             return time2.Subtract(time1).TotalHours;
         }
 
-        public Toolkit GetTimeslotInformationFromToolkit(ToolkitUser tkUser, Toolkit tk)
+        public virtual Toolkit GetTimeslotInformationFromToolkit(ToolkitUser tkUser, Toolkit tk)
         {
             var clientContext = new ClientContext(tk.Url) { Credentials = new NetworkCredential(tkUser.Name, tkUser.SecurePassword, tkUser.Domain) };
 

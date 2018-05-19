@@ -6,9 +6,7 @@ using System.Net;
 using Microsoft.SharePoint;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.SharePoint.Client;
-using Newtonsoft.Json;
 using TimeSync.Model;
-using System.Security;
 using System.Text.RegularExpressions;
 using TimeSync.DataAccess;
 
@@ -98,7 +96,7 @@ namespace TimeSync.Tests
             oListItem["DoneDate"] = doneDate;
 
             oListItem.Update();
-            _clientContext.ExecuteQuery();
+            _clientContext.ExecuteQuery();           
 
             var id = Convert.ToInt32(oListItem.Id.ToString());
             Assert.AreEqual(id, -1);

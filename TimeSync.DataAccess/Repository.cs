@@ -15,10 +15,15 @@ namespace TimeSync.DataAccess
         private StreamWriter _streamWriter;
         private StreamReader _streamReader;
         private string _saveLocation;
+        private string _appData = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\TimeSync";
 
         public Repository(string saveLocationConfigKey)
         {
-            _saveLocation = ConfigurationManager.AppSettings[saveLocationConfigKey];
+            _saveLocation = $"{_appData}\\{ConfigurationManager.AppSettings[saveLocationConfigKey]}";
+            if (!Directory.Exists(_appData))
+            {
+                Directory.CreateDirectory(_appData);
+            }
         }
 
 

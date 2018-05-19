@@ -26,8 +26,7 @@ namespace TimeSync.IoC
             {
                 _log.Warn($"Exception occurred during call to {invocation.Method.Name}", exception: ex);
                 var asBaseView = invocation.InvocationTarget as dynamic;
-                asBaseView.PopupIsOpen = true;
-                asBaseView.PopupText = "Exception occurred";
+                asBaseView.OpenExceptionViewer(ex.Message, ex);
             }
             
             //TODO Put this on view model. Do try-catch. If target (I think) can be cast as BaseViewModel then activate popup. Else just throw?
