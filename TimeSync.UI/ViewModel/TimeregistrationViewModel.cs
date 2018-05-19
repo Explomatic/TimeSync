@@ -53,10 +53,10 @@ namespace TimeSync.UI.ViewModel
             UpdateLists();
             Timeregistrations.Add(new Timeregistration
             {
-                ListOfToolkitNames = ListOfToolkitNames,
-                ListOfToolkits = ListOfToolkits,
-                ListOfTeams = new ObservableCollection<string>(),
-                ListOfTimeslots = new ObservableCollection<string>()
+                ToolkitNames = ListOfToolkitNames,
+                Toolkits = ListOfToolkits,
+                Teams = new ObservableCollection<string>(),
+                Timeslots = new ObservableCollection<string>()
             });
         }
 

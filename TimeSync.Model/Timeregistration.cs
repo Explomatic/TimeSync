@@ -25,14 +25,14 @@ namespace TimeSync.Model
         public bool ToBeDeleted { get; set; }
         public bool IsWorkPackage { get; set; }
 
-        public List<Toolkit> ListOfToolkits { get; set; }
-        public List<string> ListOfToolkitNames { get; set; }
-        public ObservableCollection<string> ListOfTeams { get; set; }
-        public ObservableCollection<string> ListOfTimeslots { get; set; }
+        public List<Toolkit> Toolkits { get; set; }
+        public List<string> ToolkitNames { get; set; }
+        public ObservableCollection<string> Teams { get; set; }
+        public ObservableCollection<string> Timeslots { get; set; }
 
         public Timeregistration()
         {
-            ListOfToolkitNames = new List<string>();
+            ToolkitNames = new List<string>();
             DoneDate = DateTime.Today;
         }
 
