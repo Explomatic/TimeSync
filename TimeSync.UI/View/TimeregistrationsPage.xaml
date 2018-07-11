@@ -127,7 +127,7 @@
 
         <Label Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync (BETA) - Timeregistrations
+            TimeSync (ALPHA) - Timeregistrations
         </Label>
         
     </Grid>

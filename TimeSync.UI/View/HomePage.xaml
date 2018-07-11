@@ -66,7 +66,7 @@
         <!--Background="DarkTurqoise"-->
         
         <Grid Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20">
-            <Label Content="Welcome to TimeSync (BETA)" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman"></Label>
+            <Label Content="Welcome to TimeSync (ALPHA)" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman"></Label>
         </Grid>
         <Label Content="{Binding VersionNumber}" FontSize="10" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FFF" />
     </Grid>

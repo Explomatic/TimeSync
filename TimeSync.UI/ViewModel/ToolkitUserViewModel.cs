@@ -101,8 +101,6 @@ namespace TimeSync.UI.ViewModel
                 _toolkitUser.Name = Username;
             }
 
-            throw new Exception("asdjls");
-
             _toolkitUser.ToSavePassword = ToSavePassword;
 
             _toolkitUser.Password = _toolkitUser.ToSavePassword ? Password : "";

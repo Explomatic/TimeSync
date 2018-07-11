@@ -82,7 +82,7 @@
 
         <Label Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync (BETA) - Account information
+            TimeSync (ALPHA) - Account information
         </Label>
     </Grid>
 </Page>
