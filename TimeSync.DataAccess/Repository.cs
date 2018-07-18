@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Configuration;
+using Microsoft.SharePoint.Client;
 
 namespace TimeSync.DataAccess
 {
@@ -14,12 +15,20 @@ namespace TimeSync.DataAccess
         private FileStream _fileStream;
         private StreamWriter _streamWriter;
         private StreamReader _streamReader;
-        private string _saveLocation;
-        private string _appData = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\TimeSync";
+        private readonly string _saveLocation;
+        private readonly string _appData = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\TimeSync";
+        private readonly Dictionary<string, string> _configValues = new Dictionary<string, string>
+        {
+            {"TimeregistrationSaveLocation","Timeregistration.txt"},
+            {"ToolkitSaveLocation", "Toolkits.txt" },
+            {"ToolkitUserSaveLocation", "ToolkitUser.txt" }
+
+        };
 
         public Repository(string saveLocationConfigKey)
         {
-            _saveLocation = $"{_appData}\\{ConfigurationManager.AppSettings[saveLocationConfigKey]}";
+            //_saveLocation = $"{_appData}\\{ConfigurationManager.AppSettings[saveLocationConfigKey]}";
+            _saveLocation = $"{_appData}\\${_configValues[saveLocationConfigKey]}";
             if (!Directory.Exists(_appData))
             {
                 Directory.CreateDirectory(_appData);

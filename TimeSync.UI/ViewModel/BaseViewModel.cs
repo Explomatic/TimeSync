@@ -11,7 +11,7 @@ namespace TimeSync.UI.ViewModel
 {
     public class BaseViewModel : ObservableObject
     {
-        private string _versionNumber = ConfigurationManager.AppSettings["VersionNumber"];
+        private string _versionNumber = Resources.VersionNumber;
 
         public string VersionNumber
         {
