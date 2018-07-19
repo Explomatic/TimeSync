@@ -11,7 +11,7 @@ namespace TimeSync.UI.ViewModel
 {
     public class BaseViewModel : ObservableObject
     {
-        private string _versionNumber = Resources.VersionNumber;
+        private string _versionNumber = TimeSync.UI.Properties.testResources.versionNumber;
 
         public string VersionNumber
         {
