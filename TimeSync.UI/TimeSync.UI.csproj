@@ -115,7 +115,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IoC\WindsorInitializer.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\testResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

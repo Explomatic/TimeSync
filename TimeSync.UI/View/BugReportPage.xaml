@@ -9,7 +9,7 @@
       Title="BugReportPage">
 
     <Grid Background="sc#0.15,0.15,0.20">
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF" Margin="0,-75,0,0" Padding="15,0,150,0" FontSize="16" FontFamily="Times New Roman" Visibility="Visible">
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF" Margin="0,-75,0,0" Padding="15,0,150,0" FontSize="16" FontFamily="Trebuchet MS" Visibility="Visible">
             Hi! We're sorry to hear you have experienced issues with TimeSync.<LineBreak/>
             Please visit us at our GitHub in order to submit an issue.<LineBreak/><LineBreak/>
             GitHub: 
@@ -23,7 +23,7 @@
 
         <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync (BETA) - Bug report
+            TimeSync (ALPHA) - Bug report
         </Label>
     </Grid>
 </Page>
