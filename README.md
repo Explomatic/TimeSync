@@ -20,11 +20,11 @@ Remember to click sava in order to load the information into the program.
 ### Toolkit information
 Once you've added a username and password you can start adding toolkits to the list of available toolkits. For each toolkit you specify
 - a name,
-- a URL, and
+- a URL,
 - whether you want to include all teams from the Teams list. If not, then only teams with an active SLA will be included!
 You are free to pick a name that you associate with the given toolkit. The URL must not include the typical "/default.aspx" at the end.
 
-**example**
+**Example**
 
 Say you have a toolkit which when opened has the URL https://goto.netcompany.com/cases/GTO31415/NCPI/default.aspx. An entry in the toolkits page could be
 
@@ -45,10 +45,10 @@ When you've synchronized one or more toolkits it is time to create one or more t
 - a timeslot (dropdown with available timeslots if applicable for the selected team),
 - a date for the timeregistration.
 
-#### Amount of hours
+#### Amount of hours specification
 The amount of hours that you wish to register can be given either as an absolute value with either **"."** or **","** as the decimal separator or it can be given as a time interval.
 
-**example**
+**Example**
 
 Say we wish to register three timeregs in the NCPI toolkit for three different days. The entries could look as follows
 
