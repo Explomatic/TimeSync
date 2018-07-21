@@ -67,6 +67,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
@@ -117,11 +118,20 @@
             </ScrollViewer>
         </Grid>
 
-        <Button Command="{Binding DeleteSelectedTimeregsCommand}" Content=" Delete selected " HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Margin="50,0,0,0"
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="2">
+            <Label Content="Select:" Style="{StaticResource SelectionLabel}" VerticalAlignment="Bottom"/>
+            <Button Command="{Binding SelectAllCommand}" Content=" all " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25" />
+            <Button Command="{Binding SelectNoneCommand}" Content=" none " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25"/>
+            <Button Command="{Binding InvertSelectionCommand}" Content=" invert " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25"/>
+        </StackPanel>
+
+        <Button Command="{Binding DeleteSelectedTimeregsCommand}" Content=" Remove selected " HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Center" Margin="50,0,0,0"
                 Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding AddNewTimeregistrationCommand}" Content=" Add timereg " HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Margin="0,0,50,0"
+        <Button Command="{Binding AddNewTimeregistrationCommand}" Content=" Add new " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
                 Style="{StaticResource RegularButton}" />
-        <Button Command="{Binding SynchroniseCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"
+        <Button Command="{Binding SaveCommand}" Content=" Save " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Margin="-150,0,0,0"
+                Style="{StaticResource RegularButton}"/>
+        <Button Command="{Binding SynchroniseCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Margin="150,0,0,0"
                 Style="{StaticResource RegularButton}"/>
 
 

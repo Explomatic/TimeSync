@@ -12,17 +12,36 @@ using System.Windows.Data;
 
 namespace TimeSync.Model
 {
-    public class Timeregistration
+    public class Timeregistration : BaseModel
     {
+        private bool _toBeDeleted;
+        private bool _isSynchronized;
         public int CaseId { get; set; }
         public DateTime DoneDate { get; set; }
         public string ToolkitDisplayName { get; set; }
         public string Team { get; set; }
         public double Hours { get; set; }
-        public bool IsSynchronized { get; set; }
         public string Duration { get; set; }
         public string Timeslot { get; set; }
-        public bool ToBeDeleted { get; set; }
+        public bool ToBeDeleted
+        {
+            get => _toBeDeleted;
+            set
+            {
+                _toBeDeleted = value;
+                RaisePropertyChangedEvent("ToBeDeleted");
+            }
+        }
+
+        public bool IsSynchronized
+        {
+            get => _isSynchronized;
+            set
+            {
+                _isSynchronized = value;
+                RaisePropertyChangedEvent("IsSynchronized");
+            }
+        }
         public bool IsWorkPackage { get; set; }
 
         public List<Toolkit> Toolkits { get; set; }

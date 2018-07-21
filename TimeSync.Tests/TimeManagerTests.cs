@@ -94,7 +94,7 @@ namespace TimeSync.Tests
 
 
             //Act
-            _timeManager.SaveToolkitInfo(user, toolkits);
+            _timeManager.SyncToolkits(user, toolkits);
 
             //Assert
             var privateObj = new PrivateObject(_timeManager);

@@ -42,18 +42,30 @@ namespace TimeSync.DataAccess
             _timeregistrationRepository = timeregRepo;
             _sharepointClient = spClient;
         }
+
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
         /// </summary>
-        public virtual void StoreTimereg(List<Timeregistration> timeRegs)
+        public virtual void StoreTimeregs(List<Timeregistration> timeregs)
         {
             //Logging?
             //Validation?
             //Call Repo
-            _timeregistrationRepository.SaveData(timeRegs);
+            _timeregistrationRepository.SaveData(timeregs);
         }
 
-        public virtual void SaveToolkitInfo(ToolkitUser toolkitUser, List<Toolkit> toolkits)
+        /// <summary>
+        /// Stores toolkits that have been input by user in "DB"
+        /// </summary>
+        public virtual void StoreToolkits(List<Toolkit> toolkits)
+        {
+            //Logging?
+            //Validation?
+            //Call Repo
+            _toolkitRepository.SaveData(toolkits);
+        }
+
+        public virtual void SyncToolkits(ToolkitUser toolkitUser, List<Toolkit> toolkits)
         {
             //Get user ids
             //foreach (var tk in toolkits)

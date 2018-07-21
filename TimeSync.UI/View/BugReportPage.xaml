@@ -21,9 +21,9 @@
                 </Hyperlink>
         </TextBlock>
 
-        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
+        <!--<Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
                FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
             TimeSync (ALPHA) - Bug report
-        </Label>
+        </Label>-->
     </Grid>
 </Page>

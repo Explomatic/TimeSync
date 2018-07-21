@@ -72,5 +72,42 @@ namespace TimeSync.UI.ViewModel
             ListOfToolkits = _toolkitRepo.GetData();
             ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
         }
+
+        public ICommand SelectAllCommand => new DelegateCommand(SelectAll);
+
+        public virtual void SelectAll()
+        {
+            foreach (var timereg in Timeregistrations)
+            {
+                timereg.ToBeDeleted = true;
+            }
+        }
+
+        public ICommand SelectNoneCommand => new DelegateCommand(SelectNone);
+
+        public virtual void SelectNone()
+        {
+            foreach (var timereg in Timeregistrations)
+            {
+                timereg.ToBeDeleted = false;
+            }
+        }
+
+        public ICommand InvertSelectionCommand => new DelegateCommand(InvertSelection);
+
+        public virtual void InvertSelection()
+        {
+            foreach (var timereg in Timeregistrations)
+            {
+                timereg.ToBeDeleted = !timereg.ToBeDeleted;
+            }
+        }
+
+        public ICommand SaveCommand => new DelegateCommand(Save);
+
+        public virtual void Save()
+        {
+            TimeManager.StoreTimeregs(Timeregistrations.ToList());
+        }
     }
 }

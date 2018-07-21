@@ -78,11 +78,5 @@
                 Style="{StaticResource RegularButton}"/>-->
         <!--<Button Content="Testpage" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Click="ClickTestpage" 
                 Style="{StaticResource RegularButton}"/>-->
-
-
-        <Label Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
-               FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync (ALPHA) - Account information
-        </Label>
     </Grid>
 </Page>

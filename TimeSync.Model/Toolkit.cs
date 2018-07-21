@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace TimeSync.Model
 {
-    public class Toolkit 
+    public class Toolkit : BaseModel
     {
+        private bool _toBeDeleted;
         public int UserId { get; set; }
         public string Url { get; set; }
         public List<Team> Teams { get; set; }
@@ -19,8 +20,18 @@ namespace TimeSync.Model
         public List<Timeslot> Timeslots { get; set; }
         public string CustomerName { get; set; }
         public string DisplayName { get; set; }
-        public bool ToBeDeleted { get; set; }
+
+        public bool ToBeDeleted
+        {
+            get => _toBeDeleted;
+            set
+            {
+                _toBeDeleted = value;
+                RaisePropertyChangedEvent("ToBeDeleted");
+            }
+        }
     }
+
     public class Team
     {
         public string Name { get; set; }

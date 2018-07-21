@@ -8,6 +8,7 @@ using Castle.Windsor;
 using log4net.Config;
 using TimeSync.DataAccess;
 using TimeSync.UI.IoC;
+using TimeSync.UI.ViewModel;
 
 namespace TimeSync.UI.View
 {
@@ -60,6 +61,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
         {
+            if (DataContext is BaseViewModel context) context.PageTitle = "Account information";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_userPage);
@@ -68,6 +70,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
+            if (DataContext is BaseViewModel context) context.PageTitle = "Toolkit information";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_toolkitsPage);
@@ -76,6 +79,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
+            if (DataContext is BaseViewModel context) context.PageTitle = "Timeregistrations";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_timeregistrationsPage);
@@ -84,6 +88,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickBugReport(object sender, RoutedEventArgs e)
         {
+            if (DataContext is BaseViewModel context) context.PageTitle = "Bug report";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_bugReportPage);

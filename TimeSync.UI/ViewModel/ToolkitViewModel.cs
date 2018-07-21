@@ -21,7 +21,7 @@ namespace TimeSync.UI.ViewModel
 
         public ObservableCollection<Toolkit> Toolkits
         {
-            get { return _toolkits; }
+            get => _toolkits;
             set
             {
                 _toolkits = value;
@@ -44,11 +44,11 @@ namespace TimeSync.UI.ViewModel
             Toolkits.Add(new Toolkit());
         }
 
-        public ICommand SaveToolkitsCommand => new DelegateCommand(SaveToolkits);
+        public ICommand SyncCommand => new DelegateCommand(Sync);
 
-        public virtual void SaveToolkits()
+        public virtual void Sync()
         {
-            TimeManager.SaveToolkitInfo(TimeManager.UserInfo, Toolkits.ToList());
+            TimeManager.SyncToolkits(TimeManager.UserInfo, Toolkits.ToList());
         }
 
         public ICommand DeleteSelectedToolkitsCommand => new DelegateCommand(DeleteSelectedToolkits);
@@ -56,6 +56,44 @@ namespace TimeSync.UI.ViewModel
         public virtual void DeleteSelectedToolkits()
         {
             Toolkits = new ObservableCollection<Toolkit>(Toolkits.Where(x => !x.ToBeDeleted));
+        }
+
+        public ICommand SelectAllCommand => new DelegateCommand(SelectAll);
+
+        public virtual void SelectAll()
+        {
+            foreach (var toolkit in Toolkits)
+            {
+                toolkit.ToBeDeleted = true;
+            }
+            
+        }
+
+        public ICommand SelectNoneCommand => new DelegateCommand(SelectNone);
+
+        public virtual void SelectNone()
+        {
+            foreach (var tk in Toolkits)
+            {
+                tk.ToBeDeleted = false;
+            }
+        }
+
+        public ICommand InvertSelectionCommand => new DelegateCommand(InvertSelection);
+
+        public virtual void InvertSelection()
+        {
+            foreach (var tk in Toolkits)
+            {
+                tk.ToBeDeleted = !tk.ToBeDeleted;
+            }
+        }
+
+        public ICommand SaveCommand => new DelegateCommand(Save);
+
+        public virtual void Save()
+        {
+            TimeManager.StoreToolkits(Toolkits.ToList());
         }
     }
 }
