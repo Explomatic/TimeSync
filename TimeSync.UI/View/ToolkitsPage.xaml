@@ -32,13 +32,12 @@
 
     <Grid Background="sc#0.15,0.15,0.20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0">
+        <Grid Grid.Row="0" HorizontalAlignment="Left" Margin="10,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="25"/>
                 <ColumnDefinition Width="125"/>
@@ -71,21 +70,20 @@
             </ScrollViewer>
         </Grid>
 
-        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="2">
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="1">
             <Label Content="Select:" Style="{StaticResource SelectionLabel}" VerticalAlignment="Bottom"/>
             <Button Command="{Binding SelectAllCommand}" Content=" all " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25" />
             <Button Command="{Binding SelectNoneCommand}" Content=" none " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25"/>
             <Button Command="{Binding InvertSelectionCommand}" Content=" invert " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25"/>
         </StackPanel>
-        
 
-        <Button Command="{Binding DeleteSelectedToolkitsCommand}" Content=" Remove selected " HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Center" Margin="50,0,0,0"
+        <Button Command="{Binding RemoveSelectedCommand}" Content=" Remove selected " HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Margin="50,0,0,0"
                 Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding AddNewToolkitCommand}" Content=" Add new " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,50,0"
+        <Button Command="{Binding AddCommand}" Content=" Add " HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Margin="0,0,50,0"
+                Style="{StaticResource RegularButton}" />
+        <Button Command="{Binding SaveCommand}" Content=" Save " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Margin="-150,0,0,0"
                 Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding SyncCommand}" Content=" Sync " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Margin="150,0,0,0"
-                Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding SaveCommand}" Content=" Save " HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Margin="-150,0,0,0"
+        <Button Command="{Binding SyncCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Margin="150,0,0,0"
                 Style="{StaticResource RegularButton}"/>
         
         <!--<Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"

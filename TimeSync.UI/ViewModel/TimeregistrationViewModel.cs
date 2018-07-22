@@ -46,7 +46,7 @@ namespace TimeSync.UI.ViewModel
             TimeManager.Sync(Timeregistrations.ToList());
         }
 
-        public ICommand AddNewTimeregistrationCommand => new DelegateCommand(AddNewTimeregistration);
+        public ICommand AddCommand => new DelegateCommand(AddNewTimeregistration);
 
         public virtual void AddNewTimeregistration()
         {
@@ -60,7 +60,7 @@ namespace TimeSync.UI.ViewModel
             });
         }
 
-        public ICommand DeleteSelectedTimeregsCommand => new DelegateCommand(DeleteSelectedTimeregs);
+        public ICommand RemoveSelectedCommand => new DelegateCommand(DeleteSelectedTimeregs);
 
         public virtual void DeleteSelectedTimeregs()
         {

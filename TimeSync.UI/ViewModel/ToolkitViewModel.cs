@@ -37,7 +37,7 @@ namespace TimeSync.UI.ViewModel
             Toolkits = repo.GetData();
         }
 
-        public ICommand AddNewToolkitCommand => new DelegateCommand(AddNewToolkit);
+        public ICommand AddCommand => new DelegateCommand(AddNewToolkit);
 
         public virtual void AddNewToolkit()
         {
@@ -51,7 +51,7 @@ namespace TimeSync.UI.ViewModel
             TimeManager.SyncToolkits(TimeManager.UserInfo, Toolkits.ToList());
         }
 
-        public ICommand DeleteSelectedToolkitsCommand => new DelegateCommand(DeleteSelectedToolkits);
+        public ICommand RemoveSelectedCommand => new DelegateCommand(DeleteSelectedToolkits);
 
         public virtual void DeleteSelectedToolkits()
         {
