@@ -62,6 +62,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -71,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Encrypt.cs" />
+    <Compile Include="IEncrypt.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="ISharepointClient.cs" />
     <Compile Include="Repository.cs" />

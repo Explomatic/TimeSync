@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 namespace TimeSync.Model
 {
-    public class ToolkitUser
+    public class ToolkitUser : BaseModel
     {
         public string Name { get; set; }
         public string Password { get; set; }
         public SecureString SecurePassword { get; set; }
         public readonly string Domain;
-        public bool ToSavePassword { get; set; } = false;
+        public bool ToSavePassword { get; set; }
+        public bool IsEncrypted { get; set; }
 
         public ToolkitUser()
         {
