@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace TimeSync.UI.ViewModel
         private bool _toSavePassword;
         private bool _clearPasswordBox;
         private bool _isDataSaved;
-
+        private IEncrypt _encryptionManager = new Encrypt();
 
         public bool ClearPasswordBox
         {
@@ -70,8 +71,23 @@ namespace TimeSync.UI.ViewModel
         {
             _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
             _toolkitUser = _repo.GetData();
+            if (_toolkitUser.Password.Length > 0)
+            {
+                try
+                {
+                    _toolkitUser.SecurePassword = new NetworkCredential("", _encryptionManager.DecryptText(_toolkitUser.Password)).SecurePassword;
+                }
+                catch (CryptographicException e)
+                {
+                    popText = "Could not decrypt the saved password, please retype it.";
+                    pop = true;
+                    PopupIsOpen = true;
+                }
+            }
+            
             Username = _toolkitUser.Name;
         }
+
         public string Username
         {
             get { return _name; }
@@ -101,11 +117,9 @@ namespace TimeSync.UI.ViewModel
                 _toolkitUser.Name = Username;
             }
 
-            _toolkitUser.ToSavePassword = ToSavePassword;
-
-            _toolkitUser.Password = _toolkitUser.ToSavePassword ? Password : "";
+            _toolkitUser.Password = ToSavePassword ? Password : "";
             _toolkitUser.SecurePassword = new NetworkCredential("", Password).SecurePassword;
-            Password = _toolkitUser.ToSavePassword ? Password : "";
+            Password = ToSavePassword ? Password : "";
 
             //TODO Fix these lines. Roll into one function on TimeManager. ViewModel shouldn't think/know about how TimeManager's data/fields look
             TimeManager.UserInfo = _toolkitUser; 

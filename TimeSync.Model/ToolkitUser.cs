@@ -16,8 +16,6 @@ namespace TimeSync.Model
         public string Password { get; set; }
         public SecureString SecurePassword { get; set; }
         public readonly string Domain;
-        public bool ToSavePassword { get; set; }
-        public bool IsEncrypted { get; set; }
 
         public ToolkitUser()
         {
