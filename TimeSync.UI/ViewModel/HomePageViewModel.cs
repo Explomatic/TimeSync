@@ -67,7 +67,7 @@ namespace TimeSync.UI.ViewModel
 
         public string VersionNumber
         {
-            get { return _versionNumber; }
+            get => _versionNumber;
             set
             {
                 _versionNumber = value;

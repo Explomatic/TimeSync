@@ -30,6 +30,7 @@ namespace TimeSync.UI.ViewModel
         private bool _clearPasswordBox;
         private bool _isDataSaved;
         private IEncrypt _encryptionManager = new Encrypt();
+        private RelayCommand _updateToolkitUserCommand;
 
         public bool ClearPasswordBox
         {
@@ -107,7 +108,19 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand UpdateToolkitUserCommand => new DelegateCommand(UpdateToolkitUser);
+        public ICommand SaveCommand
+        {
+            get 
+            {
+                _updateToolkitUserCommand = new RelayCommand(param => UpdateToolkitUser(), param => CanSave());
+                return _updateToolkitUserCommand;
+            }
+        }
+
+        public virtual bool CanSave()
+        {
+            return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password);
+        }
 
         public virtual void UpdateToolkitUser()
         {
