@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Castle.Windsor;
 using log4net.Config;
 using TimeSync.DataAccess;
@@ -28,27 +29,27 @@ namespace TimeSync.UI.View
         {
             InitializeComponent();
 
-            InitWindsor();
+            //InitWindsor();
             //TODO Maybe set up our own LoggingManager class to wrap configuration and instantiation of loggers. Encapsulation principle!
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Log4Net.config";
+            //var assembly = Assembly.GetExecutingAssembly();
+            //var resourceName = "Log4Net.config";
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                XmlConfigurator.Configure(stream);
-            }
+            //using (var stream = assembly.GetManifestResourceStream(resourceName))
+            //{
+            //    XmlConfigurator.Configure(stream);
+            //}
 
             //XmlConfigurator.ConfigureAndWatch(new FileInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Log4Net.config"));
             //var logger = log4net.LogManager.GetLogger("Test");
             //logger.Debug("It works!");
-            _timeManager = _container.Resolve<TimeManager>();
-            _userPage = new UserPage(_timeManager, _container);
-            _toolkitsPage = new ToolkitsPage(_timeManager, _container);
-            _timeregistrationsPage = new TimeregistrationsPage(_timeManager, _container);
-            _bugReportPage = new BugReportPage(_timeManager, _container);
+            //_timeManager = _container.Resolve<TimeManager>();
+            //_userPage = new UserPage(_timeManager, _container);
+            //_toolkitsPage = new ToolkitsPage(_timeManager, _container);
+            //_timeregistrationsPage = new TimeregistrationsPage(_timeManager, _container);
+            //_bugReportPage = new BugReportPage(_timeManager, _container);
 
-            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            var ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "dd-MM-yyyy";
             Thread.CurrentThread.CurrentCulture = ci;
         }
@@ -58,10 +59,11 @@ namespace TimeSync.UI.View
             _container = new WindsorContainer();
             WindsorInitializer.InitializeContainer(_container);
         }
+        
 
         private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
         {
-            if (DataContext is BaseViewModel context) context.PageTitle = "Account information";
+            if (DataContext is HomePageViewModel context) context.PageTitle = "Account information";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_userPage);
@@ -70,7 +72,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
         {
-            if (DataContext is BaseViewModel context) context.PageTitle = "Toolkit information";
+            if (DataContext is HomePageViewModel context) context.PageTitle = "Toolkit information";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_toolkitsPage);
@@ -79,7 +81,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
         {
-            if (DataContext is BaseViewModel context) context.PageTitle = "Timeregistrations";
+            if (DataContext is HomePageViewModel context) context.PageTitle = "Timeregistrations";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_timeregistrationsPage);
@@ -88,7 +90,7 @@ namespace TimeSync.UI.View
 
         private void ButtonBase_OnClickBugReport(object sender, RoutedEventArgs e)
         {
-            if (DataContext is BaseViewModel context) context.PageTitle = "Bug report";
+            if (DataContext is HomePageViewModel context) context.PageTitle = "Bug report";
             ContentGrid.Children.Clear();
             var frame = new Frame();
             frame.Navigate(_bugReportPage);

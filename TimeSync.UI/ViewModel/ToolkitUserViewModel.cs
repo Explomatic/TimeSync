@@ -26,7 +26,6 @@ namespace TimeSync.UI.ViewModel
         private readonly ToolkitUser _toolkitUser;
         private string _name;
         private string _password;
-        private SecureString _securePassword;
         private bool _toSavePassword;
         private bool _clearPasswordBox;
         private bool _isDataSaved;
@@ -71,13 +70,13 @@ namespace TimeSync.UI.ViewModel
         {
             _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
             _toolkitUser = _repo.GetData();
-            if (_toolkitUser.Password.Length > 0)
+            if (!string.IsNullOrEmpty(_toolkitUser.Password))
             {
                 try
                 {
                     _toolkitUser.SecurePassword = new NetworkCredential("", _encryptionManager.DecryptText(_toolkitUser.Password)).SecurePassword;
                 }
-                catch (CryptographicException e)
+                catch (CryptographicException)
                 {
                     popText = "Could not decrypt the saved password, please retype it.";
                     pop = true;
@@ -90,7 +89,7 @@ namespace TimeSync.UI.ViewModel
 
         public string Username
         {
-            get { return _name; }
+            get => _name;
             set
             {
                 _name = value;

@@ -10,7 +10,7 @@
       Title="Homepage">
     
     <Page.DataContext>
-        <viewModel:BaseViewModel/>
+        <viewModel:HomePageViewModel/>
     </Page.DataContext>
 
     <Grid>
@@ -29,20 +29,20 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Button Margin="0,0,0,0" Width="150"
-                        Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="0"
-                    Click="ButtonBase_OnClickUserAccount">
+            <!--<Button Margin="0,0,0,0" Width="150" Height="50" 
+                    HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="0"
+                    Click="ButtonBase_OnClickUserAccount"> 
                 <Label Content="Account information"/>
-            </Button>
+            </Button>-->
 
-            <Button Margin="0,0,0,0" Width="150"
-                        Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="1"
+            <!--<Button Margin="0,0,0,0" Width="150"
+                    Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="1"
                     Click="ButtonBase_OnClickToolkits">
                 <Label Content="Toolkits"/>
             </Button>
-            
+
             <Button Margin="0,0,0,0" Width="150"
-                        Height="50" HorizontalAlignment="Right"  BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="2"
+                    Height="50" HorizontalAlignment="Right"  BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="2"
                     Click="ButtonBase_OnClickTimeregistrations">
                 <Label Content="Timeregistrations" />
             </Button>
@@ -54,9 +54,40 @@
             </Button>
 
             <Button Margin="0,0,0,0" Width="150"
-                        Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="4">
+                    Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" Grid.Row="4">
+                <Label Content="Settings"/>
+            </Button>-->
+
+            <Button Margin="0,0,0,0" Width="150" Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" 
+                    Grid.Row="0"
+                    Command="{Binding AccountInfoCommand}">
+                <Label Content="Account information"/>
+            </Button>
+
+            <Button Margin="0,0,0,0" Width="150" Height="50" HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" 
+                    Grid.Row="1"
+                    Command="{Binding ToolkitsCommand}">
+                <Label Content="Toolkits"/>
+            </Button>
+
+            <Button Margin="0,0,0,0" Width="150" Height="50" HorizontalAlignment="Right"  BorderBrush="{x:Null}" Foreground="{x:Null}" 
+                    Grid.Row="2"
+                    Command="{Binding TimeregistrationCommand}">
+                <Label Content="Timeregistrations" />
+            </Button>
+
+            <Button Margin="0,0,0,0" Width="150" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" 
+                    Grid.Row="3"
+                    Command="{Binding BugReportCommand}">
+                <Label Content="Bug report"/>
+            </Button>
+
+            <Button Margin="0,0,0,0" Width="150" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{x:Null}" Foreground="{x:Null}" 
+                    Grid.Row="4"                    
+                    Command="{Binding SettingsCommand}">
                 <Label Content="Settings"/>
             </Button>
+            
         </Grid>
 
 
@@ -64,9 +95,11 @@
         <!--Background="DarkSlateGray"-->
         <!--Background="sc#0.18,0.36,0.4"-->
         <!--Background="DarkTurqoise"-->
-        
+
+        <!--<ContentPresenter Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20" Content="{Binding CurrentPage}" />-->
+
         <Grid Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20">
-            <Label Content="Welcome to TimeSync (ALPHA)" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman"></Label>
+            <Frame Content="{Binding CurrentPage}" />
         </Grid>
         <Label Content="{Binding VersionNumber}" FontSize="10" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FFF" />
         <Label Grid.Column="0" Grid.ColumnSpan="2"  VerticalAlignment="Top" FontFamily="Trebuchet MS" Margin="0,-30,0,0"

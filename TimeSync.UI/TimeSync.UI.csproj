@@ -121,6 +121,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\HomePageViewModel.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\TimeregistrationViewModel.cs" />
     <Compile Include="ViewModel\ToolkitViewModel.cs" />
     <Compile Include="ViewModel\ToolkitUserViewModel.cs" />
@@ -145,6 +147,9 @@
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\Presenter.cs" />
+    <Compile Include="View\WelcomePage.xaml.cs">
+      <DependentUpon>WelcomePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowStyling\ControlDoubleClickBehavior.cs" />
     <Compile Include="WindowStyling\ShowSystemMenuBehavior.cs" />
     <Compile Include="WindowStyling\SystemMenuManager.cs" />
@@ -193,6 +198,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
