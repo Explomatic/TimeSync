@@ -14,6 +14,7 @@ namespace TimeSync.Model
         public int UserId { get; set; }
         public string Url { get; set; }
         public List<Team> Teams { get; set; }
+        // ReSharper disable once InconsistentNaming
         public bool GetTeamsWithoutSLA { get; set; }
         public string TimeslotFieldName { get; set; }
         public bool TimeslotIsFieldLookup { get; set; }

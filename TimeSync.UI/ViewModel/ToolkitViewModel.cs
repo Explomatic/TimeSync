@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Caching;
 using System.Windows;
 using System.Windows.Input;
 using Castle.Core;
@@ -18,6 +19,13 @@ namespace TimeSync.UI.ViewModel
     public class ToolkitViewModel : BaseViewModel
     {
         private ObservableCollection<Toolkit> _toolkits;
+        private RelayCommand _addCommand;
+        private RelayCommand _syncCommand;
+        private RelayCommand _saveCommand;
+        private RelayCommand _removeSelectedCommand;
+        private RelayCommand _selectAllCommand;
+        private RelayCommand _selectNoneCommand;
+        private RelayCommand _invertSelectionCommand;
 
         public ObservableCollection<Toolkit> Toolkits
         {
@@ -37,30 +45,73 @@ namespace TimeSync.UI.ViewModel
             Toolkits = repo.GetData();
         }
 
-        public ICommand AddCommand => new DelegateCommand(AddNewToolkit);
+        public ICommand AddCommand
+        {
+            get
+            {
+                _addCommand = new RelayCommand(param => Add(), param => true);
+                return _addCommand;
+            }
+        }
 
-        public virtual void AddNewToolkit()
+        protected virtual void Add()
         {
             Toolkits.Add(new Toolkit());
         }
 
-        public ICommand SyncCommand => new DelegateCommand(Sync);
+        public ICommand SyncCommand
+        {
+            get
+            {
+                _syncCommand = new RelayCommand(param => Sync(), param => CanSyncOrSaveToolkits());
+                return _syncCommand;
+            }
+        }
 
-        public virtual void Sync()
+        private bool CanSyncOrSaveToolkits()
+        {
+            return Toolkits.Count > 0;
+        }
+
+        protected virtual void Sync()
         {
             TimeManager.SyncToolkits(TimeManager.UserInfo, Toolkits.ToList());
         }
 
-        public ICommand RemoveSelectedCommand => new DelegateCommand(DeleteSelectedToolkits);
+        public ICommand RemoveSelectedCommand 
+        {
+            get
+            {
+                _removeSelectedCommand = new RelayCommand(param => DeleteSelectedToolkits(), param => CanRemoveToolkits());
+                return _removeSelectedCommand;
+            }    
+        }
 
-        public virtual void DeleteSelectedToolkits()
+        private bool CanRemoveToolkits()
+        {
+            return Toolkits.Any(tk => tk.ToBeDeleted);
+        }
+
+        protected virtual void DeleteSelectedToolkits()
         {
             Toolkits = new ObservableCollection<Toolkit>(Toolkits.Where(x => !x.ToBeDeleted));
         }
 
-        public ICommand SelectAllCommand => new DelegateCommand(SelectAll);
+        private bool CanSelectToolkits()
+        {
+            return Toolkits.Count > 0;
+        }
+        
+        public ICommand SelectAllCommand
+        {
+            get
+            {
+                _selectAllCommand = new RelayCommand(param => SelectAll(), param => CanSelectToolkits());
+                return _selectAllCommand;
+            }   
+        }
 
-        public virtual void SelectAll()
+        protected virtual void SelectAll()
         {
             foreach (var toolkit in Toolkits)
             {
@@ -69,9 +120,16 @@ namespace TimeSync.UI.ViewModel
             
         }
 
-        public ICommand SelectNoneCommand => new DelegateCommand(SelectNone);
+        public ICommand SelectNoneCommand
+        {
+            get
+            {
+                _selectNoneCommand = new RelayCommand(param => SelectNone(), param => CanSelectToolkits());
+                return _selectNoneCommand;
+            }   
+        }
 
-        public virtual void SelectNone()
+        protected virtual void SelectNone()
         {
             foreach (var tk in Toolkits)
             {
@@ -79,9 +137,16 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand InvertSelectionCommand => new DelegateCommand(InvertSelection);
+        public ICommand InvertSelectionCommand
+        {
+            get
+            {
+                _invertSelectionCommand = new RelayCommand(param => InvertSelection(), param => CanSelectToolkits());
+                return _invertSelectionCommand;
+            }   
+        }
 
-        public virtual void InvertSelection()
+        protected virtual void InvertSelection()
         {
             foreach (var tk in Toolkits)
             {
@@ -89,11 +154,18 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand SaveCommand => new DelegateCommand(Save);
-
-        public virtual void Save()
+        public ICommand SaveCommand
         {
-            TimeManager.StoreToolkits(Toolkits.ToList());
+            get
+            {
+                _saveCommand = new RelayCommand(param => Save(), param => CanSyncOrSaveToolkits());
+                return _saveCommand;
+            }
+        }
+
+        protected virtual void Save()
+        {
+            TimeManager.SaveToolkits(Toolkits.ToList());
         }
     }
 }

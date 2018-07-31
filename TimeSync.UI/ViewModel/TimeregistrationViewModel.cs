@@ -15,18 +15,26 @@ namespace TimeSync.UI.ViewModel
     {
         private ObservableCollection<Timeregistration> _timeregistrations;
         private IRepository<List<Toolkit>> _toolkitRepo;
+        private RelayCommand _addCommand;
+        private RelayCommand _syncCommand;
+        private RelayCommand _saveCommand;
+        private RelayCommand _removeSelectedCommand;
+        private RelayCommand _selectAllCommand;
+        private RelayCommand _selectNoneCommand;
+        private RelayCommand _invertSelectionCommand;
+        
         public TimeManager TimeManager { get; set; }
         public ObservableCollection<Timeregistration> Timeregistrations {
-            get { return _timeregistrations; }
+            get => _timeregistrations;
             set
             {
                 _timeregistrations = value;
                 RaisePropertyChangedEvent("Timeregistrations");
             } 
         }
+        
         public List<Toolkit> ListOfToolkits { get; set; }
         public List<string> ListOfToolkitNames { get; set; }
-        public List<string> ListOfTeams { get; set; }
 
         public TimeregistrationViewModel()
         {
@@ -39,16 +47,16 @@ namespace TimeSync.UI.ViewModel
             ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
         }
 
-        public ICommand SynchroniseCommand => new DelegateCommand(Synchronise);
-
-        public virtual void Synchronise()
+        public ICommand AddCommand
         {
-            TimeManager.Sync(Timeregistrations.ToList());
+            get
+            {
+                _addCommand = new RelayCommand(param => Add(), param => true);
+                return _addCommand;
+            }
         }
 
-        public ICommand AddCommand => new DelegateCommand(AddNewTimeregistration);
-
-        public virtual void AddNewTimeregistration()
+        protected virtual void Add()
         {
             UpdateLists();
             Timeregistrations.Add(new Timeregistration
@@ -60,32 +68,77 @@ namespace TimeSync.UI.ViewModel
             });
         }
 
-        public ICommand RemoveSelectedCommand => new DelegateCommand(DeleteSelectedTimeregs);
+        public ICommand SyncCommand
+        {
+            get
+            {
+                _syncCommand = new RelayCommand(param => Sync(), param => CanSyncOrSaveToolkits());
+                return _syncCommand;
+            }
+        }
 
-        public virtual void DeleteSelectedTimeregs()
+        private bool CanSyncOrSaveToolkits()
+        {
+            return Timeregistrations.Count > 0;
+        }
+
+        protected virtual void Sync()
+        {
+            TimeManager.Sync(Timeregistrations.ToList());
+        }
+
+        public ICommand RemoveSelectedCommand 
+        {
+            get
+            {
+                _removeSelectedCommand = new RelayCommand(param => DeleteSelectedToolkits(), param => CanRemoveToolkits());
+                return _removeSelectedCommand;
+            }    
+        }
+
+        private bool CanRemoveToolkits()
+        {
+            return Timeregistrations.Any(tk => tk.ToBeDeleted);
+        }
+
+        protected virtual void DeleteSelectedToolkits()
         {
             Timeregistrations = new ObservableCollection<Timeregistration>(Timeregistrations.Where(x => !x.ToBeDeleted));
         }
 
-        private void UpdateLists()
+        private bool CanSelectToolkits()
         {
-            ListOfToolkits = _toolkitRepo.GetData();
-            ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
+            return Timeregistrations.Count > 0;
+        }
+        
+        public ICommand SelectAllCommand
+        {
+            get
+            {
+                _selectAllCommand = new RelayCommand(param => SelectAll(), param => CanSelectToolkits());
+                return _selectAllCommand;
+            }   
         }
 
-        public ICommand SelectAllCommand => new DelegateCommand(SelectAll);
-
-        public virtual void SelectAll()
+        protected virtual void SelectAll()
         {
             foreach (var timereg in Timeregistrations)
             {
                 timereg.ToBeDeleted = true;
             }
+            
         }
 
-        public ICommand SelectNoneCommand => new DelegateCommand(SelectNone);
+        public ICommand SelectNoneCommand
+        {
+            get
+            {
+                _selectNoneCommand = new RelayCommand(param => SelectNone(), param => CanSelectToolkits());
+                return _selectNoneCommand;
+            }   
+        }
 
-        public virtual void SelectNone()
+        protected virtual void SelectNone()
         {
             foreach (var timereg in Timeregistrations)
             {
@@ -93,9 +146,16 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand InvertSelectionCommand => new DelegateCommand(InvertSelection);
+        public ICommand InvertSelectionCommand
+        {
+            get
+            {
+                _invertSelectionCommand = new RelayCommand(param => InvertSelection(), param => CanSelectToolkits());
+                return _invertSelectionCommand;
+            }   
+        }
 
-        public virtual void InvertSelection()
+        protected virtual void InvertSelection()
         {
             foreach (var timereg in Timeregistrations)
             {
@@ -103,11 +163,24 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand SaveCommand => new DelegateCommand(Save);
-
-        public virtual void Save()
+        public ICommand SaveCommand
         {
-            TimeManager.StoreTimeregs(Timeregistrations.ToList());
+            get
+            {
+                _saveCommand = new RelayCommand(param => Save(), param => CanSyncOrSaveToolkits());
+                return _saveCommand;
+            }
+        }
+
+        protected virtual void Save()
+        {
+            TimeManager.SaveTimeregistrations(Timeregistrations.ToList());
+        }
+
+        private void UpdateLists()
+        {
+            ListOfToolkits = _toolkitRepo.GetData();
+            ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
         }
     }
 }

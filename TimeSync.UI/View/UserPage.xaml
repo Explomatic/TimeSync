@@ -65,12 +65,16 @@
                     <!--<Label Grid.Column="0" Grid.Row="2" Margin="4" Content="Save password:" HorizontalAlignment="Left" />-->
                 <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" IsChecked="{Binding ToSavePassword}" 
                           Content="Save password" FontSize="12"/>
-                <Label FontSize="13" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,10,0,0"  Content="Please note that passwords are currently saved as cleartext." Visibility="{Binding Path=ToSavePassword, Converter={StaticResource booleanToVisibilityConverter}, Mode=TwoWay}"/>
-                <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,40,0,0"  Content="Account information saved!" Visibility="{Binding Path=IsDataSaved, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                <!--<Label FontSize="13" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,10,0,0"  
+                       Content="Please note that passwords are currently saved as cleartext." 
+                       Visibility="{Binding Path=ToSavePassword, Converter={StaticResource booleanToVisibilityConverter}, Mode=TwoWay}"/>-->
+                <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,40,0,0" 
+                       Content="Account information saved!" 
+                       Visibility="{Binding Path=IsDataSaved, Converter={StaticResource booleanToVisibilityConverter}}"/>
             </Grid>
         </StackPanel>
         <Button Command="{Binding SaveCommand}" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
-                Content="Save"
+                Content=" Save "
                 Style="{StaticResource RegularButton}">
         </Button>
         

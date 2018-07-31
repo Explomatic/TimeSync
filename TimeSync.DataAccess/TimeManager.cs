@@ -5,7 +5,9 @@ using System.Linq;
 using TimeSync.IoC;
 using TimeSync.Model;
 using System;
+using System.Net;
 using Castle.Core.Internal;
+using Microsoft.SharePoint.Client;
 
 namespace TimeSync.DataAccess
 {
@@ -18,6 +20,7 @@ namespace TimeSync.DataAccess
         private readonly IRepository<List<Toolkit>> _toolkitRepository;
         private readonly IRepository<List<Timeregistration>> _timeregistrationRepository;
         private readonly ISharepointClient _sharepointClient;
+        private readonly IEncrypt _encryptionManager;
         private ToolkitUser _toolkitUser;
         private List<Toolkit> _toolkits;
 
@@ -28,8 +31,13 @@ namespace TimeSync.DataAccess
             _toolkitRepository = new Repository<List<Toolkit>>("ToolkitSaveLocation");
             _timeregistrationRepository = new Repository<List<Timeregistration>>("TimeregistrationSaveLocation");
             _sharepointClient = new SharepointClient();
+            _encryptionManager = new Encrypt();
 
             UserInfo = _toolkitUserRepository.GetData();
+            if (UserInfo.Password?.Length > 0)
+            {
+                UserInfo.SecurePassword = new NetworkCredential("", _encryptionManager.DecryptText(UserInfo.Password))
+                    .SecurePassword;}
             _toolkits = _toolkitRepository.GetData();
         }
 
@@ -46,7 +54,7 @@ namespace TimeSync.DataAccess
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
         /// </summary>
-        public virtual void StoreTimeregs(List<Timeregistration> timeregs)
+        public virtual void SaveTimeregistrations(List<Timeregistration> timeregs)
         {
             //Logging?
             //Validation?
@@ -57,7 +65,7 @@ namespace TimeSync.DataAccess
         /// <summary>
         /// Stores toolkits that have been input by user in "DB"
         /// </summary>
-        public virtual void StoreToolkits(List<Toolkit> toolkits)
+        public virtual void SaveToolkits(List<Toolkit> toolkits)
         {
             //Logging?
             //Validation?

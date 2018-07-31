@@ -49,17 +49,6 @@
           5.5387 8.53734,2.19202 12.4227,0.00012207 Z " />
                 </Label>
             </Grid>
-            <!--<StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding ToBeDeleted}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfToolkitNames}" SelectedItem="{Binding ToolkitDisplayName}" DropDownClosed="CboxToolkitSelected"/>
-                <ComboBox Width="130" Margin="5,5,5,5" ItemsSource="{Binding ListOfTeams}" SelectedItem="{Binding Team}" DropDownClosed="CboxTeamSelected"/>
-                <TextBox Width="55" Margin="5,5,5,5" Text="{Binding CaseId}" VerticalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding IsWorkPackage}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox Width="100" Margin="5,5,5,5" Text="{Binding Duration}" VerticalAlignment="Center"/>
-                <ComboBox Width="100" Margin="5,5,5,5" ItemsSource="{Binding ListOfTimeslots}" SelectedItem="{Binding Timeslot}" VerticalAlignment="Center"/>
-                <DatePicker Width="110" Margin="5,5,5,5" SelectedDate="{Binding DoneDate}" />
-                --><!--<DatePicker Width="150" Margin="5,5,5,5" SelectedDate="{Binding DoneDate}" Text="{Binding DoneDate}" />--><!--
-            </StackPanel>-->
         </DataTemplate>
     </Page.Resources>
 
@@ -119,9 +108,9 @@
 
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="1">
             <Label Content="Select:" Style="{StaticResource SelectionLabel}" VerticalAlignment="Bottom"/>
-            <Button Command="{Binding SelectAllCommand}" Content=" all " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25" />
-            <Button Command="{Binding SelectNoneCommand}" Content=" none " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25"/>
-            <Button Command="{Binding InvertSelectionCommand}" Content=" invert " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" Height="25"/>
+            <Button Command="{Binding SelectAllCommand}" Content=" all " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" />
+            <Button Command="{Binding SelectNoneCommand}" Content=" none " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" />
+            <Button Command="{Binding InvertSelectionCommand}" Content=" invert " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" />
         </StackPanel>
 
         <Button Command="{Binding RemoveSelectedCommand}" Content=" Remove selected " HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Margin="50,0,0,0"
@@ -130,7 +119,7 @@
                 Style="{StaticResource RegularButton}" />
         <Button Command="{Binding SaveCommand}" Content=" Save " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Margin="-150,0,0,0"
                 Style="{StaticResource RegularButton}"/>
-        <Button Command="{Binding SynchroniseCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Margin="150,0,0,0"
+        <Button Command="{Binding SyncCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Margin="150,0,0,0"
                 Style="{StaticResource RegularButton}"/>
 
     </Grid>

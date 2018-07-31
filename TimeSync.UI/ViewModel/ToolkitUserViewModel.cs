@@ -100,7 +100,7 @@ namespace TimeSync.UI.ViewModel
 
         public string Password
         {
-            get { return _password; }
+            get => _password;
             set
             {
                 _password = $@"{value}";
@@ -112,26 +112,26 @@ namespace TimeSync.UI.ViewModel
         {
             get 
             {
-                _updateToolkitUserCommand = new RelayCommand(param => UpdateToolkitUser(), param => CanSave());
+                _updateToolkitUserCommand = new RelayCommand(param => Save(), param => CanSave());
                 return _updateToolkitUserCommand;
             }
         }
 
-        public virtual bool CanSave()
+        protected virtual bool CanSave()
         {
             return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password);
         }
 
-        public virtual void UpdateToolkitUser()
+        protected virtual void Save()
         {
             if (!string.IsNullOrWhiteSpace(Username))
             {
                 _toolkitUser.Name = Username;
             }
 
-            _toolkitUser.Password = ToSavePassword ? Password : "";
+            _toolkitUser.Password = _encryptionManager.EncryptText(Password);
             _toolkitUser.SecurePassword = new NetworkCredential("", Password).SecurePassword;
-            Password = ToSavePassword ? Password : "";
+            Password = "";
 
             //TODO Fix these lines. Roll into one function on TimeManager. ViewModel shouldn't think/know about how TimeManager's data/fields look
             TimeManager.UserInfo = _toolkitUser; 
