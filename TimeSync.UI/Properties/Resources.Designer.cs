@@ -61,7 +61,7 @@ namespace TimeSync.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to v0.1.2.
+        ///   Looks up a localized string similar to v0.1.3.
         /// </summary>
         internal static string versionNumber {
             get {
