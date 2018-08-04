@@ -21,8 +21,7 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class HomePageViewModel : BaseViewModel
     {
-        private string _versionNumber = TimeSync.UI.Properties.Resources.versionNumber;
-        private string _basePageTitle = "TimeSync (ALPHA)";
+        private readonly string _basePageTitle = $"TimeSync {Properties.Resources.versionNumber} (ALPHA)";
         private string _currentPageTitle = "";
 
         private TimeManager _timeManager;
@@ -63,16 +62,6 @@ namespace TimeSync.UI.ViewModel
         {
             _container = new WindsorContainer();
             WindsorInitializer.InitializeContainer(_container);
-        }
-
-        public string VersionNumber
-        {
-            get => _versionNumber;
-            set
-            {
-                _versionNumber = value;
-                RaisePropertyChangedEvent("VersionNumber");
-            }
         }
 
         public string PageTitle

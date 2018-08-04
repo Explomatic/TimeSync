@@ -74,7 +74,9 @@ namespace TimeSync.UI.ViewModel
         {
             IRepository<ObservableCollection<Toolkit>> repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
             Toolkits = repo.GetData();
-            InitializeToolkitList();
+
+            // Used for easy UI population during design phases.
+            //InitializeToolkitList();
         }
 
         public ICommand AddCommand

@@ -16,23 +16,11 @@
 
     <Page.Resources>
         <DataTemplate x:Key="ToolkitDataTemplate"  DataType="{x:Type src:Toolkit}">
-            <!--<StackPanel Orientation="Horizontal" MinWidth="700" MinHeight="25">-->
-                <!--<CheckBox Width="15" Height="15" Margin="5,0,5,0" IsChecked="{Binding ToBeDeleted}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox MinWidth="115" Margin="5,5,5,5" Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                <TextBox MinWidth="430" Margin="10,5,10,5" Text="{Binding Url}" VerticalAlignment="Center"/>
-                <CheckBox Width="15" Height="15" Margin="40,0,5,0" IsChecked="{Binding GetTeamsWithoutSLA}" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
-            <!--</StackPanel>-->
             <Grid MinWidth="720">
                 <Grid.ColumnDefinitions>
-                    <!--<ColumnDefinition Width="25"/>
-                    <ColumnDefinition Width="125"/>
-                    <ColumnDefinition Width="450"/>
-                    <ColumnDefinition Width="100"/>-->
                     <ColumnDefinition Width="25" />
-                    <!--<ColumnDefinition MinWidth="25" Width="5*"/>-->
                     <ColumnDefinition MinWidth="125" Width="5*"/>
                     <ColumnDefinition MinWidth="450" Width="18*"/>
-                    <!--<ColumnDefinition MinWidth="100" Width="20*"/>-->
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0"  IsChecked="{Binding ToBeDeleted}" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -50,19 +38,11 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
-        <!--<Viewbox Stretch="Uniform" VerticalAlignment="Top">-->
-        <!--<Grid Grid.Row="0" HorizontalAlignment="Left" Margin="10,10,0,0" Width="{Binding ActualWidth, 
-              RelativeSource = {RelativeSource AncestorType = {x:Type Window}}}">-->
         <Grid Grid.Row="0" HorizontalAlignment="Stretch" Margin="10,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="25" />
-                <!--<ColumnDefinition Width="125" />
-                <ColumnDefinition Width="450" />
-                <ColumnDefinition Width="100" />-->
-                <!--<ColumnDefinition MinWidth="25" Width="5*"/>-->
                 <ColumnDefinition MinWidth="125" Width="5*"/>
                 <ColumnDefinition MinWidth="450" Width="18*"/>
-                <!--<ColumnDefinition MinWidth="100" Width="20*"/>-->
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="15"/>
             </Grid.ColumnDefinitions>
@@ -71,21 +51,30 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Label Content="Toolkit name" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"/>
-            <Label Content="URL" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"/>
-            <Label Content="All teams" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" FontSize="16"/>
-            <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" VerticalScrollBarVisibility="Visible" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch"
-                              MinWidth="735">
+            <Label Grid.Column="1" Grid.Row="0" 
+                   Content="Toolkit name" 
+                   HorizontalAlignment="Center" 
+                   FontSize="16"/>
+            <Label Grid.Column="2" Grid.Row="0" 
+                   Content="URL" 
+                   HorizontalAlignment="Center" 
+                   FontSize="16"/>
+            <Label Grid.Column="3" Grid.Row="0"
+                   Content="All teams"                    
+                   HorizontalAlignment="Center" 
+                   FontSize="16"/>
+            <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" 
+                          VerticalScrollBarVisibility="Visible" 
+                          HorizontalContentAlignment="Left" 
+                          HorizontalAlignment="Stretch"
+                          MinWidth="735">
 
-                <!--<ItemsControl Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" HorizontalAlignment="Center" ItemTemplate="{StaticResource ToolkitDataTemplate}" ItemsSource ="{Binding Toolkits}" />-->
-
-                <ItemsControl MinWidth="720" HorizontalAlignment="Stretch" ItemTemplate="{StaticResource ToolkitDataTemplate}" ItemsSource ="{Binding Toolkits}" 
-                              Margin="0,0,0,0"/>
-                <!--<ItemsControl MinWidth="700" MinHeight="25"  HorizontalAlignment="Left" ItemTemplate="{StaticResource ToolkitDataTemplate}" ItemsSource ="{Binding Toolkits}" />-->
-                    <!--</Grid>-->
+                <ItemsControl MinWidth="720" 
+                              HorizontalAlignment="Stretch" 
+                              ItemTemplate="{StaticResource ToolkitDataTemplate}" 
+                              ItemsSource ="{Binding Toolkits}"/>
             </ScrollViewer>
-            </Grid>
-        <!--</Viewbox>-->
+        </Grid>
 
 
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="1">
@@ -103,10 +92,5 @@
                 Style="{StaticResource RegularButton}"/>
         <Button Command="{Binding SyncCommand}" Content=" Synchronise " HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Margin="150,0,0,0"
                 Style="{StaticResource RegularButton}"/>
-        
-        <!--<Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" FontFamily="Trebuchet MS"
-               FontWeight="Bold" FontSize="12" Foreground="#FFF"  HorizontalAlignment="Center">
-            TimeSync (ALPHA) - Toolkit information
-        </Label>-->
     </Grid>
 </Page>

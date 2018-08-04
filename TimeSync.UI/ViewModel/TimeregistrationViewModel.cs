@@ -22,7 +22,75 @@ namespace TimeSync.UI.ViewModel
         private RelayCommand _selectAllCommand;
         private RelayCommand _selectNoneCommand;
         private RelayCommand _invertSelectionCommand;
-        
+
+        private void InitializeTimeregList()
+        {
+            for (var i = 0; i < 18; i++)
+            {
+                _timeregistrations.Add(new Timeregistration()
+                {
+                    Team = "Operations",
+                    CaseId = 0,
+                    DoneDate = DateTime.Now,
+                    Duration = "08:00-10:00",
+                    Hours = 0,
+                    IsSynchronized = true,
+                    IsWorkPackage = false,
+                    Teams = new ObservableCollection<string>()
+                    {
+                        "Operations","Infrastruktur"
+                    },
+                    Timeslots = new ObservableCollection<string>()
+                    {
+                        "08:00-16:30",
+                        "16:30-06:00",
+                        "06:00-08:00"
+                    },
+                    Timeslot = "08:00-16:30",
+                    ToolkitDisplayName = "Hest 1",
+                    ToolkitNames = new List<string>()
+                    {
+                        "Hest 1","Hest 2", "Hest 3"
+                    },
+                    Toolkits = InitializeToolkitList(),
+                    ToBeDeleted = false
+                });
+            }
+        }
+        private List<Toolkit> InitializeToolkitList()
+        {
+            var toolkits = new List<Toolkit>();
+            for (var i = 0; i < 18; i++)
+            {
+                toolkits.Add(new Toolkit()
+                {
+                    CustomerName = "HEST",
+                    DisplayName = "HEST TK",
+                    GetTeamsWithoutSLA = false,
+                    Teams = new List<Team>()
+                    {
+                        new Team()
+                        {
+                            Name = "Operations",
+                            UsesTimeslots = true
+                        },
+                        new Team()
+                        {
+                            Name = "Infrastruktur",
+                            UsesTimeslots = false
+                        }
+                    },
+                    TimeslotFieldName = "hesthest",
+                    TimeslotIsFieldLookup = false,
+                    Timeslots = null,
+                    ToBeDeleted = false,
+                    Url = "HTTPS://HEST.DK"
+                });
+            }
+
+            return toolkits;
+        }
+
         public TimeManager TimeManager { get; set; }
         public ObservableCollection<Timeregistration> Timeregistrations {
             get => _timeregistrations;
@@ -45,6 +113,10 @@ namespace TimeSync.UI.ViewModel
             _toolkitRepo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
             ListOfToolkits = _toolkitRepo.GetData();
             ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
+
+            // Used for easy UI population during design phases.
+            //InitializeTimeregList();
+
         }
 
         public ICommand AddCommand
