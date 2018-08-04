@@ -108,11 +108,11 @@ namespace TimeSync.DataAccess
             return (FieldLookupValue) item.FieldValues.Single(field => field.Key == "RelatedCase").Value;
         }
 
+        //TODO: Add support for multiple timeregs per day for a case (i.e. group them by case id)
+        //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
+        //Send to Toolkit -- SEE UNIT TEST PROJECT
         public virtual List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
         {
-            //TODO: Add support for multiple timeregs per day for a case (i.e. group them by case id)
-            //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
-            //Send to Toolkit -- SEE UNIT TEST PROJECT
             var clientContext = new ClientContext(toolkit.Url)
             {
                 Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.SecurePassword, toolkitUser.Domain)

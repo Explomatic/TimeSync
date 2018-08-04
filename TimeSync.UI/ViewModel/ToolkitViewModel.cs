@@ -27,6 +27,37 @@ namespace TimeSync.UI.ViewModel
         private RelayCommand _selectNoneCommand;
         private RelayCommand _invertSelectionCommand;
 
+        private void InitializeToolkitList()
+        {
+            for (var i = 0; i < 18; i++)
+            {
+                _toolkits.Add(new Toolkit()
+                {
+                    CustomerName = "HEST",
+                    DisplayName = "HEST TK",
+                    GetTeamsWithoutSLA = false,
+                    Teams = new List<Team>()
+                    {
+                        new Team()
+                        {
+                            Name = "Operations",
+                            UsesTimeslots = true
+                        },
+                        new Team()
+                        {
+                            Name = "Infrastruktur",
+                            UsesTimeslots = false
+                        }
+                    },
+                    TimeslotFieldName = "hesthest",
+                    TimeslotIsFieldLookup = false,
+                    Timeslots = null,
+                    ToBeDeleted = false,
+                    Url = "HTTPS://HEST.DK"
+                });
+            }
+        }
+
         public ObservableCollection<Toolkit> Toolkits
         {
             get => _toolkits;
@@ -43,6 +74,7 @@ namespace TimeSync.UI.ViewModel
         {
             IRepository<ObservableCollection<Toolkit>> repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
             Toolkits = repo.GetData();
+            InitializeToolkitList();
         }
 
         public ICommand AddCommand
