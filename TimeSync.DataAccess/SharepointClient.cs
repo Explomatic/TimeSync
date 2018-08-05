@@ -118,9 +118,9 @@ namespace TimeSync.DataAccess
                 Credentials = new NetworkCredential(toolkitUser.Name, toolkitUser.SecurePassword, toolkitUser.Domain)
             };
 
-            const string timeregList = "tidsregistrering";
-            var sharepointList = clientContext.Web.Lists.GetByTitle(timeregList);
-            clientContext.Load(sharepointList);
+            const string timeregSpListName = "tidsregistrering";
+            var timeregSpList = clientContext.Web.Lists.GetByTitle(timeregSpListName);
+            clientContext.Load(timeregSpList);
             clientContext.ExecuteQuery();
 
             var spListItems = new List<ListItem>();
@@ -128,11 +128,30 @@ namespace TimeSync.DataAccess
             var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
             var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
             var itemCreateInfo = new ListItemCreationInformation();
+
+//            var timeregsByCaseId = timeregs.GroupBy(x => x.CaseId);
+
+            var timeregsByCaseId = GroupTimeregistrationsByCaseId(timeregs);
+            
+//            var timeregsByDate = timeregsByCaseId.GroupBy(x => x)
+
+//            foreach (var caseIdGroup in timeregsByCaseId)
+//            {
+//                var caseId = caseIdGroup.Key;
+//                var timeregsByDate = caseIdGroup.GroupBy(x => x.DoneDate);
+//                foreach (var doneDateGroup in timeregsByDate)
+//                {
+//                    var doneDate = doneDateGroup.Key;
+//                    var timeregsForDateForCaseId = doneDateGroup.GetEnumerator();
+//                    if (timeregsForDateForCaseId)
+//                }
+//            }
+            
             foreach (var timereg in timeregs)
             {
                 var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{toolkit.CustomerName}-{timereg.CaseId}");
 
-                var sharepointListItem = sharepointList.AddItem(itemCreateInfo);
+                var sharepointListItem = timeregSpList.AddItem(itemCreateInfo);
 
                 if (!timereg.CouldConvertDurationToHours())
                 {
@@ -158,6 +177,42 @@ namespace TimeSync.DataAccess
             {
                 return new List<ListItem>();
             }
+        }
+
+        public virtual Dictionary<int,List<Timeregistration>> GroupTimeregistrationsByCaseId(IEnumerable<Timeregistration> timeregs)
+        {
+            var tmp = from timereg in timeregs
+                group timereg by timereg.CaseId
+                into timeregsByCaseIdGroup
+                let timeregsForCaseId = from timeregForCaseId in timeregsByCaseIdGroup
+                    select timeregForCaseId
+
+                select new
+                {
+                    CaseId = timeregsByCaseIdGroup.Key,
+                    TimeregsForCaseId = timeregsForCaseId.ToList()
+                };
+
+            var groupTimeregistrationsByCaseId = tmp.ToList();
+            return groupTimeregistrationsByCaseId.ToDictionary(x => x.CaseId, x => x.TimeregsForCaseId);
+        }
+        
+        public virtual Dictionary<DateTime,List<Timeregistration>> GroupTimeregistrationsByDoneDate(IEnumerable<Timeregistration> timeregs)
+        {
+            var tmp = from timereg in timeregs
+                group timereg by timereg.DoneDate
+                into timeregsByDoneDate
+                let timeregsForDoneDate = from timeregForDoneDate in timeregsByDoneDate
+                    select timeregForDoneDate
+
+                select new
+                {
+                    DoneDate = timeregsByDoneDate.Key,
+                    TimeregsByDoneDate = timeregsForDoneDate.ToList()
+                };
+
+            var groupTimeregistrationsByCaseId = tmp.ToList();
+            return groupTimeregistrationsByCaseId.ToDictionary(x => x.DoneDate, x => x.TimeregsByDoneDate);
         }
 
         public virtual List<Team> GetTeamsFromToolkit(ToolkitUser tkUser, Toolkit tk)

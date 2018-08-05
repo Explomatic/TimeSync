@@ -18,11 +18,11 @@ namespace TimeSync.UI.View
     /// </summary>
     public partial class HomePage : Page
     {
-        private TimeManager _timeManager;
-        private UserPage _userPage;
-        private ToolkitsPage _toolkitsPage;
-        private TimeregistrationsPage _timeregistrationsPage;
-        private BugReportPage _bugReportPage;
+//        private TimeManager _timeManager;
+//        private UserPage _userPage;
+//        private ToolkitsPage _toolkitsPage;
+//        private TimeregistrationsPage _timeregistrationsPage;
+//        private BugReportPage _bugReportPage;
         private IWindsorContainer _container;
 
         public HomePage()
@@ -54,47 +54,47 @@ namespace TimeSync.UI.View
             Thread.CurrentThread.CurrentCulture = ci;
         }
 
-        private void InitWindsor()
-        {
-            _container = new WindsorContainer();
-            WindsorInitializer.InitializeContainer(_container);
-        }
+//        private void InitWindsor()
+//        {
+//            _container = new WindsorContainer();
+//            WindsorInitializer.InitializeContainer(_container);
+//        }
         
 
-        private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is HomePageViewModel context) context.PageTitle = "Account information";
-            ContentGrid.Children.Clear();
-            var frame = new Frame();
-            frame.Navigate(_userPage);
-            ContentGrid.Children.Add(frame);
-        }
-
-        private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is HomePageViewModel context) context.PageTitle = "Toolkit information";
-            ContentGrid.Children.Clear();
-            var frame = new Frame();
-            frame.Navigate(_toolkitsPage);
-            ContentGrid.Children.Add(frame);
-        }
-
-        private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is HomePageViewModel context) context.PageTitle = "Timeregistrations";
-            ContentGrid.Children.Clear();
-            var frame = new Frame();
-            frame.Navigate(_timeregistrationsPage);
-            ContentGrid.Children.Add(frame);
-        }
-
-        private void ButtonBase_OnClickBugReport(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is HomePageViewModel context) context.PageTitle = "Bug report";
-            ContentGrid.Children.Clear();
-            var frame = new Frame();
-            frame.Navigate(_bugReportPage);
-            ContentGrid.Children.Add(frame);
-        }
+//        private void ButtonBase_OnClickUserAccount(object sender, RoutedEventArgs e)
+//        {
+//            if (DataContext is HomePageViewModel context) context.PageTitle = "Account information";
+//            ContentGrid.Children.Clear();
+//            var frame = new Frame();
+//            frame.Navigate(_userPage);
+//            ContentGrid.Children.Add(frame);
+//        }
+//
+//        private void ButtonBase_OnClickToolkits(object sender, RoutedEventArgs e)
+//        {
+//            if (DataContext is HomePageViewModel context) context.PageTitle = "Toolkit information";
+//            ContentGrid.Children.Clear();
+//            var frame = new Frame();
+//            frame.Navigate(_toolkitsPage);
+//            ContentGrid.Children.Add(frame);
+//        }
+//
+//        private void ButtonBase_OnClickTimeregistrations(object sender, RoutedEventArgs e)
+//        {
+//            if (DataContext is HomePageViewModel context) context.PageTitle = "Timeregistrations";
+//            ContentGrid.Children.Clear();
+//            var frame = new Frame();
+//            frame.Navigate(_timeregistrationsPage);
+//            ContentGrid.Children.Add(frame);
+//        }
+//
+//        private void ButtonBase_OnClickBugReport(object sender, RoutedEventArgs e)
+//        {
+//            if (DataContext is HomePageViewModel context) context.PageTitle = "Bug report";
+//            ContentGrid.Children.Clear();
+//            var frame = new Frame();
+//            frame.Navigate(_bugReportPage);
+//            ContentGrid.Children.Add(frame);
+//        }
     }
 }

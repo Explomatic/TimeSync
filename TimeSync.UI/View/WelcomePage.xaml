@@ -9,6 +9,6 @@
       Title="WelcomePage">
 
     <Grid>
-        <Label Content="Welcome to TimeSync (ALPHA)" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman" />
+        <Label Content="Welcome to TimeSync" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman" />
     </Grid>
 </Page>

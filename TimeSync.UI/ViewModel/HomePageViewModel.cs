@@ -21,7 +21,7 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class HomePageViewModel : BaseViewModel
     {
-        private readonly string _basePageTitle = $"TimeSync {Properties.Resources.versionNumber} (ALPHA)";
+        private readonly string _basePageTitle = $"TimeSync {Properties.Resources.versionNumber}";
         private string _currentPageTitle = "";
 
         private TimeManager _timeManager;

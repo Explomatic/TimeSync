@@ -156,7 +156,7 @@ namespace TimeSync.UI.ViewModel
 
         protected virtual void Sync()
         {
-            TimeManager.Sync(Timeregistrations.ToList());
+            TimeManager.SyncTimeregs(Timeregistrations.ToList());
         }
 
         public ICommand RemoveSelectedCommand 

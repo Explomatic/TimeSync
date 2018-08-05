@@ -64,7 +64,7 @@ namespace TimeSync.Tests
             };
 
             //Act
-            _timeManager.Sync(timeregs);
+            _timeManager.SyncTimeregs(timeregs);
 
             //Assert
             Assert.AreEqual(2, timeregs.Count(tr => tr.IsSynchronized));

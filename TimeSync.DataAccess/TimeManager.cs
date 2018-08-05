@@ -119,13 +119,21 @@ namespace TimeSync.DataAccess
         /// <summary>
         /// Call Sharepoint and do clean up for stored timeregs
         /// </summary>
-        public virtual void Sync(List<Timeregistration> timeregs)
+        public virtual void SyncTimeregs(List<Timeregistration> timeregs)
         {
             //TODO: Add logging + give user feedback when timeregs are synchronised.
             //Logging?
             _toolkitUser = _toolkitUser ?? _toolkitUserRepository.GetData();
             //var toolkitInfo = _toolkitInfo ?? _toolkitInfoRepository.GetData();
             _toolkits = _toolkits ?? _toolkitRepository.GetData();
+
+            var distinctTkDisplayNames = timeregs.Select(x => x.ToolkitDisplayName).Distinct();
+            foreach (var tkDisplayName in distinctTkDisplayNames)
+            {
+                var timeregsInTk = timeregs.Where(x => x.ToolkitDisplayName == tkDisplayName).ToList();
+                var tk = _toolkits.Single(x => x.DisplayName == tkDisplayName);
+                _sharepointClient.MakeTimeregistrations(timeregsInTk, _toolkitUser, tk);
+            }
 
             //var uniqueToolkitNames = new List<string>();
             //foreach (var timereg in timeregs)

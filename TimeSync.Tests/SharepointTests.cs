@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.SharePoint.Client;
 using TimeSync.Model;
 using System.Text.RegularExpressions;
+using System.Web.UI;
 using TimeSync.DataAccess;
 
 namespace TimeSync.Tests
@@ -19,6 +21,81 @@ namespace TimeSync.Tests
         private ClientContext _clientContext = null;
         private SharepointClient _sharepointClient;
         private ToolkitUser _toolkitUser;
+        private IEncrypt _encryptionManager = new Encrypt();
+        
+        private List<Timeregistration> InitializeTimeregList()
+        {
+            var timeregs = new List<Timeregistration>();
+            for (var i = 0; i < 21; i++)
+            {
+                var now = DateTime.Now;
+//                var date = (DateTime.Now).AddDays(i < 7 ? 0 : (i < 14 ? 1 : 2)),
+                var date = new DateTime(now.Year, now.Month, now.Day).AddDays(i < 7 ? 0 : (i < 14 ? 1 : 2));
+                timeregs.Add(new Timeregistration()
+                {
+                    Team = "Operations",
+                    CaseId = i%3,
+                    DoneDate = date,
+                    Duration = "08:00-10:00",
+                    Hours = 0,
+                    IsSynchronized = true,
+                    IsWorkPackage = false,
+                    Teams = new ObservableCollection<string>()
+                    {
+                        "Operations","Infrastruktur"
+                    },
+                    Timeslots = new ObservableCollection<string>()
+                    {
+                        "08:00-16:30",
+                        "16:30-06:00",
+                        "06:00-08:00"
+                    },
+                    Timeslot = "08:00-16:30",
+                    ToolkitDisplayName = $"Hest {i % 3}",
+                    ToolkitNames = new List<string>()
+                    {
+                        "Hest 1","Hest 2", "Hest 3"
+                    },
+                    Toolkits = InitializeToolkitList(),
+                    ToBeDeleted = false
+                });
+            }
+
+            return timeregs;
+        }
+        private List<Toolkit> InitializeToolkitList()
+        {
+            var toolkits = new List<Toolkit>();
+            for (var i = 0; i < 21; i++)
+            {
+                toolkits.Add(new Toolkit()
+                {
+                    CustomerName = "HEST",
+                    DisplayName = $"Hest {i % 3}",
+                    GetTeamsWithoutSLA = false,
+                    Teams = new List<Team>()
+                    {
+                        new Team()
+                        {
+                            Name = "Operations",
+                            UsesTimeslots = true
+                        },
+                        new Team()
+                        {
+                            Name = "Infrastruktur",
+                            UsesTimeslots = false
+                        }
+                    },
+                    TimeslotFieldName = "hesthest",
+                    TimeslotIsFieldLookup = false,
+                    Timeslots = null,
+                    ToBeDeleted = false,
+                    Url = "HTTPS://HEST.DK"
+                });
+            }
+
+            return toolkits;
+        }
 
         [TestInitialize]
         public void Init()
@@ -27,7 +104,15 @@ namespace TimeSync.Tests
 
             _toolkitUser = _toolkitUserRepository.GetData();
 
-            _toolkitUser.SecurePassword = new NetworkCredential("", _toolkitUser.Password).SecurePassword;
+            try
+            {
+                _toolkitUser.SecurePassword =
+                    new NetworkCredential("", _encryptionManager.DecryptText(_toolkitUser.Password)).SecurePassword;
+            }
+            catch (Exception)
+            {
+                _toolkitUser.SecurePassword = new NetworkCredential("", "=%6pTT|m9~lw5`b::wkn").SecurePassword;
+            }
             _toolkitUser.Password = "";
 
             _sharepointClient = new SharepointClient();
@@ -870,6 +955,23 @@ namespace TimeSync.Tests
             var id = _sharepointClient.MakeTimeregistration(timereg, _toolkitUser, toolkit);
 
             Assert.AreNotEqual(-1, id);
+        }
+
+        [TestMethod]
+        public void TimeregGroupingTest()
+        {
+            var timeregs = InitializeTimeregList();
+            var groupedByCaseId = _sharepointClient.GroupTimeregistrationsByCaseId(timeregs);
+            
+            var groupedByCaseIdByDate = new Dictionary<int, Dictionary<DateTime, List<Timeregistration>>>();
+            foreach (var kvpair in groupedByCaseId)
+            {
+                var groupedByDate = _sharepointClient.GroupTimeregistrationsByDoneDate(kvpair.Value);
+                groupedByCaseIdByDate.Add(kvpair.Key, groupedByDate);
+            }
+            
+            
+            Assert.AreEqual(0, 1);
         }
     }
 }
