@@ -132,6 +132,14 @@ namespace TimeSync.DataAccess
 //            var timeregsByCaseId = timeregs.GroupBy(x => x.CaseId);
 
             var timeregsByCaseId = GroupTimeregistrationsByCaseId(timeregs);
+            var timeregsByCaseIdByDate = new Dictionary<int, Dictionary<DateTime, List<Timeregistration>>>();
+            foreach (var timeregsForCaseId in timeregsByCaseId)
+            {
+                var timeregByDate = GroupTimeregistrationsByDoneDate(timeregsForCaseId.Value);
+                timeregsByCaseIdByDate.Add(timeregsForCaseId.Key, timeregByDate);
+            }
+            
+                       
             
 //            var timeregsByDate = timeregsByCaseId.GroupBy(x => x)
 
