@@ -49,12 +49,6 @@ namespace TimeSync.Model
         public ObservableCollection<string> Teams { get; set; }
         public ObservableCollection<string> Timeslots { get; set; }
 
-        public Timeregistration()
-        {
-            ToolkitNames = new List<string>();
-            DoneDate = DateTime.Today;
-        }
-
         public bool CouldConvertDurationToHours()
         {
             var durationIsNumberOfHours = DurationIsNumberOfHours(Duration);

@@ -8,7 +8,7 @@ namespace TimeSync.DataAccess
     {
         int GetUserIdFromToolkit(ToolkitUser toolkitUser, Toolkit toolkit);
         int MakeTimeregistration(Timeregistration timereg, ToolkitUser toolkitUser, Toolkit toolkit);
-        List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit);
+        void MakeTimeregistrations(IEnumerable<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit);
         Toolkit GetTimeslotInformationFromToolkit(ToolkitUser toolkitUser, Toolkit tk);
         List<Team> GetTeamsFromToolkit(ToolkitUser toolkitUser, Toolkit tk);
     }

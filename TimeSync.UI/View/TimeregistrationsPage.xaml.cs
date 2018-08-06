@@ -26,14 +26,14 @@ namespace TimeSync.UI.View
             _timeManager = timeManager;
             _container = container;
             this.DataContext = _container.Resolve<TimeregistrationViewModel>();
-            var viewModel = this.DataContext as TimeregistrationViewModel;
+            var viewModel = (TimeregistrationViewModel) this.DataContext;
             viewModel.TimeManager = _timeManager;
         }
 
-        public void CboxToolkitSelected(object sender, EventArgs eventArgs)
+        public virtual void CboxToolkitSelected(object sender, EventArgs eventArgs)
         {
             var cbox = sender as ComboBox;
-            var timereg = (Timeregistration) cbox.DataContext;
+            var timereg = (Timeregistration) cbox?.DataContext;
 
             var tk = timereg?.Toolkits.FirstOrDefault(t => t.DisplayName == timereg.ToolkitDisplayName);
 
@@ -47,31 +47,26 @@ namespace TimeSync.UI.View
             }
         }
 
-        public void CboxTeamSelected(object sender, EventArgs eventArgs)
+        public virtual void CboxTeamSelected(object sender, EventArgs eventArgs)
         {
             var cbox = sender as ComboBox;
-            var timereg = (Timeregistration)cbox.DataContext;
+            var timereg = (Timeregistration) cbox?.DataContext;
 
             if (timereg?.Team == null) return;
 
             var tk = timereg.Toolkits.FirstOrDefault(t => t.DisplayName == timereg.ToolkitDisplayName);
 
             if (tk == null) return;
-            foreach (var team in tk.Teams)
-            {
-                if (team.Name != timereg.Team) continue;
-                if (!team.UsesTimeslots)
-                {
-                    timereg.Timeslots.Clear();
-                    return;
-                }
-                foreach (var timeslot in tk.Timeslots)
-                {
-                    if (timereg.Timeslots.Contains(timeslot.TimeInterval.Interval)) continue;
-                    timereg.Timeslots.Add(timeslot.TimeInterval.Interval);
-                }
-                return;
 
+            var team = tk.Teams.Single(t => t.Name == timereg.Team);
+            if (!team.UsesTimeslots)
+            {
+                timereg.Timeslots.Clear();
+            }
+            foreach (var timeslot in tk.Timeslots)
+            {
+                if (timereg.Timeslots.Contains(timeslot.TimeInterval.Interval)) continue;
+                timereg.Timeslots.Add(timeslot.TimeInterval.Interval);
             }
         }
     }
