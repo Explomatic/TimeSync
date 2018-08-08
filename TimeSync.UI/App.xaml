@@ -104,6 +104,7 @@
         </Style>
 
         <!-- Window styling -->
+        <!-- #1c2444 -->
         <SolidColorBrush x:Key="WindowColor" Color="sc#0.11,0.11,0.15"/>
         <SolidColorBrush x:Key="WindowBackColor" Color="sc#0.11,0.11,0.15"/>
         <SolidColorBrush x:Key="WindowForeColor" Color="WhiteSmoke"/>
