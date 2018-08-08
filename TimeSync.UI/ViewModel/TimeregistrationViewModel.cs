@@ -27,7 +27,7 @@ namespace TimeSync.UI.ViewModel
         {
             for (var i = 0; i < 18; i++)
             {
-                _timeregistrations.Add(new Timeregistration()
+                _timeregistrations.Add(new Timeregistration
                 {
                     Team = "Operations",
                     CaseId = 0,

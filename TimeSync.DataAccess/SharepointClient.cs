@@ -111,7 +111,7 @@ namespace TimeSync.DataAccess
         //TODO: Add support for multiple timeregs per day for a case (i.e. group them by case id)
         //Do some loop over list where we create Microsoft.SharePoint.Client.ListItem and put into SP.List oList -- SEE UNIT TEST PROJECT
         //Send to Toolkit -- SEE UNIT TEST PROJECT
-        public virtual List<ListItem> MakeTimeregistrations(List<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
+        public virtual void MakeTimeregistrations(IEnumerable<Timeregistration> timeregs, ToolkitUser toolkitUser, Toolkit toolkit)
         {
             var clientContext = new ClientContext(toolkit.Url)
             {
@@ -123,96 +123,70 @@ namespace TimeSync.DataAccess
             clientContext.Load(timeregSpList);
             clientContext.ExecuteQuery();
 
-            var spListItems = new List<ListItem>();
+            var listItems = new Dictionary<CaseDateTimeslot, ListItem>();
 
             var doneBy = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
             var author = new SPFieldLookupValue(toolkit.UserId, toolkitUser.Name);
             var itemCreateInfo = new ListItemCreationInformation();
 
-//            var timeregsByCaseId = timeregs.GroupBy(x => x.CaseId);
-
-            var timeregsByCaseId = GroupTimeregistrationsByCaseId(timeregs);
-            
-//            var timeregsByDate = timeregsByCaseId.GroupBy(x => x)
-
-//            foreach (var caseIdGroup in timeregsByCaseId)
-//            {
-//                var caseId = caseIdGroup.Key;
-//                var timeregsByDate = caseIdGroup.GroupBy(x => x.DoneDate);
-//                foreach (var doneDateGroup in timeregsByDate)
-//                {
-//                    var doneDate = doneDateGroup.Key;
-//                    var timeregsForDateForCaseId = doneDateGroup.GetEnumerator();
-//                    if (timeregsForDateForCaseId)
-//                }
-//            }
-            
-            foreach (var timereg in timeregs)
+            var timeregsByCaseIdDateTimeslot = GroupTimeregistrations(timeregs);
+            foreach (var caseDateTimeslotGroup in timeregsByCaseIdDateTimeslot)
             {
-                var toolkitCase = new SPFieldLookupValue(timereg.CaseId, $"{toolkit.CustomerName}-{timereg.CaseId}");
-
                 var sharepointListItem = timeregSpList.AddItem(itemCreateInfo);
-
-                if (!timereg.CouldConvertDurationToHours())
-                {
-                    return new List<ListItem>();
-                }
-
-                sharepointListItem["Hours"] = timereg.Hours;
+                
+                var caseDateTimeslot = caseDateTimeslotGroup.Key;
+                var toolkitCase = new SPFieldLookupValue(caseDateTimeslot.CaseId, $"{toolkit.CustomerName}-{caseDateTimeslot.CaseId}");
+                var doneDate = caseDateTimeslot.Date;
+                var hours = CalculateDuration(caseDateTimeslotGroup.Value);
+                
+                sharepointListItem["Hours"] = hours;
                 sharepointListItem["DoneBy"] = doneBy;
                 sharepointListItem["Author"] = author;
                 sharepointListItem["Case"] = toolkitCase;
-                sharepointListItem["DoneDate"] = timereg.DoneDate;
+                sharepointListItem["DoneDate"] = doneDate;
 
                 sharepointListItem.Update();
-                spListItems.Add(sharepointListItem);
-            }
-            
+                listItems.Add(caseDateTimeslot, sharepointListItem);
+            } 
+                        
             try
             {
                 clientContext.ExecuteQuery();
-                return spListItems;
             }
-            catch
+            catch (Exception)
             {
-                return new List<ListItem>();
+                throw new Exception($"Unable to save timeregs to Toolkit. Toolkit: DisplayName={toolkit.DisplayName}, Url={toolkit.Url}");
+            }
+
+            foreach (var item in listItems)
+            {
+                var isSynchronised = item.Value.Id != -1;
+                foreach (var timereg in timeregsByCaseIdDateTimeslot[item.Key])
+                {
+                    timereg.IsSynchronized = isSynchronised;
+                }
             }
         }
 
-        public virtual Dictionary<int,List<Timeregistration>> GroupTimeregistrationsByCaseId(IEnumerable<Timeregistration> timeregs)
+        public virtual double CalculateDuration(List<Timeregistration> timeregs)
         {
-            var tmp = from timereg in timeregs
-                group timereg by timereg.CaseId
-                into timeregsByCaseIdGroup
-                let timeregsForCaseId = from timeregForCaseId in timeregsByCaseIdGroup
-                    select timeregForCaseId
+            double duration = 0;
+            foreach (var timereg in timeregs)
+            {
+                var success = timereg.CouldConvertDurationToHours();
+                if (!success)
+                    throw new ArgumentException($"The amount of hours given ({timereg.Duration}) for the timeregistration is invalid. Timeregistration: Toolkit={timereg.ToolkitDisplayName}, Team={timereg.Team}, Case ID={timereg.CaseId}, timeslot={timereg.Timeslot}");
 
-                select new
-                {
-                    CaseId = timeregsByCaseIdGroup.Key,
-                    TimeregsForCaseId = timeregsForCaseId.ToList()
-                };
+                duration += timereg.Hours;
+            }
 
-            var groupTimeregistrationsByCaseId = tmp.ToList();
-            return groupTimeregistrationsByCaseId.ToDictionary(x => x.CaseId, x => x.TimeregsForCaseId);
+            return duration;
         }
-        
-        public virtual Dictionary<DateTime,List<Timeregistration>> GroupTimeregistrationsByDoneDate(IEnumerable<Timeregistration> timeregs)
+
+        public virtual Dictionary<CaseDateTimeslot,List<Timeregistration>> GroupTimeregistrations(IEnumerable<Timeregistration> timeregs)
         {
-            var tmp = from timereg in timeregs
-                group timereg by timereg.DoneDate
-                into timeregsByDoneDate
-                let timeregsForDoneDate = from timeregForDoneDate in timeregsByDoneDate
-                    select timeregForDoneDate
-
-                select new
-                {
-                    DoneDate = timeregsByDoneDate.Key,
-                    TimeregsByDoneDate = timeregsForDoneDate.ToList()
-                };
-
-            var groupTimeregistrationsByCaseId = tmp.ToList();
-            return groupTimeregistrationsByCaseId.ToDictionary(x => x.DoneDate, x => x.TimeregsByDoneDate);
+            return timeregs.GroupBy(timereg => new CaseDateTimeslot {CaseId = timereg.CaseId, Date = timereg.DoneDate, Timeslot = timereg.Timeslot})
+                .ToDictionary(x => x.Key, x => x.ToList());
         }
 
         public virtual List<Team> GetTeamsFromToolkit(ToolkitUser tkUser, Toolkit tk)
@@ -295,16 +269,6 @@ namespace TimeSync.DataAccess
 
             var timeslots = new List<Timeslot>();
 
-            //return listItems.Select(item => new Timeslot
-            //    {
-            //        TimeInterval = new TimeInterval
-            //        {
-            //            Id = (from field in item.FieldValues where field.Key == "ID" select (int) field.Value).Single(),
-            //            Interval = (from field in item.FieldValues where field.Key == "Title" select (string) field.Value).Single()
-            //        }
-            //    })
-            //    .ToList();
-
             foreach (var item in listItems)
             {
                 var timeslot = new Timeslot
@@ -324,6 +288,7 @@ namespace TimeSync.DataAccess
             return timeslots.OrderBy(ts => ts.TimeInterval.Id).ToList();
         }
 
+        // ReSharper disable once InconsistentNaming
         private static List<Team> GetTeamsWithActiveSLA(ClientContext clientContext)
         {
             const string list = "SLA";
@@ -414,12 +379,6 @@ namespace TimeSync.DataAccess
                 };
                 teams.Add(team);
             }
-
-            //var teams = listItems.Select(item => new Team
-            //{
-            //    Name =
-            //        (from field in item.FieldValues where field.Key == "Title" select field.Value.ToString()).SingleOrDefault()
-            //}).ToList();
 
             return teams.GroupBy(team => team.Name).Select(g => g.First()).OrderBy(team => team.Name).ToList();
         }
@@ -570,14 +529,12 @@ namespace TimeSync.DataAccess
             clientContext.Load(spList);
             clientContext.ExecuteQuery();
 
-            //.GroupBy(team => team.Name).Select(g => g.First()).OrderBy(team => team.Name).ToList();
-
             var uniqueTimeregsWithTimeslot = timeregsWithTimeslot.GroupBy(timereg => timereg.CaseId)
                 .Select(g => g.First()).OrderBy(timereg => timereg.CaseId).ToList();
 
             var uniqueCaseIds = (from uniqueTimereg in uniqueTimeregsWithTimeslot select uniqueTimereg.CaseId).ToList();
 
-            var query = GenereateCamlQueryForIds(uniqueCaseIds);
+            var query = GenerateCamlQueryForIds(uniqueCaseIds);
 
             var listItems = spList.GetItems(query);
             clientContext.Load(listItems);
@@ -600,13 +557,6 @@ namespace TimeSync.DataAccess
             }
 
             return tkCases;
-
-            //return listItems.Select(item => new ToolkitCase
-            //    {
-            //        CaseId = int.Parse((from field in item.FieldValues where field.Key == "ID" select field.Value.ToString()).Single()),
-            //        Team = (from field in item.FieldValues where field.Key == "Team" select ((FieldLookupValue) field.Value).LookupValue).Single()
-            //    })
-            //    .ToList();
         }
 
         private static List<TimeregWithTimeslot> GetTopTimeregsWithTimeslot(ClientRuntimeContext clientContext, List spList, Toolkit tk)
@@ -647,18 +597,6 @@ namespace TimeSync.DataAccess
             }
 
             return listOfTimeregsWithTimelots;
-
-            //return listItems.Select(item => new TimeregWithTimeslot
-            //    {
-            //        Timeslot = tk.TimeslotIsFieldLookup
-            //            ? (from field in item.FieldValues where field.Key == tk.TimeslotFieldName select ((FieldLookupValue) field.Value).LookupValue).Single()
-            //            : (from field in item.FieldValues where field.Key == tk.TimeslotFieldName select field.Value.ToString()).Single(),
-            //        TimeslotId = tk.TimeslotIsFieldLookup
-            //            ? (from field in item.FieldValues where field.Key == tk.TimeslotFieldName select ((FieldLookupValue) field.Value).LookupId).Single()
-            //            : -1,
-            //        CaseId = (from field in item.FieldValues where field.Key == "Sag_x003a_Sags_x0020_Id" select ExtractCaseIdFromField(((FieldLookupValue) field.Value).LookupValue)).Single()
-            //    })
-            //    .ToList();
         }
 
         private static int ExtractCaseIdFromField(string spCaseId)
@@ -672,14 +610,8 @@ namespace TimeSync.DataAccess
             return caseId;
         }
 
-        private static string IdAsValueType(int value)
+        private static CamlQuery GenerateCamlQueryForIds(IEnumerable<int> listOfCaseIds)
         {
-            return $"<Value Type='Text'>{value}</Value>";
-        }
-
-        private static CamlQuery GenereateCamlQueryForIds(IEnumerable<int> listOfCaseIds)
-        {
-            //var values = listOfCaseIds.Aggregate("", (current, caseId) => current + IdAsValueType(caseId));
             var values = listOfCaseIds.Select(caseId => TextEquals("ID", caseId)).Aggregate(WrapInOr);
 
             return new CamlQuery
@@ -694,7 +626,6 @@ namespace TimeSync.DataAccess
         private static string WrapInOr(string first, string second)
         {
             return $"<Or>{first}{second}</Or>";
-            throw new NotImplementedException();
         }
 
         private static string TextEquals(string column, int value)
@@ -711,20 +642,6 @@ namespace TimeSync.DataAccess
         {
             return $"<Eq><FieldRef Name='{column}' /><Value Type='Text'>{value}</Value></Eq>";
         }
-        //private static string IdAsValueType(string customer, int value)
-        //{
-        //    return $"<Value Type='Text'>{customer}-{value}</Value>";
-        //}
-
-        //private static CamlQuery GenereateCamlQueryForIds(IEnumerable<int> listOfCaseIds, string customerName)
-        //{
-        //    var values =
-        //        listOfCaseIds.Aggregate("", (current, caseId) => current + IdAsValueType(customerName, caseId));
-        //    return new CamlQuery()
-        //    {
-        //        ViewXml = $"<View><Where><Or><In><FieldRef Name='Sag_x003a_Sags_x0020_Id'/><Values>{values}</Values></In></Or></Where><View>"
-        //    };
-        //}
 
         private static bool CheckIfToolkitUsesTimeslots(ClientContext clientContext, List spList, Toolkit tk)
         {
@@ -751,26 +668,15 @@ namespace TimeSync.DataAccess
             };
 
             var counter = 0;
-            //var whileLoopWatch = new Stopwatch();
-            //whileLoopWatch.Stop();
             while (counter < 4)
             {
-                //whileLoopWatch.Start();
                 var listItems = spList.GetItems(query);
                 clientContext.Load(listItems);
                 clientContext.ExecuteQuery();
-                //whileLoopWatch.Stop();
-                //var toolkitQueryDuration = whileLoopWatch.Elapsed;
-
-                //var firstForeachLoopWatch = new Stopwatch();
-                //firstForeachLoopWatch.Start();
-                //var secondForeachLoopDurations = new List<TimeSpan>();
 
                 var rx = new Regex(@"\d{2}\:\d{2}\s{0,1}\-\s{0,1}\d{2}\:\d{2}");
                 foreach (var item in listItems)
                 {
-                    //var secondForeachLoopWatch = new Stopwatch();
-                    //secondForeachLoopWatch.Start();
                     foreach (var field in item.FieldValues)
                     {
                         if (field.Value == null) continue;
@@ -790,14 +696,7 @@ namespace TimeSync.DataAccess
                         return true;
 
                     }
-                    //secondForeachLoopWatch.Stop();
-                    //var secondForeachLoopDuration = secondForeachLoopWatch.Elapsed;
-                    //secondForeachLoopDurations.Add(secondForeachLoopDuration);
                 }
-                //firstForeachLoopWatch.Stop();
-                //var firstForeachLoopDuration = firstForeachLoopWatch.Elapsed;
-                //var avgSecondDuration = secondForeachLoopDurations.Average(duration => duration.TotalMilliseconds);
-                //var totalSecondDuration = secondForeachLoopDurations.Sum(duration => duration.TotalMilliseconds);
                 query.ListItemCollectionPosition = listItems.ListItemCollectionPosition;
 
                 counter++;
@@ -818,5 +717,12 @@ namespace TimeSync.DataAccess
 
             return listItems.Count != 0;
         }
-    }   
+    }
+
+    public class CaseDateTimeslot
+    {
+        public int CaseId { get; set; }
+        public DateTime Date { get; set; }
+        public string Timeslot { get; set; }
+    }
 }

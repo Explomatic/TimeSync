@@ -956,22 +956,5 @@ namespace TimeSync.Tests
 
             Assert.AreNotEqual(-1, id);
         }
-
-        [TestMethod]
-        public void TimeregGroupingTest()
-        {
-            var timeregs = InitializeTimeregList();
-            var groupedByCaseId = _sharepointClient.GroupTimeregistrationsByCaseId(timeregs);
-            
-            var groupedByCaseIdByDate = new Dictionary<int, Dictionary<DateTime, List<Timeregistration>>>();
-            foreach (var kvpair in groupedByCaseId)
-            {
-                var groupedByDate = _sharepointClient.GroupTimeregistrationsByDoneDate(kvpair.Value);
-                groupedByCaseIdByDate.Add(kvpair.Key, groupedByDate);
-            }
-            
-            
-            Assert.AreEqual(0, 1);
-        }
     }
 }

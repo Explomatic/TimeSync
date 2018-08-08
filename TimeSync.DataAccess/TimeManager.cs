@@ -135,19 +135,6 @@ namespace TimeSync.DataAccess
                 _sharepointClient.MakeTimeregistrations(timeregsInTk, _toolkitUser, tk);
             }
 
-            //var uniqueToolkitNames = new List<string>();
-            //foreach (var timereg in timeregs)
-            //{
-            //    if (uniqueToolkitNames.Contains(timereg.ToolkitDisplayName)) continue;
-            //    uniqueToolkitNames.Add(timereg.ToolkitDisplayName);
-            //}
-
-            //foreach (var toolkitName in uniqueToolkitNames)
-            //{
-            //    var tkTimeregs = (from timereg in timeregs where timereg.ToolkitDisplayName == toolkitName select timereg).ToList();
-            //    _sharepointClient.MakeTimeregistrations(tkTimeregs, _toolkitUser, _toolkits.Single(tk => tk.CustomerName == toolkitName));
-            //}
-
             //Send to Sharepoint
             foreach (var timereg in timeregs.Where(tr => !tr.IsSynchronized))
             {
