@@ -439,11 +439,22 @@ namespace TimeSync.DataAccess
             var query = new CamlQuery
             {
                 ViewXml =
-                    $@"<View><Query><Where><IsNotNull><FieldRef Name='{
-                            tk.TimeslotFieldName
-                        }'/></IsNotNull></Where><OrderBy><FieldRef Name='ID' Ascending='FALSE'/></OrderBy></Query><ViewFields><FieldRef Name='{
-                            tk.TimeslotFieldName
-                        }' /></ViewFields><RowLimit>{rowLimit}</RowLimit></View>"
+                    $@"<View>
+                            <Query>
+                                <Where>
+                                    <IsNotNull>
+                                        <FieldRef Name='{tk.TimeslotFieldName}'/>
+                                    </IsNotNull>
+                                </Where>
+                                <OrderBy>
+                                    <FieldRef Name='ID' Ascending='FALSE'/>
+                                </OrderBy>
+                            </Query>
+                            <ViewFields>
+                                <FieldRef Name='{tk.TimeslotFieldName}' />
+                            </ViewFields>
+                            <RowLimit>{rowLimit}</RowLimit>
+                        </View>"
             };
 
             while (timespan < 24 && loopCounter < 10)
