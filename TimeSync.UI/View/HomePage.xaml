@@ -8,42 +8,48 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="950"
       Title="Homepage">
-    
+
     <Page.DataContext>
         <viewModel:HomePageViewModel/>
     </Page.DataContext>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="{StaticResource WindowColor}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Border Grid.Column="0" BorderBrush="{StaticResource WindowBorderColor}" BorderThickness="0 0 0.75 0">
+            <Grid Background="{StaticResource WindowColor}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <Button Style="{StaticResource MenuButton}" Grid.Row="0" Content="Account information"
-                    Command="{Binding AccountInfoCommand}" />
+                <Button Style="{StaticResource MenuButton}" Grid.Row="0" Content="Account information"
+                        Command="{Binding AccountInfoCommand}" />
 
-            <Button Style="{StaticResource MenuButton}" Grid.Row="1" Content="Toolkits"
-                    Command="{Binding ToolkitsCommand}" />
+                <Button Style="{StaticResource MenuButton}" Grid.Row="1" Content="Toolkits"
+                        Command="{Binding ToolkitsCommand}" />
 
-            <Button Style="{StaticResource MenuButton}" Grid.Row="2" Content="Timeregistrations"
-                    Command="{Binding TimeregistrationCommand}" />
+                <Button Style="{StaticResource MenuButton}" Grid.Row="2" Content="Timeregistrations"
+                        Command="{Binding TimeregistrationCommand}" />
 
-            <Button Style="{StaticResource MenuButton}" Grid.Row="3" VerticalAlignment="Bottom" Content="Bug report"
-                    Command="{Binding BugReportCommand}" />
+                <Button Grid.Row="3" Height="50" Content="Hest" Style="{StaticResource TestButton}" IsEnabled="True"
+                        IsMouseDirectlyOverChanged="UIElement_OnIsMouseDirectlyOverChanged"/>
 
-            <Button Style="{StaticResource MenuButton}" Grid.Row="4" VerticalAlignment="Bottom" Content="Settings"
-                    Command="{Binding SettingsCommand}" />
-        </Grid>
+                <Button Style="{StaticResource MenuButton}" Grid.Row="4" VerticalAlignment="Bottom" Content="Bug report"
+                        Command="{Binding BugReportCommand}" />
+
+                <Button Style="{StaticResource MenuButton}" Grid.Row="5" VerticalAlignment="Bottom" Content="Settings"
+                        Command="{Binding SettingsCommand}" />
+            </Grid>
+        </Border>
+
 
 
         <!--Column 1-->
@@ -53,10 +59,10 @@
 
         <!--<ContentPresenter Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20" Content="{Binding CurrentPage}" />-->
 
-        <Grid Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20">
-            <Frame Content="{Binding CurrentPage}" />
-        </Grid>
-        <Label Grid.Column="0" 
+        <!--<Grid Name="ContentGrid" Grid.Column="1" Background="{StaticResource WindowFrameColor}">-->
+            <Frame Grid.Column="1" Content="{Binding CurrentPage}" Background="{StaticResource WindowFrameColor}" />
+        <!--</Grid>-->
+        <!--<Label Grid.Column="0" 
                Grid.ColumnSpan="2" 
                VerticalAlignment="Top" 
                FontFamily="Trebuchet MS" 
@@ -65,6 +71,6 @@
                FontSize="12" 
                Foreground="#FFF" 
                HorizontalAlignment="Left" 
-               Content="{Binding PageTitle}"/>
+               Content="{Binding PageTitle}"/>-->
     </Grid>
 </Page>

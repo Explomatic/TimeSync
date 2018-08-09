@@ -98,7 +98,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="sc#0.15,0.15,0.20">
+    <Grid Background="{StaticResource WindowFrameColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>

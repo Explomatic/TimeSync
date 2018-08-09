@@ -13,29 +13,18 @@ namespace TimeSync.UI.ViewModel
 {
     public class BaseViewModel : ObservableObject
     {
-        //private string _versionNumber = TimeSync.UI.Properties.Resources.versionNumber;
-        //private string _basePageTitle = "TimeSync (ALPHA)";
-        //private string _currentPageTitle = "";
+        private readonly string _basePageTitle = $"TimeSync {Properties.Resources.versionNumber}";
+        private string _currentPageTitle = "";
 
-        //public string VersionNumber
-        //{
-        //    get { return _versionNumber; }
-        //    set
-        //    {
-        //        _versionNumber = value;
-        //        RaisePropertyChangedEvent("VersionNumber");
-        //    }
-        //}
-
-        //public string PageTitle
-        //{
-        //    get => _currentPageTitle.IsNullOrEmpty() ? _basePageTitle : $"{_basePageTitle} - {_currentPageTitle}";
-        //    set
-        //    {
-        //        _currentPageTitle = value;
-        //        RaisePropertyChangedEvent("PageTitle");
-        //    }
-        //}
+        public string PageTitle
+        {
+            get => _currentPageTitle.IsNullOrEmpty() ? _basePageTitle : $"{_basePageTitle} - {_currentPageTitle}";
+            set
+            {
+                _currentPageTitle = value;
+                RaisePropertyChangedEvent("PageTitle");
+            }
+        }
 
         protected bool pop;
         public bool PopupIsOpen

@@ -1,11 +1,18 @@
 ﻿<NavigationWindow x:Class="TimeSync.UI.View.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TimeSync.UI"
-        mc:Ignorable="d"
-        Title="" Height="450" Width="950" Source="HomePage.xaml"
-                  Style="{StaticResource CustomWindow}"
-                  ShowsNavigationUI="False">
-</NavigationWindow>
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:TimeSync.UI"
+    xmlns:viewModel="clr-namespace:TimeSync.UI.ViewModel"
+    mc:Ignorable="d"
+    Title="" 
+    Height="450" 
+    Width="950" 
+    Source="HomePage.xaml"
+    Style="{StaticResource CustomWindow}"
+    ShowsNavigationUI="False" >
+    <Window.DataContext>
+        <viewModel:BaseViewModel/>
+    </Window.DataContext>
+    </NavigationWindow>

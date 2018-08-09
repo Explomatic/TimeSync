@@ -18,7 +18,7 @@
       <viewModel:ToolkitUserViewModel/>  
     </Page.DataContext>
 
-    <Grid Background="sc#0.15,0.15,0.20">
+    <Grid Background="{StaticResource WindowFrameColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
