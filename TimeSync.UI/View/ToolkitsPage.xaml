@@ -31,7 +31,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="{StaticResource WindowFrameColor}">
+    <Grid Background="{StaticResource WindowFrameBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>

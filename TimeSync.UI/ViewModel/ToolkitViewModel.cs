@@ -76,7 +76,7 @@ namespace TimeSync.UI.ViewModel
             Toolkits = repo.GetData();
 
             // Used for easy UI population during design phases.
-            //InitializeToolkitList();
+            InitializeToolkitList();
         }
 
         public ICommand AddCommand

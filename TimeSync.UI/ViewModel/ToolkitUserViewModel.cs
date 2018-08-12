@@ -81,7 +81,7 @@ namespace TimeSync.UI.ViewModel
                 {
                     popText = "Could not decrypt the saved password, please retype it.";
                     pop = true;
-                    PopupIsOpen = true;
+                    PopupIsOpen = true; 
                 }
             }
             

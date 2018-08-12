@@ -19,8 +19,8 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" BorderBrush="{StaticResource WindowBorderColor}" BorderThickness="0 0 0.75 0">
-            <Grid Background="{StaticResource WindowColor}">
+        <Border Grid.Column="0" BorderBrush="{StaticResource WindowBorderBrush}" BorderThickness="0 0 0.75 0">
+            <Grid Background="{StaticResource WindowBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -30,47 +30,45 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Button Style="{StaticResource MenuButton}" Grid.Row="0" Content="Account information"
-                        Command="{Binding AccountInfoCommand}" />
+                <Border Grid.Row="0" BorderThickness="0 0 0 0.75" BorderBrush="White">
+                    <Button Style="{StaticResource MenuButton}" Content="Account information"
+                            Command="{Binding AccountInfoCommand}" />    
+                </Border>
+                
+                <Border Grid.Row="1" BorderThickness="0 0 0 0.75" BorderBrush="White">
+                    <Button Style="{StaticResource MenuButton}" Content="Toolkits"
+                            Command="{Binding ToolkitsCommand}" />
+                </Border>
 
-                <Button Style="{StaticResource MenuButton}" Grid.Row="1" Content="Toolkits"
-                        Command="{Binding ToolkitsCommand}" />
+                <Border Grid.Row="2" BorderThickness="0 0 0 0.75" BorderBrush="White">
+                    <Button Style="{StaticResource MenuButton}" Content="Timeregistrations"
+                            Command="{Binding TimeregistrationCommand}" />
+                </Border>
 
-                <Button Style="{StaticResource MenuButton}" Grid.Row="2" Content="Timeregistrations"
-                        Command="{Binding TimeregistrationCommand}" />
+                <Border Grid.Row="4" BorderThickness="0 0.75 0 0" BorderBrush="White">
+                    <Button Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Bug report"
+                            Command="{Binding BugReportCommand}" />
+                </Border>
 
-                <Button Grid.Row="3" Height="50" Content="Hest" Style="{StaticResource TestButton}" IsEnabled="True"
-                        IsMouseDirectlyOverChanged="UIElement_OnIsMouseDirectlyOverChanged"/>
-
-                <Button Style="{StaticResource MenuButton}" Grid.Row="4" VerticalAlignment="Bottom" Content="Bug report"
-                        Command="{Binding BugReportCommand}" />
-
-                <Button Style="{StaticResource MenuButton}" Grid.Row="5" VerticalAlignment="Bottom" Content="Settings"
-                        Command="{Binding SettingsCommand}" />
+                <Border Grid.Row="5" BorderThickness="0 0.75 0 0" BorderBrush="White">
+                    <Button Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Settings"
+                            Command="{Binding SettingsCommand}" />
+                </Border>
             </Grid>
         </Border>
 
-
-
-        <!--Column 1-->
-        <!--Background="DarkSlateGray"-->
-        <!--Background="sc#0.18,0.36,0.4"-->
-        <!--Background="DarkTurqoise"-->
-
-        <!--<ContentPresenter Name="ContentGrid" Grid.Column="1" Background="sc#0.15,0.15,0.20" Content="{Binding CurrentPage}" />-->
-
-        <!--<Grid Name="ContentGrid" Grid.Column="1" Background="{StaticResource WindowFrameColor}">-->
-            <Frame Grid.Column="1" Content="{Binding CurrentPage}" Background="{StaticResource WindowFrameColor}" />
-        <!--</Grid>-->
-        <!--<Label Grid.Column="0" 
-               Grid.ColumnSpan="2" 
-               VerticalAlignment="Top" 
+        <Frame Grid.Column="1" Content="{Binding CurrentPage}" Background="{StaticResource WindowFrameBackgroundBrush}" />
+        
+        <Label Grid.Column="0" Grid.ColumnSpan="2" 
+               HorizontalAlignment="Left" VerticalAlignment="Top"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               Height="30"
                FontFamily="Trebuchet MS" 
                Margin="0,-30,0,0"
                FontWeight="Bold" 
                FontSize="12" 
-               Foreground="#FFF" 
-               HorizontalAlignment="Left" 
-               Content="{Binding PageTitle}"/>-->
+               Foreground="{StaticResource TitleTextBrush}" 
+               Content="{Binding PageTitle}"
+               />
     </Grid>
 </Page>
