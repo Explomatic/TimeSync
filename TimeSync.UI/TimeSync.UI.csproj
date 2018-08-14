@@ -128,6 +128,7 @@
     <Compile Include="ViewModel\TimeregistrationViewModel.cs" />
     <Compile Include="ViewModel\ToolkitViewModel.cs" />
     <Compile Include="ViewModel\ToolkitUserViewModel.cs" />
+    <Compile Include="ViewModel\WelcomePageViewModel.cs" />
     <Compile Include="View\BugReportPage.xaml.cs">
       <DependentUpon>BugReportPage.xaml</DependentUpon>
     </Compile>

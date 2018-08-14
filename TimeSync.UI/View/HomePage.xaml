@@ -35,7 +35,7 @@
                             Command="{Binding AccountInfoCommand}" />    
                 </Border>
                 
-                <Border Grid.Row="1" BorderThickness="0 0 0 0.75" BorderBrush="White">
+                <Border Grid.Row="1" BorderThickness="0 0.75 0 0.75" BorderBrush="White">
                     <Button Style="{StaticResource MenuButton}" Content="Toolkits"
                             Command="{Binding ToolkitsCommand}" />
                 </Border>
@@ -45,7 +45,7 @@
                             Command="{Binding TimeregistrationCommand}" />
                 </Border>
 
-                <Border Grid.Row="4" BorderThickness="0 0.75 0 0" BorderBrush="White">
+                <Border Grid.Row="4" BorderThickness="0 0.75 0 0.75" BorderBrush="White">
                     <Button Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Bug report"
                             Command="{Binding BugReportCommand}" />
                 </Border>
