@@ -49,8 +49,8 @@ namespace TimeSync.UI.ViewModel
             _userPage = new UserPage(_timeManager, _container);
             _toolkitsPage = new ToolkitsPage(_timeManager, _container);
             _timeregistrationsPage = new TimeregistrationsPage(_timeManager, _container);
-            _bugReportPage = new BugReportPage(_timeManager, _container);
-            _welcomePage = new WelcomePage();
+            _bugReportPage = _container.Resolve<BugReportPage>();
+            _welcomePage = _container.Resolve<WelcomePage>();
 
             _currentPage = _welcomePage;
         }

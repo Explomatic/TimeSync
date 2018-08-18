@@ -22,22 +22,9 @@ namespace TimeSync.UI.View
 {
     public partial class BugReportPage : Page
     {
-        private TimeManager _timeManager;
-        private IWindsorContainer _container;
         public BugReportPage()
         {
             InitializeComponent();
-        }
-
-        public BugReportPage(TimeManager timeManager, IWindsorContainer container)
-        {
-            InitializeComponent();
-            _timeManager = timeManager;
-            _container = container;
-            DataContext = _container.Resolve<ToolkitUserViewModel>();
-            var viewModel = (ToolkitUserViewModel) DataContext;
-
-            viewModel.TimeManager = _timeManager;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
