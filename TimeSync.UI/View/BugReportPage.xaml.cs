@@ -34,8 +34,8 @@ namespace TimeSync.UI.View
             InitializeComponent();
             _timeManager = timeManager;
             _container = container;
-            this.DataContext = _container.Resolve<ToolkitUserViewModel>();
-            var viewModel = this.DataContext as ToolkitUserViewModel;
+            DataContext = _container.Resolve<ToolkitUserViewModel>();
+            var viewModel = (ToolkitUserViewModel) DataContext;
 
             viewModel.TimeManager = _timeManager;
         }

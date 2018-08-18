@@ -96,9 +96,5 @@ namespace TimeSync.UI.View
 //            frame.Navigate(_bugReportPage);
 //            ContentGrid.Children.Add(frame);
 //        }
-        private void UIElement_OnIsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            var tmp = "hest";
-        }
     }
 }

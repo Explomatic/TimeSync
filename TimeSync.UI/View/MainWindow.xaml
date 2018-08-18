@@ -11,8 +11,4 @@
     Width="950" 
     Source="HomePage.xaml"
     Style="{StaticResource CustomWindow}"
-    ShowsNavigationUI="False" >
-    <Window.DataContext>
-        <viewModel:BaseViewModel/>
-    </Window.DataContext>
-    </NavigationWindow>
+    ShowsNavigationUI="False" />

@@ -124,9 +124,11 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\HomePageViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\TimeregistrationViewModel.cs" />
     <Compile Include="ViewModel\ToolkitViewModel.cs" />
     <Compile Include="ViewModel\ToolkitUserViewModel.cs" />
+    <Compile Include="ViewModel\WelcomePageViewModel.cs" />
     <Compile Include="View\BugReportPage.xaml.cs">
       <DependentUpon>BugReportPage.xaml</DependentUpon>
     </Compile>
@@ -135,6 +137,9 @@
     </Compile>
     <Compile Include="View\Page1.xaml.cs">
       <DependentUpon>Page1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TimeregistrationsPage.xaml.cs">
       <DependentUpon>TimeregistrationsPage.xaml</DependentUpon>
@@ -187,6 +192,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\Page1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

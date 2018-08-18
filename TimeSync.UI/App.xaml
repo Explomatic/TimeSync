@@ -17,65 +17,82 @@
             </StackPanel>
         </DataTemplate>
 
-        <Style TargetType="Button" x:Key="TestButton">
-            <Setter Property="Background" Value="{x:Null}"/>
-            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000" />
-            <Setter Property="BorderThickness" Value="0"/>
-            <!--<Setter Property="BorderBrush" Value="Black"/>-->
-            <Setter Property="Template">
-                <!--<Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <ContentControl Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ControlTemplate>
-                </Setter.Value>-->
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <!--<Border Background="{TemplateBinding Background}">-->
-                            <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <!--</Border>-->
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="TextBlock.Foreground" Value="#FF6D6D6D" />
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="sc#0.31,0.52,0.39"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="true">
-                    <Setter Property="Background" Value="sc#0.00,0.52,0.39"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <!---red window brushes-->
+        <!--<SolidColorBrush x:Key="WindowColor" Color="DarkRed"/> 
+        <SolidColorBrush x:Key="WindowBackColor" Color="DarkRed"/> 
+        <SolidColorBrush x:Key="WindowForeColor" Color="White"/> 
+        <SolidColorBrush x:Key="WindowForeHighlightColor" Color="White"/> 
+        <SolidColorBrush x:Key="WindowButtonColor" Color="OrangeRed"/> 
+        <SolidColorBrush x:Key="WindowButtonOverColor" Color="Orange"/> 
+        <SolidColorBrush x:Key="WindowButtonPressedColor" Color="DarkOrange"/>-->
+
+        <!-- Brushes -->
+        <!-- 2d3a6e even lighter -->
+        <!--222b52 lighter-->
+        <!-- 1c2444 nc background colour -->
+        <!--111528 darker -->
+        
+        <!-- Window styling -->
+        <SolidColorBrush x:Key="WindowBorderBrush" Color="White"/>
+        <SolidColorBrush x:Key="WindowBrush" Color="#111528"/>
+        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#111528"/>
+        <SolidColorBrush x:Key="WindowFrameBackgroundBrush" Color="#111528" />
+        <SolidColorBrush x:Key="WindowForegroundBrush" Color="WhiteSmoke"/>
+        <SolidColorBrush x:Key="WindowForegroundHighlightBrush" Color="WhiteSmoke"/>
+        <SolidColorBrush x:Key="WindowButtonBrush" Color="#111528"/>
+        <SolidColorBrush x:Key="WindowButtonHoverBrush" Color="sc#0.31,0.52,0.39"/>
+        <SolidColorBrush x:Key="WindowButtonPressedBrush" Color="sc#0.00,0.52,0.39"/>
+        
+        <!--#828eca-->
+        <!--#5969b8-->
+        <!-- <SolidColorBrush x:Key="ButtonPressedBrush" Color="sc#0.00,0.52,0.39"/> -->
+        <!-- <SolidColorBrush x:Key="ButtonHoverBrush" Color="sc#0.31,0.52,0.39"/> -->
+        <SolidColorBrush x:Key="ButtonPressedBrush" Color="#5969b8"/>
+        <SolidColorBrush x:Key="ButtonHoverBrush" Color="#b9c0e1"/>
+        <SolidColorBrush x:Key="ButtonDisabledBrush" Color="#FF6D6D6D"/>
+        <SolidColorBrush x:Key="TextBrushOange" Color="sc#0.95,0.15,0.0000"/>
+        <SolidColorBrush x:Key="TitleTextBrush" Color="White"/>
+        
+        <Color x:Key="TextOrange">sc#0.95,0.15,0.0000</Color>
+        <Color x:Key="LightOrange">#ea6402</Color>
+        <Color x:Key="Orange">#c35302</Color>
+        <Color x:Key="DarkOrange">#b04b02</Color>
+        
+        <!-- ScrollBar -->
+        <!-- <SolidColorBrush x:Key="StandardBorderBrush" Color="DarkGray" /> -->
+        <!-- <SolidColorBrush x:Key="StandardBrush" Color="LightGray" /> -->
+        <SolidColorBrush x:Key="ScrollBarBorderColor" Color="{StaticResource Orange}" />
+        <SolidColorBrush x:Key="ScrollBarFillColor" Color="{StaticResource Orange}" />
+        <SolidColorBrush x:Key="ScrollBarPressedColor" Color="{StaticResource DarkOrange}" />
+        <SolidColorBrush x:Key="ScrollBarHoverColor" Color="{StaticResource LightOrange}" />
+        <!-- <SolidColorBrush x:Key="ScrollBarBackgroundColor" Color="{StaticResource DarkOrange}"/> -->
+        <SolidColorBrush x:Key="ScrollBarBackgroundColor" Color="WhiteSmoke"/>
+        <!--<SolidColorBrush x:Key="GlyphBrush" Color="333333" />-->
 
         <Style TargetType="Button" x:Key="BaseButtonStyle">
-            <Setter Property="Background" Value="{x:Null}"/>
-            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000" />
-            <Setter Property="BorderThickness" Value="0"/>
-            <!--<Setter Property="BorderBrush" Value="Black"/>-->
-            <!--<Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <ContentControl Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{TemplateBinding Background}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>-->
+            <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrushOange}" />
+            <!-- <Setter Property="BorderThickness" Value="0"/> -->
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="sc#0.31,0.52,0.39"/>
+                    <Setter Property="Background" Value="{StaticResource ButtonHoverBrush}"/>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="true">
-                    <Setter Property="Background" Value="sc#0.00,0.52,0.39"/>
+                    <Setter Property="Background" Value="{StaticResource ButtonPressedBrush}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="TextBlock.Foreground" Value="{StaticResource ButtonDisabledBrush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -97,15 +114,12 @@
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Opacity" Value="0.5" />
-                    <!-- <Setter Property="Foreground" Value="#FF6D6D6D" /> -->
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style TargetType="Button" x:Key="RegularButton" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="FontSize" Value="20"/>
-            <!--<Setter Property="Width" Value="150" />-->
-            <!--<Setter Property="Height" Value="50" />-->
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="#FF6D6D6D" />
@@ -137,46 +151,25 @@
             <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000" />
             <Setter Property="FontSize" Value="16"/>
         </Style>
-        
+
         <Style TargetType="CheckBox">
-            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"/> 
+            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000"/>
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <!-- Window styling -->
-        <!--222b52-->
-        <!-- 1c2444 -->
-        <!--111528-->
-        <SolidColorBrush x:Key="WindowBorderColor" Color="White"/>
-        <SolidColorBrush x:Key="WindowColor" Color="#111528"/>
-        <SolidColorBrush x:Key="WindowBackColor" Color="#111528"/>
-        <SolidColorBrush x:Key="WindowFrameColor" Color="#111528" />
-        <SolidColorBrush x:Key="WindowForeColor" Color="WhiteSmoke"/>
-        <SolidColorBrush x:Key="WindowForeHighlightColor" Color="WhiteSmoke"/>
-        <SolidColorBrush x:Key="WindowButtonColor" Color="#111528"/>
-        <SolidColorBrush x:Key="WindowButtonOverColor" Color="sc#0.31,0.52,0.39"/>
-        <SolidColorBrush x:Key="WindowButtonPressedColor" Color="sc#0.00,0.52,0.39"/>
 
-        <!---red window brushes-->
-        <!--<SolidColorBrush x:Key="WindowColor" Color="DarkRed"/> 
-        <SolidColorBrush x:Key="WindowBackColor" Color="DarkRed"/> 
-        <SolidColorBrush x:Key="WindowForeColor" Color="White"/> 
-        <SolidColorBrush x:Key="WindowForeHighlightColor" Color="White"/> 
-        <SolidColorBrush x:Key="WindowButtonColor" Color="OrangeRed"/> 
-        <SolidColorBrush x:Key="WindowButtonOverColor" Color="Orange"/> 
-        <SolidColorBrush x:Key="WindowButtonPressedColor" Color="DarkOrange"/>-->
 
         <!--The window template and it's components -->
 
-        <sw:WindowMinimizeCommand x:Key="MinimizeCommand"></sw:WindowMinimizeCommand>
-        <sw:WindowMaximizeCommand x:Key="MaximizeCommand"></sw:WindowMaximizeCommand>
-        <sw:WindowCloseCommand x:Key="CloseCommand"></sw:WindowCloseCommand>
+        <sw:WindowMinimizeCommand x:Key="MinimizeCommand" />
+        <sw:WindowMaximizeCommand x:Key="MaximizeCommand" />
+        <sw:WindowCloseCommand x:Key="CloseCommand" />
 
         <Style TargetType="{x:Type Button}" x:Key="WindowButton">
             <Setter Property="Height" Value="25"/>
             <Setter Property="Width" Value="25"/>
-            <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
-            <Setter Property="Foreground" Value="{StaticResource WindowForeColor}"/>
+            <Setter Property="Background" Value="{StaticResource WindowButtonBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource WindowForegroundBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -185,16 +178,16 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="{StaticResource WindowButtonColor}"/>
-                                <Setter Property="Foreground" Value="{StaticResource WindowColor}"/>
+                                <Setter Property="Background" Value="{StaticResource WindowButtonBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource WindowBrush}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource WindowButtonOverColor}"/>
-                                <Setter Property="Foreground" Value="{StaticResource WindowForeHighlightColor}"/>
+                                <Setter Property="Background" Value="{StaticResource WindowButtonHoverBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource WindowForegroundHighlightBrush}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="{StaticResource WindowButtonPressedColor}"/>
-                                <Setter Property="Foreground" Value="{StaticResource WindowForeColor}"/>
+                                <Setter Property="Background" Value="{StaticResource WindowButtonPressedBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource WindowForegroundBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -237,12 +230,6 @@
             </Setter>
         </Style>
 
-        <SolidColorBrush x:Key="StandardBorderBrush" Color="DarkGray"></SolidColorBrush>
-        <SolidColorBrush x:Key="StandardBrush" Color="LightGray"></SolidColorBrush>
-        <SolidColorBrush x:Key="PressedBrush" Color="Gray"></SolidColorBrush>
-        <SolidColorBrush x:Key="HoverBrush" Color="#fefefe"></SolidColorBrush>
-        <!--<SolidColorBrush x:Key="GlyphBrush" Color="333333"></SolidColorBrush>-->
-
         <Style x:Key="LineButtonUpStyle" TargetType="{x:Type RepeatButton}">
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Template">
@@ -260,11 +247,12 @@
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="Path" 
                                         Property="Fill"
-                                        Value="{StaticResource HoverBrush}" />
+                                        Value="{StaticResource ScrollBarHoverColor}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter TargetName="Path" Property="Fill"
-                                        Value="{StaticResource PressedBrush}" />
+                                <Setter TargetName="Path" 
+                                        Property="Fill"
+                                        Value="{StaticResource ScrollBarPressedColor}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -289,12 +277,12 @@
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="Path" 
                                         Property="Fill"
-                                        Value="{StaticResource HoverBrush}" />
+                                        Value="{StaticResource ScrollBarHoverColor}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
                                 <Setter TargetName="Path" 
                                         Property="Fill"
-                                        Value="{StaticResource PressedBrush}" />
+                                        Value="{StaticResource ScrollBarPressedColor}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -314,31 +302,38 @@
             </Setter>
         </Style>
 
+        <!-- Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}" -->
+        <!-- Stroke="{StaticResource StandardBorderBrush} -->
         <Style x:Key="VerticalScrollBarThumbStyle" TargetType="{x:Type Thumb}">
             <Setter Property="IsTabStop"
                     Value="False"/>
             <Setter Property="Focusable"
                     Value="False"/>
-            <Setter Property="Margin"
-                    Value="1,0,1,0" />
-            <Setter Property="BorderBrush" Value="{StaticResource StandardBorderBrush}" />
+            <!-- <Setter Property="Margin" -->
+            <!--         Value="1,0,1,0" /> -->
+            <Setter Property="BorderBrush" Value="{StaticResource ScrollBarBorderColor}" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Rectangle Width="7" Name="ellipse"  
-                                   Stroke="{StaticResource StandardBorderBrush}"
-                                   Fill="{StaticResource StandardBrush}"
-                                   RadiusX="4" 
-                                   RadiusY="4"/>
+                        <Rectangle Name="ellipse"
+                                   Width="10"
+                                   Stroke="{StaticResource ScrollBarBorderColor}"
+                                   Fill="{StaticResource ScrollBarFillColor}"
+                                   RadiusX="0" 
+                                   RadiusY="0"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="ellipse"
-                                        Property="Fill" Value="{StaticResource HoverBrush}"></Setter>
+                                        Property="Fill" Value="{StaticResource ScrollBarHoverColor}"/>
+                                <Setter TargetName="ellipse"
+                                        Property="Stroke" Value="{StaticResource ScrollBarHoverColor}"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="True">
                                 <Setter TargetName="ellipse"
-                                        Property="Fill" Value="{StaticResource PressedBrush}"></Setter>
+                                        Property="Fill" Value="{StaticResource ScrollBarPressedColor}"/>
+                                <Setter TargetName="ellipse"
+                                        Property="Stroke" Value="{StaticResource ScrollBarPressedColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -347,15 +342,16 @@
         </Style>
 
         <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-            <Grid Background="{StaticResource WindowBackColor}">
+            <!-- <Grid Background="{StaticResource WindowBackColor}"> -->
+            <Grid Background="{StaticResource ScrollBarBackgroundColor}">
                 <Grid.RowDefinitions>
                     <!--<RowDefinition MaxHeight="18"/>-->
                     <RowDefinition Height="*"/>
                     <!--<RowDefinition MaxHeight="18"/>-->
                 </Grid.RowDefinitions>
                 <!--<Grid.Background>-->
-                    
-                    <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+
+                <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                         <GradientStop Offset="0" Color="White"></GradientStop>
                         <GradientStop Offset="1" Color="Blue"></GradientStop>
                     </LinearGradientBrush>-->
@@ -365,7 +361,7 @@
                               Command="ScrollBar.LineUpCommand">
                 </RepeatButton>-->
                 <!--<Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="True">-->
-                <Track Name="PART_Track" IsDirectionReversed="True" Margin="0,5,0,5" >
+                <Track Name="PART_Track" IsDirectionReversed="True" Margin="0,0,0,0" >
                     <Track.DecreaseRepeatButton>
                         <RepeatButton Command="ScrollBar.PageUpCommand"
                                       Style="{StaticResource ScrollBarPageButtonStyle}"/>
@@ -390,7 +386,7 @@
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Style.Triggers>
                 <Trigger Property="Orientation" Value="Vertical">
-                    <Setter Property="Width" Value="15"/>
+                    <Setter Property="Width" Value="10"/>
                     <Setter Property="Height" Value="Auto" />
                     <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                 </Trigger>
@@ -398,7 +394,7 @@
         </Style>
 
         <ControlTemplate x:Key="WindowTemplate" TargetType="{x:Type Window}">
-            <Grid Background="{StaticResource WindowBackColor}">
+            <Grid Background="{StaticResource WindowBackgroundBrush}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
@@ -425,7 +421,7 @@
                                VerticalContentAlignment="Center" 
                                HorizontalAlignment="Stretch" 
                                VerticalAlignment="Stretch" 
-                               Foreground="{StaticResource WindowForeColor}"                                            
+                               Foreground="{StaticResource WindowForegroundBrush}"                                            
                                FontSize="16" 
                                sw:WindowDragBehavior.LeftMouseButtonDrag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
                                sw:ControlDoubleClickBehavior.ExecuteCommand="{StaticResource MaximizeCommand}" 
@@ -445,7 +441,7 @@
                                 <Button DockPanel.Dock="Right"  Style="{StaticResource WindowButton}" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
                                     <Grid Width="15" Height="15">
                                         <Path Margin="3"
-                                          Stroke="{StaticResource WindowForeHighlightColor}"
+                                          Stroke="{StaticResource WindowForegroundHighlightBrush}"
                                           StrokeThickness="1.5"
                                           StrokeStartLineCap="Square"
                                           StrokeEndLineCap="Square"
@@ -508,10 +504,8 @@
             <Setter Property="MinHeight" Value="230"/>
             <Setter Property="BorderBrush" Value="White"/>
             <Setter Property="BorderThickness" Value="0.75"/>
-            <!--CaptionHeight + ResizeBorderThickness * 2-->
 
             <Setter Property="Template" Value="{StaticResource WindowTemplate}"/>
         </Style>
-
     </Application.Resources>
 </Application>
