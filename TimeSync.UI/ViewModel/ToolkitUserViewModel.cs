@@ -7,8 +7,10 @@ using System.Net;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Castle.Core;
@@ -24,7 +26,7 @@ namespace TimeSync.UI.ViewModel
     {
         private readonly IRepository<ToolkitUser> _repo;
         private readonly ToolkitUser _toolkitUser;
-        private string _name;
+        private string _name = "1";
         private string _password;
         private bool _toSavePassword;
         private bool _clearPasswordBox;
@@ -172,6 +174,16 @@ namespace TimeSync.UI.ViewModel
             if (Equals(value, FalseValue))
                 return false;
             return null;
+        }
+    }
+    
+    public class ToolkitUserNameValidationRule : ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+//            var regex = new Regex("[a-zA-Z]*");
+//            return regex.IsMatch(value?.ToString() ?? "") ? new ValidationResult(true, null) : new ValidationResult(false, "Initials may only contain letters A to Z.");
+            return new ValidationResult(false, "asjdlka");
         }
     }
 }

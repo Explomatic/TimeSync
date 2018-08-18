@@ -12,6 +12,8 @@
         <viewModel:BoolToVisibilityConverter 
             x:Key="booleanToVisibilityConverter" 
             TrueValue="Visible" FalseValue="Hidden" />
+        <viewModel:ToolkitUserNameValidationRule 
+            x:Key="toolkitUserNameValidationRule" />
     </Page.Resources>
 
     <Page.DataContext>
@@ -56,18 +58,29 @@
 
                 <Label Grid.Column="0" Grid.Row="0" Margin="4" Content="Netcompany initials:" HorizontalAlignment="Left"
                        Width="150"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3"
-                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Padding="3">
+                    <TextBox.Text>
+                        <Binding Path="Username" UpdateSourceTrigger="PropertyChanged" >
+                            <Binding.ValidationRules>
+                                <viewModel:ToolkitUserNameValidationRule ValidationStep="RawProposedValue"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <AdornedElementPlaceholder x:Name="textBox"/>
+                                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </TextBox>
 
                 <Label Grid.Column="0" Grid.Row="1" Margin="4" Content="NCDMZ Password:" HorizontalAlignment="Left" Width="150"/>
                 <PasswordBox Grid.Column="1" Grid.Row="1" Margin="4" Padding="3" PasswordChanged="PasswordBox_PasswordChanged" />
 
-                    <!--<Label Grid.Column="0" Grid.Row="2" Margin="4" Content="Save password:" HorizontalAlignment="Left" />-->
                 <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" IsChecked="{Binding ToSavePassword}" 
                           Content="Save password" FontSize="12"/>
-                <!--<Label FontSize="13" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,10,0,0"  
-                       Content="Please note that passwords are currently saved as cleartext." 
-                       Visibility="{Binding Path=ToSavePassword, Converter={StaticResource booleanToVisibilityConverter}, Mode=TwoWay}"/>-->
                 <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,40,0,0" 
                        Content="Account information saved!" 
                        Visibility="{Binding Path=IsDataSaved, Converter={StaticResource booleanToVisibilityConverter}}"/>
