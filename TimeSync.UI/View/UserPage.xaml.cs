@@ -11,32 +11,19 @@ namespace TimeSync.UI.View
 {
 
     public partial class UserPage : Page
-    {
-        private TimeManager _timeManager;
-        private IWindsorContainer _container;
-        public UserPage()
+    {       
+        public UserPage(ToolkitUserViewModel vm)
         {
             InitializeComponent();
-        }
-
-        public UserPage(TimeManager timeManager, IWindsorContainer container)
-        {
-            InitializeComponent();
-            _timeManager = timeManager;
-            _container = container;
-            this.DataContext = _container.Resolve<ToolkitUserViewModel>();
-            var viewModel = this.DataContext as ToolkitUserViewModel;
-            
-            viewModel.TimeManager = _timeManager;
+            DataContext = vm;
         }
 
         public void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (this.DataContext != null)
-            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
+            if (DataContext != null)
+            { ((dynamic)DataContext).Password = ((PasswordBox)sender).Password; }
         }
 
-        //
         private void ClickTestpage(object sender, RoutedEventArgs e)
         {
             var testPage = new Page1();

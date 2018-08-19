@@ -39,7 +39,9 @@ namespace TimeSync.DataAccess
             if (UserInfo.Password?.Length > 0)
             {
                 UserInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(UserInfo.Password))
-                    .SecurePassword;}
+                    .SecurePassword;
+            }
+            
             _toolkits = _toolkitRepository.GetData();
         }
 
@@ -56,23 +58,34 @@ namespace TimeSync.DataAccess
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
         /// </summary>
-        public virtual void SaveTimeregistrations(List<Timeregistration> timeregs)
+        public virtual bool SaveTimeregistrations(List<Timeregistration> timeregs)
         {
             //Logging?
             //Validation?
             //Call Repo
-            _timeregistrationRepository.SaveData(timeregs);
+            return _timeregistrationRepository.SaveData(timeregs);
         }
 
         /// <summary>
         /// Stores toolkits that have been input by user in "DB"
         /// </summary>
-        public virtual void SaveToolkits(List<Toolkit> toolkits)
+        public virtual bool SaveToolkits(List<Toolkit> toolkits)
         {
             //Logging?
             //Validation?
             //Call Repo
-            _toolkitRepository.SaveData(toolkits);
+            return _toolkitRepository.SaveData(toolkits);
+        }
+        
+        /// <summary>
+        /// Stores toolkit user information that have been input by user in "DB"
+        /// </summary>
+        public virtual bool SaveToolkitUser()
+        {
+            //Logging?
+            //Validation?
+            //Call Repo
+            return _toolkitUserRepository.SaveData(UserInfo);
         }
         
         public virtual IEnumerable<Toolkit> GetToolkits()
@@ -129,9 +142,7 @@ namespace TimeSync.DataAccess
         public virtual void SyncTimeregs(List<Timeregistration> timeregs)
         {
             //TODO: Add logging + give user feedback when timeregs are synchronised.
-            //Logging?
             _toolkitUser = _toolkitUser ?? _toolkitUserRepository.GetData();
-            //var toolkitInfo = _toolkitInfo ?? _toolkitInfoRepository.GetData();
             _toolkits = _toolkits ?? _toolkitRepository.GetData();
 
             var distinctTkDisplayNames = timeregs.Select(x => x.ToolkitDisplayName).Distinct();
@@ -161,6 +172,11 @@ namespace TimeSync.DataAccess
                 throw new Exception("Toolkit not found");
 
             return toolkit;
+        }
+
+        public IEnumerable<Timeregistration> GetTimeregistrations()
+        {
+            return _timeregistrationRepository.GetData().Where(t => !t.IsSynchronized);
         }
     }
 }

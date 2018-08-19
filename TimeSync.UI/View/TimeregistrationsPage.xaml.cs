@@ -12,22 +12,14 @@ namespace TimeSync.UI.View
 {
     public partial class TimeregistrationsPage : Page
     {
-        private TimeManager _timeManager;
-
-        private IWindsorContainer _container;
         public TimeregistrationsPage()
         {
             InitializeComponent();
         }
 
-        public TimeregistrationsPage(TimeManager timeManager, IWindsorContainer container)
+        public TimeregistrationsPage(TimeregistrationViewModel vm) : this()
         {
-            InitializeComponent();
-            _timeManager = timeManager;
-            _container = container;
-            this.DataContext = _container.Resolve<TimeregistrationViewModel>();
-            var viewModel = (TimeregistrationViewModel) this.DataContext;
-            viewModel.TimeManager = _timeManager;
+            DataContext = vm;
         }
 
         public virtual void CboxToolkitSelected(object sender, EventArgs eventArgs)

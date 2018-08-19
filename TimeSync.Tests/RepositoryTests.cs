@@ -23,7 +23,7 @@ namespace TimeSync.Tests
         [TestMethod]
         public void GetUserInfoFromRepoTest()
         {
-            _repo = new Repository<ToolkitUser>("TestRetrieveLocation");
+            _repo = new Repository<ToolkitUser>();
             var userInfo = _repo.GetData();
 
             Assert.AreEqual(userInfo.Name, "MOMA");
@@ -34,7 +34,7 @@ namespace TimeSync.Tests
         [TestMethod]
         public void SaveUserInfoToRepoTest()
         {
-            _repo = new Repository<ToolkitUser>("TestSaveLocation");
+            _repo = new Repository<ToolkitUser>();
             var userInfo = new ToolkitUser
             {
                 Name = "MOMA",
@@ -49,7 +49,7 @@ namespace TimeSync.Tests
         [TestMethod]
         public void SaveAndGetUserInfoToRepoTest()
         {
-            _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
+            _repo = new Repository<ToolkitUser>();
             var userInfo = new ToolkitUser
             {
                 Name = "Testname",

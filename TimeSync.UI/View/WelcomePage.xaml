@@ -12,7 +12,7 @@
     <!--     viewModel:WelcomePageViewModel -->
     <!-- </Page.DataContext> -->
     
-    <Grid d:DataContext="{d:DesignData WelcomePageViewModel |(in TimeSync.UI.ViewModel)}">
+    <Grid d:DataContext="{d:DesignInstance viewModel:WelcomePageViewModel}">
         <Label Content="{Binding WelcomeMessage}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Foreground="#FFF" FontStyle="Italic" FontFamily="Times New Roman" />
     </Grid>
 </Page>

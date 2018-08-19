@@ -4,21 +4,32 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TimeSync.UI.View"
+      xmlns:viewModel="clr-namespace:TimeSync.UI.ViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="700"
-      Title="BugReportPage">
+      Title="Bug report">
 
-    <Grid Background="sc#0.15,0.15,0.20">
+    <Grid d:DataContext="{d:DesignInstance viewModel:BugReportViewModel}">
+        <!-- TODO: See code-behind todo -->
+        <!-- <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-75,0,0" Orientation="Vertical"> -->
+        <!--     <TextBlock Foreground="White" Padding="15,0,150,0" FontSize="16" FontFamily="Trebuchet MS" Text="{Binding Message}"/> -->
+        <!--     <TextBlock Padding="15,0,0,0" FontSize="16" FontFamily="Trebuchet MS"> -->
+        <!--         <Hyperlink NavigateUri="{Binding IssuesUri}" Command="{Binding NavigateCommand}" Foreground="{StaticResource TextBrushOange}"> -->
+        <!--             Asdasd -->
+        <!--         </Hyperlink> -->
+        <!--     </TextBlock> -->
+        <!-- </StackPanel> -->
+
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF" Margin="0,-75,0,0" Padding="15,0,150,0" FontSize="16" FontFamily="Trebuchet MS" Visibility="Visible">
             Hi! We're sorry to hear you have experienced issues with TimeSync.<LineBreak/>
-            Please visit us at our GitHub in order to submit an issue.<LineBreak/><LineBreak/>
+            Please visit us at our GitHub in order to submit an issue. <LineBreak/>
             GitHub: 
-                <Hyperlink
-                    NavigateUri="https://github.com/NCTimeSync/TimeSync/issues"
-                    RequestNavigate="Hyperlink_RequestNavigate"
-                    Foreground="sc#0.95,0.15,0.0000">
+            <Hyperlink
+                NavigateUri="https://github.com/NCTimeSync/TimeSync/issues"
+                RequestNavigate="Hyperlink_RequestNavigate"
+                Foreground="sc#0.95,0.15,0.0000">
                     https://github.com/NCTimeSync/TimeSync/issues
-                </Hyperlink>
+            </Hyperlink>
         </TextBlock>
     </Grid>
 </Page>

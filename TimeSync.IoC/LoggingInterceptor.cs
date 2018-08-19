@@ -15,7 +15,6 @@ namespace TimeSync.IoC
         public LoggingInterceptor()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType); //TODO Make this a string resource or enum or smth
-            //_log.
         }
 
         public void Intercept(IInvocation invocation)

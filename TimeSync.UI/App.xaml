@@ -72,7 +72,6 @@
         <Style TargetType="Button" x:Key="BaseButtonStyle">
             <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
             <Setter Property="Foreground" Value="{StaticResource TextBrushOange}" />
-            <!-- <Setter Property="BorderThickness" Value="0"/> -->
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -99,27 +98,30 @@
 
         <Style TargetType="Button" x:Key="SelectionButton" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="2,0,2,0" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="MinWidth" Value="30" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,-1.5"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.5" />
-                </Trigger>
-            </Style.Triggers>
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="40" />
         </Style>
 
         <Style TargetType="Button" x:Key="RegularButton" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="FontSize" Value="20"/>
+            <Setter Property="MinHeight" Value="35"/>
+            <Setter Property="MinWidth" Value="75"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5" BorderBrush="White" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="#FF6D6D6D" />
@@ -127,10 +129,22 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="Button" x:Key="MenuButton" BasedOn="{StaticResource BaseButtonStyle}">
+        <Style TargetType="Button" x:Key="MenuButton" BasedOn="{StaticResource BaseButtonStyle}"
+               d:DataContext="{d:DesignInstance viewModels:HomePageViewModel}">
+            <Style.Resources>
+                <viewModels:StringToSolidColorBrushConverter x:Key="StringToSolidColorBrushConverter"/>
+            </Style.Resources>
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="50" />
             <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource StringToSolidColorBrushConverter}">
+                        <Binding RelativeSource="{RelativeSource Self}"/>
+                        <Binding Path="CurrentPage.Title" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="TextBlock.Foreground" Value="#FF6D6D6D" />
@@ -143,8 +157,12 @@
         </Style>
 
         <Style TargetType="Label" x:Key="SelectionLabel">
-            <Setter Property="Foreground" Value="sc#0.95,0.15,0.0000" />
+            <Setter Property="TextBlock.Foreground" Value="sc#0.95,0.15,0.0000" />
             <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            
         </Style>
 
         <Style TargetType="Label" x:Key="TextLabel">

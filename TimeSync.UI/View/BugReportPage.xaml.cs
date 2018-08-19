@@ -1,36 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Castle.Windsor;
-using TimeSync.DataAccess;
 using TimeSync.UI.ViewModel;
 
 namespace TimeSync.UI.View
 {
+    
     public partial class BugReportPage : Page
     {
-        public BugReportPage()
+        public BugReportPage(BugReportViewModel vm)
         {
             InitializeComponent();
+            
+            //TODO: Fix opening links in view model using commands before using the viewmodel
+//            DataContext = vm;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }

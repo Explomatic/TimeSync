@@ -17,6 +17,7 @@ namespace TimeSync.Tests
         private Mock<IRepository<List<Toolkit>>> _tkRepoMock;
         private Mock<IRepository<List<Timeregistration>>> _timeregRepoMock;
         private Mock<ISharepointClient> _spClientMock;
+        private Mock<IEncryption> _encryptionManagerMock;
 
         [TestInitialize]
         public void Init()
@@ -25,10 +26,10 @@ namespace TimeSync.Tests
             _tkRepoMock = new Mock<IRepository<List<Toolkit>>>();
             _timeregRepoMock = new Mock<IRepository<List<Timeregistration>>>();
             _spClientMock = new Mock<ISharepointClient>();
+            _encryptionManagerMock = new Mock<IEncryption>();
 
             _timeManager = new TimeManager(_userRepoMock.Object, _tkRepoMock.Object, _timeregRepoMock.Object
-                , _spClientMock.Object);
-
+                , _spClientMock.Object, _encryptionManagerMock.Object);
 
             SetUpMocksToReturnEmpty();
         }
@@ -40,6 +41,7 @@ namespace TimeSync.Tests
             _timeregRepoMock.Setup(r => r.GetData()).Returns(new List<Timeregistration>());
             _spClientMock.Setup(r => r.GetUserIdFromToolkit(It.IsAny<ToolkitUser>(), It.IsAny<Toolkit>()))
                 .Returns(999);
+            _encryptionManagerMock.Setup(r => r.DecryptText(It.IsAny<string>())).Returns("Hest");
         }
 
         private void MockReturnsListOfTimeRegsWithVariousStatusses()

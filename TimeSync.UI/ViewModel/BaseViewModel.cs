@@ -14,14 +14,14 @@ namespace TimeSync.UI.ViewModel
     public class BaseViewModel : ObservableObject
     {
         private readonly string _basePageTitle = $"TimeSync {Properties.Resources.versionNumber}";
-        private string _currentPageTitle = "";
+        private string _currentUser;
 
         public string PageTitle
         {
-            get => _currentPageTitle.IsNullOrEmpty() ? _basePageTitle : $"{_basePageTitle} - {_currentPageTitle}";
+            get => _currentUser.IsNullOrEmpty() ? _basePageTitle : $"{_basePageTitle} (current user: {_currentUser})";
             set
             {
-                _currentPageTitle = value;
+                _currentUser = value;
                 RaisePropertyChangedEvent("PageTitle");
             }
         }

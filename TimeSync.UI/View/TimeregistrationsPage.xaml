@@ -7,11 +7,11 @@
       xmlns:src="clr-namespace:TimeSync.Model;assembly=TimeSync.Model"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="TimeregistrationsPage">
+      Title="Timeregistrations">
 
-    <Page.DataContext>
-        <viewModel:TimeregistrationViewModel/>
-    </Page.DataContext>
+    <!-- <Page.DataContext> -->
+    <!--     <viewModel:TimeregistrationViewModel/> -->
+    <!-- </Page.DataContext> -->
     
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="Converter"/>
@@ -98,11 +98,12 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="{StaticResource WindowFrameBackgroundBrush}">
+    <Grid Background="{StaticResource WindowFrameBackgroundBrush}"
+          d:DataContext="{d:DesignInstance viewModel:TimeregistrationViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" HorizontalAlignment="Stretch" Margin="10,10,0,0">
@@ -161,13 +162,16 @@
                               ItemsSource ="{Binding Timeregistrations}" />
             </ScrollViewer>
         </Grid>
-
-        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="1">
-            <Label Content="Select:" Style="{StaticResource SelectionLabel}" VerticalAlignment="Bottom"/>
-            <Button Command="{Binding SelectAllCommand}" Content=" all " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" />
-            <Button Command="{Binding SelectNoneCommand}" Content=" none " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" />
-            <Button Command="{Binding InvertSelectionCommand}" Content=" invert " VerticalAlignment="Bottom" Style="{StaticResource SelectionButton}" />
-        </StackPanel>
+        
+        <Border Grid.Row="1" BorderBrush="White" BorderThickness="0 0.75 0 0.75">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                <Label Content="Select:" Style="{StaticResource SelectionLabel}"/>
+                <Button Command="{Binding SelectAllCommand}" Content="all" Style="{StaticResource SelectionButton}" />
+                <Button Command="{Binding SelectNoneCommand}" Content="none" Style="{StaticResource SelectionButton}"/>
+                <Button Command="{Binding InvertSelectionCommand}" Content="invert" Style="{StaticResource SelectionButton}" />
+            </StackPanel>    
+        </Border>
 
         <Button Command="{Binding RemoveSelectedCommand}" Content=" Remove selected " HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Margin="50,0,0,0"
                 Style="{StaticResource RegularButton}"/>

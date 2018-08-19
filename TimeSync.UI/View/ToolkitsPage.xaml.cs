@@ -12,27 +12,14 @@ namespace TimeSync.UI.View
     /// </summary>
     public partial class ToolkitsPage : Page
     {
-        private TimeManager _timeManager;
-        private IWindsorContainer _container;
-
         public ToolkitsPage()
         {
             InitializeComponent();
         }
 
-        public ToolkitsPage(TimeManager timeManager, IWindsorContainer container)
+        public ToolkitsPage(ToolkitViewModel vm) : this()
         {
-            InitializeComponent();
-            _timeManager = timeManager;
-            _container = container;
-            this.DataContext = _container.Resolve<ToolkitViewModel>();
-            var viewModel = this.DataContext as ToolkitViewModel;
-            viewModel.TimeManager = _timeManager;
-
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
+            DataContext = vm;
         }
     }
 }

@@ -9,11 +9,15 @@
       d:DesignHeight="450" d:DesignWidth="950"
       Title="Homepage">
 
+    <Page.Resources>
+        <viewModel:StringToSolidColorBrushConverter x:Key="BooleanToSolidColorBrushConverter"/>
+    </Page.Resources>
+    
     <Page.DataContext>
         <viewModel:HomePageViewModel/>
     </Page.DataContext>
 
-    <Grid>
+    <Grid d:DataContext="{d:DesignInstance viewModel:HomePageViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition />
@@ -30,30 +34,20 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" BorderThickness="0 0 0 0.75" BorderBrush="White">
-                    <Button Style="{StaticResource MenuButton}" Content="Account information"
-                            Command="{Binding AccountInfoCommand}" />    
-                </Border>
-                
-                <Border Grid.Row="1" BorderThickness="0 0.75 0 0.75" BorderBrush="White">
-                    <Button Style="{StaticResource MenuButton}" Content="Toolkits"
-                            Command="{Binding ToolkitsCommand}" />
-                </Border>
+                <Button Grid.Row="0" Style="{StaticResource MenuButton}" Content="Account information"
+                        Command="{Binding AccountInfoCommand}" />    
 
-                <Border Grid.Row="2" BorderThickness="0 0 0 0.75" BorderBrush="White">
-                    <Button Style="{StaticResource MenuButton}" Content="Timeregistrations"
-                            Command="{Binding TimeregistrationCommand}" />
-                </Border>
+                <Button Grid.Row="1" Style="{StaticResource MenuButton}" Content="Toolkits"
+                        Command="{Binding ToolkitsCommand}" />
 
-                <Border Grid.Row="4" BorderThickness="0 0.75 0 0.75" BorderBrush="White">
-                    <Button Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Bug report"
-                            Command="{Binding BugReportCommand}" />
-                </Border>
+                <Button Grid.Row="2" Style="{StaticResource MenuButton}" Content="Timeregistrations"
+                        Command="{Binding TimeregistrationCommand}" />
 
-                <Border Grid.Row="5" BorderThickness="0 0.75 0 0" BorderBrush="White">
-                    <Button Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Settings"
-                            Command="{Binding SettingsCommand}" />
-                </Border>
+                <Button Grid.Row="4" Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Bug report"
+                        Command="{Binding BugReportCommand}" />
+
+                <Button Grid.Row="5" Style="{StaticResource MenuButton}" VerticalAlignment="Bottom" Content="Settings"
+                        Command="{Binding SettingsCommand}" />
             </Grid>
         </Border>
 

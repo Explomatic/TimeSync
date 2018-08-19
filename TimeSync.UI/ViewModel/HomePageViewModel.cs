@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using Castle.Core;
 using Castle.Core.Internal;
 using Castle.Windsor;
@@ -18,16 +22,17 @@ using TimeSync.UI.View;
 
 namespace TimeSync.UI.ViewModel
 {
-    [Interceptor(typeof(ExceptionInterceptor))]
+    [Interceptor(typeof(ExceptionInterceptor)),Interceptor(typeof(LoggingInterceptor))]
     public class HomePageViewModel : BaseViewModel
     {
         private TimeManager _timeManager;
-        private UserPage _userPage;
-        private ToolkitsPage _toolkitsPage;
-        private TimeregistrationsPage _timeregistrationsPage;
-        private BugReportPage _bugReportPage;
-        private WelcomePage _welcomePage;
-        private Page _settingsPage = null;
+        private readonly UserPage _userPage;
+        private readonly ToolkitsPage _toolkitsPage;
+        private readonly TimeregistrationsPage _timeregistrationsPage;
+        private readonly BugReportPage _bugReportPage;
+        private readonly WelcomePage _welcomePage;
+        private readonly SettingsPage _settingsPage = null;
+        private Page _currentPage;
         private IWindsorContainer _container;
 
         private RelayCommand _accountInfoCommand;
@@ -35,6 +40,8 @@ namespace TimeSync.UI.ViewModel
         private RelayCommand _timeregistrationCommand;
         private RelayCommand _bugReportCommand;
         private RelayCommand _settingsCommand;
+        
+        
 
         public HomePageViewModel()
         {
@@ -45,14 +52,17 @@ namespace TimeSync.UI.ViewModel
             var logger = log4net.LogManager.GetLogger("Test");
             logger.Debug("It works!");
 
-            _timeManager = _container.Resolve<TimeManager>();
-            _userPage = new UserPage(_timeManager, _container);
-            _toolkitsPage = new ToolkitsPage(_timeManager, _container);
-            _timeregistrationsPage = new TimeregistrationsPage(_timeManager, _container);
+            // TODO: Move these container resolves from HomePageViewModel to the App class.
+            TimeManager = _container.Resolve<TimeManager>();
+            _userPage = _container.Resolve<UserPage>();
+            _toolkitsPage = _container.Resolve<ToolkitsPage>();
+            _timeregistrationsPage = _container.Resolve<TimeregistrationsPage>();
             _bugReportPage = _container.Resolve<BugReportPage>();
             _welcomePage = _container.Resolve<WelcomePage>();
 
             _currentPage = _welcomePage;
+
+            PageTitle = TimeManager.UserInfo.Name;
         }
 
         private void InitWindsor()
@@ -60,8 +70,6 @@ namespace TimeSync.UI.ViewModel
             _container = new WindsorContainer();
             WindsorInitializer.InitializeContainer(_container);
         }
-
-        private Page _currentPage;
 
         public Page CurrentPage
         {
@@ -92,14 +100,13 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void AccountInfo()
         {
-            PageTitle = "Account information";
             CurrentPage = _userPage;
         }
 
         public virtual bool CanNavigateFromAccountInfo()
         {
-            return _timeManager.UserInfo != null && _timeManager.UserInfo.Name?.Length > 0 &&
-                   _timeManager.UserInfo.SecurePassword?.Length > 0;
+            return TimeManager.UserInfo != null && TimeManager.UserInfo.Name?.Length > 0 &&
+                   TimeManager.UserInfo.SecurePassword?.Length > 0;
         }
 
         public ICommand ToolkitsCommand
@@ -113,7 +120,6 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void Toolkits()
         {
-            PageTitle = "Toolkit information";
             CurrentPage = _toolkitsPage;
         }
 
@@ -128,7 +134,6 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void Timeregistration()
         {
-            PageTitle = "Timeregistrations";
             CurrentPage = _timeregistrationsPage;
         }
 
@@ -143,7 +148,6 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void BugReport()
         {
-            PageTitle = "Bug report";
             CurrentPage = _bugReportPage;
         }
 
@@ -158,13 +162,38 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void Settings()
         {
-            PageTitle = "Settings";
             CurrentPage = _welcomePage;
         }
 
         public virtual bool SettingsActivated()
         {
             return _settingsPage != null;
+        }
+    }
+    
+    [ValueConversion(typeof(string), typeof(SolidColorBrush))]
+    public sealed class StringToSolidColorBrushConverter : IMultiValueConverter
+    {
+        public SolidColorBrush TrueValue { get; set; }
+        public SolidColorBrush FalseValue { get; set; }
+
+        public StringToSolidColorBrushConverter()
+        {
+            // set defaults
+            TrueValue = (SolidColorBrush) Application.Current.FindResource("ButtonHoverBrush");
+            FalseValue = (SolidColorBrush) Application.Current.FindResource("WindowButtonBrush");
+        }
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var button = (Button) values[0];
+            var currentPageTitle = (string) values[1];
+            return (string) button.Content == currentPageTitle ? TrueValue : FalseValue;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

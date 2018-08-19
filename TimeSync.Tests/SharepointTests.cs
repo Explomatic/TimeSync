@@ -100,7 +100,7 @@ namespace TimeSync.Tests
         [TestInitialize]
         public void Init()
         {
-            _toolkitUserRepository = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
+            _toolkitUserRepository = new Repository<ToolkitUser>();
 
             _toolkitUser = _toolkitUserRepository.GetData();
 
@@ -111,7 +111,7 @@ namespace TimeSync.Tests
             }
             catch (Exception)
             {
-                _toolkitUser.SecurePassword = new NetworkCredential("", "=%6pTT|m9~lw5`b::wkn").SecurePassword;
+                _toolkitUser.SecurePassword = new NetworkCredential("", "").SecurePassword;
             }
             _toolkitUser.Password = "";
 

@@ -6,21 +6,18 @@
       xmlns:viewModel="clr-namespace:TimeSync.UI.ViewModel"
     mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="User account information">
+      Title="Account information">
 
     <Page.Resources>
         <viewModel:BoolToVisibilityConverter 
-            x:Key="booleanToVisibilityConverter" 
+            x:Key="BooleanToVisibilityConverter" 
             TrueValue="Visible" FalseValue="Hidden" />
-        <viewModel:ToolkitUserNameValidationRule 
-            x:Key="toolkitUserNameValidationRule" />
+        <!-- <viewModel:ToolkitUserNameValidationRule  -->
+        <!--     x:Key="ToolkitUserNameValidationRule" /> -->
     </Page.Resources>
 
-    <Page.DataContext>
-      <viewModel:ToolkitUserViewModel/>  
-    </Page.DataContext>
-
-    <Grid Background="{StaticResource WindowFrameBackgroundBrush}">
+    <Grid Background="{StaticResource WindowFrameBackgroundBrush}"
+          d:DataContext="{d:DesignInstance viewModel:ToolkitUserViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition />
@@ -70,7 +67,7 @@
                         <ControlTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <AdornedElementPlaceholder x:Name="textBox"/>
-                                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" Margin="15,0,0,0"/>
                             </StackPanel>
                         </ControlTemplate>
                     </Validation.ErrorTemplate>
@@ -83,7 +80,7 @@
                           Content="Save password" FontSize="12"/>
                 <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" Style="{StaticResource TextLabel}" Padding="0,40,0,0" 
                        Content="Account information saved!" 
-                       Visibility="{Binding Path=IsDataSaved, Converter={StaticResource booleanToVisibilityConverter}}"/>
+                       Visibility="{Binding Path=IsDataSaved, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </Grid>
         </StackPanel>
         <Button Command="{Binding SaveCommand}" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"
@@ -91,10 +88,5 @@
                 Style="{StaticResource RegularButton}">
         </Button>
         
-        
-        <!--<Button Command="{Binding HideShowPopupCommand}" Content=" popup " HorizontalAlignment="Right" Grid.Row="3" VerticalAlignment="Center"
-                Style="{StaticResource RegularButton}"/>-->
-        <!--<Button Content="Testpage" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" Click="ClickTestpage" 
-                Style="{StaticResource RegularButton}"/>-->
     </Grid>
 </Page>

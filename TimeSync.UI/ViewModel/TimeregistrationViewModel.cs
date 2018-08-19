@@ -14,7 +14,6 @@ namespace TimeSync.UI.ViewModel
     public class TimeregistrationViewModel : BaseViewModel
     {
         private ObservableCollection<Timeregistration> _timeregistrations;
-        private IRepository<List<Toolkit>> _toolkitRepo;
         private RelayCommand _addCommand;
         private RelayCommand _syncCommand;
         private RelayCommand _saveCommand;
@@ -101,22 +100,19 @@ namespace TimeSync.UI.ViewModel
             } 
         }
         
-        public List<Toolkit> ListOfToolkits { get; set; }
-        public List<string> ListOfToolkitNames { get; set; }
+        public List<Toolkit> Toolkits { get; set; }
+        public List<string> ToolkitNames { get; set; }
 
-        public TimeregistrationViewModel()
+        public TimeregistrationViewModel(TimeManager timeManager)
         {
-            IRepository<ObservableCollection<Timeregistration>> timeregRepo = new Repository<ObservableCollection<Timeregistration>>("TimeregistrationSaveLocation");
-            Timeregistrations = new ObservableCollection<Timeregistration>();
-            Timeregistrations = timeregRepo.GetData();
+            TimeManager = timeManager;
+            Timeregistrations = new ObservableCollection<Timeregistration>(TimeManager.GetTimeregistrations());
 
-            _toolkitRepo = new Repository<List<Toolkit>>("ToolkitSaveLocation");
-            ListOfToolkits = _toolkitRepo.GetData();
-            ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
+            Toolkits = TimeManager.GetToolkits().ToList();
+            ToolkitNames = (from tk in Toolkits select tk.DisplayName).ToList();
 
             // Used for easy UI population during design phases.
             //InitializeTimeregList();
-
         }
 
         public ICommand AddCommand
@@ -133,8 +129,8 @@ namespace TimeSync.UI.ViewModel
             UpdateLists();
             Timeregistrations.Add(new Timeregistration
             {
-                ToolkitNames = ListOfToolkitNames,
-                Toolkits = ListOfToolkits,
+                ToolkitNames = ToolkitNames,
+                Toolkits = Toolkits,
                 Teams = new ObservableCollection<string>(),
                 Timeslots = new ObservableCollection<string>()
             });
@@ -251,8 +247,8 @@ namespace TimeSync.UI.ViewModel
 
         private void UpdateLists()
         {
-            ListOfToolkits = _toolkitRepo.GetData();
-            ListOfToolkitNames = (from tk in ListOfToolkits select tk.DisplayName).ToList();
+            Toolkits = TimeManager.GetToolkits().ToList();
+            ToolkitNames = (from tk in Toolkits select tk.DisplayName).ToList();
         }
     }
 }

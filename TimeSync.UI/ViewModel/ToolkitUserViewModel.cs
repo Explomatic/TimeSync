@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Castle.Core;
+using log4net;
 using TimeSync.DataAccess;
 using TimeSync.IoC;
 using TimeSync.Model;
@@ -24,15 +25,15 @@ namespace TimeSync.UI.ViewModel
     [Interceptor(typeof(ExceptionInterceptor))]
     public class ToolkitUserViewModel : BaseViewModel
     {
-        private readonly IRepository<ToolkitUser> _repo;
         private readonly ToolkitUser _toolkitUser;
-        private string _name = "1";
+        private string _name;
         private string _password;
         private bool _toSavePassword;
         private bool _clearPasswordBox;
         private bool _isDataSaved;
-        private IEncryption _encryptionManager = new Encryption();
+        private readonly IEncryption _encryptionManager;
         private RelayCommand _updateToolkitUserCommand;
+        private ILog _logger;
 
         public bool ClearPasswordBox
         {
@@ -68,29 +69,7 @@ namespace TimeSync.UI.ViewModel
                 RaisePropertyChangedEvent("IsDataSaved");
             }
         }
-
-        // TODO: Move this functionality out and into the timeManager
-        public ToolkitUserViewModel()
-        {
-            _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
-            _toolkitUser = _repo.GetData();
-            if (!string.IsNullOrEmpty(_toolkitUser.Password))
-            {
-                try
-                {
-                    _toolkitUser.SecurePassword = new NetworkCredential("", _encryptionManager.DecryptText(_toolkitUser.Password)).SecurePassword;
-                }
-                catch (CryptographicException)
-                {
-                    popText = "Could not decrypt the saved password, please retype it.";
-                    pop = true;
-                    PopupIsOpen = true; 
-                }
-            }
-            
-            Username = _toolkitUser.Name;
-        }
-
+        
         public string Username
         {
             get => _name;
@@ -111,7 +90,32 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
-        public ICommand SaveCommand
+        public ToolkitUserViewModel(TimeManager tm, IEncryption encryptionManager, ILog logger)
+        {
+            TimeManager = tm;
+            _logger = logger;
+            _encryptionManager = encryptionManager;            
+            _toolkitUser = TimeManager.UserInfo;
+            
+            if (!string.IsNullOrEmpty(_toolkitUser.Password))
+            {
+                try
+                {
+                    _toolkitUser.SecurePassword = new NetworkCredential("", _encryptionManager.DecryptText(_toolkitUser.Password)).SecurePassword;
+                }
+                catch (CryptographicException)
+                {
+                    _logger.Info($"Could not decrypt password for user {_toolkitUser.Name}. User must retype the password in order to continue.");
+                    popText = "Could not decrypt the saved password, please retype it.";
+                    pop = true;
+                    PopupIsOpen = true; 
+                }
+            }
+            
+            Username = _toolkitUser.Name;
+        }
+
+        public virtual ICommand SaveCommand
         {
             get 
             {
@@ -136,11 +140,15 @@ namespace TimeSync.UI.ViewModel
             _toolkitUser.SecurePassword = new NetworkCredential("", Password).SecurePassword;
             Password = "";
 
-            //TODO Fix these lines. Roll into one function on TimeManager. ViewModel shouldn't think/know about how TimeManager's data/fields look
-            TimeManager.UserInfo = _toolkitUser; 
-            var success = _repo.SaveData(_toolkitUser);
+            TimeManager.UserInfo = _toolkitUser;
+            var success = TimeManager.SaveToolkitUser();
 
-            if (!success) return;
+            if (!success)
+            {
+                _logger.Error("Was unable to successfully save the user information to the database.");
+                return;
+            }
+
             ClearPasswordBox = !ToSavePassword;
             IsDataSaved = true;
         }
