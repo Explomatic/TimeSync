@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TimeSync.UI.ViewModel;
 
 namespace TimeSync.UI.View
 {
@@ -20,9 +21,11 @@ namespace TimeSync.UI.View
     /// </summary>
     public partial class SettingsPage : Page
     {
-        public SettingsPage()
+        public SettingsPage(SettingsViewModel vm)
         {
             InitializeComponent();
+
+            DataContext = vm;
         }
     }
 }
