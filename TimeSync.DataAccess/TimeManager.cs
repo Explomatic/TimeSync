@@ -12,44 +12,46 @@ using Microsoft.SharePoint.Client;
 namespace TimeSync.DataAccess
 {
     [Interceptor(typeof(LoggingInterceptor))]
-    public class TimeManager : INotifyPropertyChanged
+    public class TimeManager
     {
-        public ToolkitUser UserInfo;
-        public event PropertyChangedEventHandler PropertyChanged;
         private readonly IRepository<ToolkitUser> _toolkitUserRepository;
         private readonly IRepository<List<Toolkit>> _toolkitRepository;
         private readonly IRepository<List<Timeregistration>> _timeregistrationRepository;
         private readonly ISharepointClient _sharepointClient;
-        private readonly IEncrypt _encryptionManager;
         private ToolkitUser _toolkitUser;
         private List<Toolkit> _toolkits;
+        
+        public ToolkitUser UserInfo;
 
-        public TimeManager()
+        public TimeManager(IRepository<ToolkitUser> tkUserRepo, 
+            IRepository<List<Toolkit>> tkRepo, 
+            IRepository<List<Timeregistration>> timeregRepo,
+            ISharepointClient spClient,
+            IEncryption encryptionManager)
         {
             UserInfo = new ToolkitUser();
-            _toolkitUserRepository = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
-            _toolkitRepository = new Repository<List<Toolkit>>("ToolkitSaveLocation");
-            _timeregistrationRepository = new Repository<List<Timeregistration>>("TimeregistrationSaveLocation");
-            _sharepointClient = new SharepointClient();
-            _encryptionManager = new Encrypt();
+            _toolkitUserRepository = tkUserRepo;
+            _toolkitRepository = tkRepo;
+            _timeregistrationRepository = timeregRepo;
+            _sharepointClient = spClient;
 
             UserInfo = _toolkitUserRepository.GetData();
             if (UserInfo.Password?.Length > 0)
             {
-                UserInfo.SecurePassword = new NetworkCredential("", _encryptionManager.DecryptText(UserInfo.Password))
+                UserInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(UserInfo.Password))
                     .SecurePassword;}
             _toolkits = _toolkitRepository.GetData();
         }
 
-        public TimeManager(IRepository<ToolkitUser> userRepo, IRepository<List<Toolkit>> toolkitRepo,
-            IRepository<List<Timeregistration>> timeregRepo
-            , ISharepointClient spClient)
-        {
-            _toolkitUserRepository = userRepo;
-            _toolkitRepository = toolkitRepo;
-            _timeregistrationRepository = timeregRepo;
-            _sharepointClient = spClient;
-        }
+//        public TimeManager(IRepository<ToolkitUser> userRepo, IRepository<List<Toolkit>> toolkitRepo,
+//            IRepository<List<Timeregistration>> timeregRepo
+//            , ISharepointClient spClient)
+//        {
+//            _toolkitUserRepository = userRepo;
+//            _toolkitRepository = toolkitRepo;
+//            _timeregistrationRepository = timeregRepo;
+//            _sharepointClient = spClient;
+//        }
 
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"
@@ -71,6 +73,11 @@ namespace TimeSync.DataAccess
             //Validation?
             //Call Repo
             _toolkitRepository.SaveData(toolkits);
+        }
+        
+        public virtual IEnumerable<Toolkit> GetToolkits()
+        {
+            return _toolkitRepository.GetData();
         }
 
         public virtual void SyncToolkits(ToolkitUser toolkitUser, List<Toolkit> toolkits)

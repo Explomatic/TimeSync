@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace TimeSync.DataAccess
 {
-    public class Encrypt : IEncrypt
+    public class Encryption : IEncryption
     {
         private static readonly byte[] AdditionalEntropy = InitializeEntropy();
 
@@ -19,7 +19,7 @@ namespace TimeSync.DataAccess
         {
             var plainTextBytes = Encoding.ASCII.GetBytes(plainText);
 
-            // Encrypt the data using DataProtectionScope.CurrentUser. The result can be decrypted
+            // Encryption the data using DataProtectionScope.CurrentUser. The result can be decrypted
             //  only by the same current user.
             return Convert.ToBase64String(ProtectedData.Protect(plainTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
         }
@@ -28,7 +28,7 @@ namespace TimeSync.DataAccess
         {
             var encryptedTextBytes = Convert.FromBase64String(encryptedText);
 
-            // Encrypt the data using DataProtectionScope.CurrentUser. The result can be decrypted
+            // Encryption the data using DataProtectionScope.CurrentUser. The result can be decrypted
             //  only by the same current user.
             return Convert.ToBase64String(ProtectedData.Protect(encryptedTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
         }

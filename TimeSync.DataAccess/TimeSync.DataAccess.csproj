@@ -72,8 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Encrypt.cs" />
-    <Compile Include="IEncrypt.cs" />
+    <Compile Include="Encryption.cs" />
+    <Compile Include="IEncryption.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="ISharepointClient.cs" />
     <Compile Include="Repository.cs" />

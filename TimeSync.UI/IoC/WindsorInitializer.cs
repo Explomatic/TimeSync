@@ -22,6 +22,10 @@ namespace TimeSync.UI.IoC
             );
             
             container.Register(
+                Component.For(typeof(IRepository<>)).ImplementedBy(typeof(Repository<>))
+            );
+            
+            container.Register(
                 Component.For<TimeManager>()
             );
 

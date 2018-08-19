@@ -17,22 +17,33 @@ namespace TimeSync.DataAccess
         private StreamReader _streamReader;
         private readonly string _saveLocation;
         private readonly string _appData = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\TimeSync";
-        private readonly Dictionary<string, string> _configValues = new Dictionary<string, string>
-        {
-            {"TimeregistrationSaveLocation","Timeregistration.txt"},
-            {"ToolkitSaveLocation", "Toolkits.txt" },
-            {"ToolkitUserSaveLocation", "ToolkitUser.txt" }
+//        private readonly Dictionary<string, string> _datafileNames = new Dictionary<string, string>
+//        {
+//            {"Timeregistration","Timeregistration.txt"},
+//            {"Toolkit", "Toolkits.txt" },
+//            {"ToolkitUser", "ToolkitUser.txt" }
+//
+//        };
 
-        };
-
-        public Repository(string saveLocationConfigKey)
+        public Repository()
         {
-            _saveLocation = $"{_appData}\\{_configValues[saveLocationConfigKey]}";
+            var repoType = typeof(T).Name;
+            _saveLocation = $"{_appData}\\{repoType}.txt";
             if (!Directory.Exists(_appData))
             {
                 Directory.CreateDirectory(_appData);
             }
         }
+
+//        public Repository(string saveLocationConfigKey)
+//        {
+//            
+//            _saveLocation = $"{_appData}\\{_datafileNames[saveLocationConfigKey]}";
+//            if (!Directory.Exists(_appData))
+//            {
+//                Directory.CreateDirectory(_appData);
+//            }
+//        }
 
         //Type in
         //Save (add/update): {registrations: [{"date": 20102, "hours": 210391, ....}, {"date": 2+01023...}]}

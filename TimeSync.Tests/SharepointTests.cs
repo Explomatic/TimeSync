@@ -21,7 +21,7 @@ namespace TimeSync.Tests
         private ClientContext _clientContext = null;
         private SharepointClient _sharepointClient;
         private ToolkitUser _toolkitUser;
-        private IEncrypt _encryptionManager = new Encrypt();
+        private IEncryption _encryptionManager = new Encryption();
         
         private List<Timeregistration> InitializeTimeregList()
         {

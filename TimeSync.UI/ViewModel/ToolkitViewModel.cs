@@ -70,10 +70,11 @@ namespace TimeSync.UI.ViewModel
 
         public TimeManager TimeManager { get; set; }
 
-        public ToolkitViewModel()
+        public ToolkitViewModel(TimeManager timeManager)
         {
-            IRepository<ObservableCollection<Toolkit>> repo = new Repository<ObservableCollection<Toolkit>>("ToolkitSaveLocation");
-            Toolkits = repo.GetData();
+            TimeManager = timeManager;
+            Toolkits = new ObservableCollection<Toolkit>(TimeManager.GetToolkits());
+            
 
             // Used for easy UI population during design phases.
             InitializeToolkitList();

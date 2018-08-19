@@ -8,7 +8,7 @@ namespace TimeSync.UI.ViewModel
         private string _defaultMessage;
         private string _welcomeMessage;
         private TimeManager _timeManager;
-
+        
         public WelcomePageViewModel(TimeManager timeManager)
         {
             TimeManager = timeManager;

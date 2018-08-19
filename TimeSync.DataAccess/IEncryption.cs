@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TimeSync.DataAccess
 {
-    public interface IEncrypt
+    public interface IEncryption
     {
         string EncryptText(string plainText);
         string DecryptText(string encryptedText);

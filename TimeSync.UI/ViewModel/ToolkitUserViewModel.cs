@@ -31,7 +31,7 @@ namespace TimeSync.UI.ViewModel
         private bool _toSavePassword;
         private bool _clearPasswordBox;
         private bool _isDataSaved;
-        private IEncrypt _encryptionManager = new Encrypt();
+        private IEncryption _encryptionManager = new Encryption();
         private RelayCommand _updateToolkitUserCommand;
 
         public bool ClearPasswordBox
@@ -69,6 +69,7 @@ namespace TimeSync.UI.ViewModel
             }
         }
 
+        // TODO: Move this functionality out and into the timeManager
         public ToolkitUserViewModel()
         {
             _repo = new Repository<ToolkitUser>("ToolkitUserSaveLocation");
