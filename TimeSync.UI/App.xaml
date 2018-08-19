@@ -42,21 +42,22 @@
         <SolidColorBrush x:Key="WindowButtonBrush" Color="#111528"/>
         <SolidColorBrush x:Key="WindowButtonHoverBrush" Color="sc#0.31,0.52,0.39"/>
         <SolidColorBrush x:Key="WindowButtonPressedBrush" Color="sc#0.00,0.52,0.39"/>
-        
+
+        <Color x:Key="TextOrange">sc#0.95,0.15,0.0000</Color>
+        <Color x:Key="LightOrange">#ea6402</Color>
+        <Color x:Key="Orange">#c35302</Color>
+        <Color x:Key="DarkOrange">#b04b02</Color>
+        <Color x:Key="ButtonHoverColor">#b9c0e1</Color>
+
         <!--#828eca-->
         <!--#5969b8-->
         <!-- <SolidColorBrush x:Key="ButtonPressedBrush" Color="sc#0.00,0.52,0.39"/> -->
         <!-- <SolidColorBrush x:Key="ButtonHoverBrush" Color="sc#0.31,0.52,0.39"/> -->
         <SolidColorBrush x:Key="ButtonPressedBrush" Color="#5969b8"/>
-        <SolidColorBrush x:Key="ButtonHoverBrush" Color="#b9c0e1"/>
+        <SolidColorBrush x:Key="ButtonHoverBrush" Color="{DynamicResource ButtonHoverColor}"/>
         <SolidColorBrush x:Key="ButtonDisabledBrush" Color="#FF6D6D6D"/>
         <SolidColorBrush x:Key="TextBrushOange" Color="sc#0.95,0.15,0.0000"/>
         <SolidColorBrush x:Key="TitleTextBrush" Color="White"/>
-        
-        <Color x:Key="TextOrange">sc#0.95,0.15,0.0000</Color>
-        <Color x:Key="LightOrange">#ea6402</Color>
-        <Color x:Key="Orange">#c35302</Color>
-        <Color x:Key="DarkOrange">#b04b02</Color>
         
         <!-- ScrollBar -->
         <!-- <SolidColorBrush x:Key="StandardBorderBrush" Color="DarkGray" /> -->
@@ -70,6 +71,7 @@
         <!--<SolidColorBrush x:Key="GlyphBrush" Color="333333" />-->
 
         <Style TargetType="Button" x:Key="BaseButtonStyle">
+            <Setter Property="FontFamily" Value="Global User Interface"/>
             <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
             <Setter Property="Foreground" Value="{StaticResource TextBrushOange}" />
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -157,12 +159,21 @@
         </Style>
 
         <Style TargetType="Label" x:Key="SelectionLabel">
+            <Setter Property="FontFamily" Value="Global User Interface"/>
             <Setter Property="TextBlock.Foreground" Value="sc#0.95,0.15,0.0000" />
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>            
         </Style>
 
         <Style TargetType="Label" x:Key="TextLabel">

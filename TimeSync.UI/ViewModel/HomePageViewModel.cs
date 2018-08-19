@@ -31,7 +31,7 @@ namespace TimeSync.UI.ViewModel
         private readonly TimeregistrationsPage _timeregistrationsPage;
         private readonly BugReportPage _bugReportPage;
         private readonly WelcomePage _welcomePage;
-        private readonly SettingsPage _settingsPage = null;
+        private readonly SettingsPage _settingsPage;
         private Page _currentPage;
         private IWindsorContainer _container;
 
@@ -59,6 +59,8 @@ namespace TimeSync.UI.ViewModel
             _timeregistrationsPage = _container.Resolve<TimeregistrationsPage>();
             _bugReportPage = _container.Resolve<BugReportPage>();
             _welcomePage = _container.Resolve<WelcomePage>();
+            //_settingsPage = _container.Resolve<SettingsPage>();
+            _settingsPage = null;
 
             _currentPage = _welcomePage;
 
@@ -162,7 +164,7 @@ namespace TimeSync.UI.ViewModel
 
         public virtual void Settings()
         {
-            CurrentPage = _welcomePage;
+            CurrentPage = _settingsPage;
         }
 
         public virtual bool SettingsActivated()

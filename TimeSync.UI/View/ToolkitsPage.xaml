@@ -81,7 +81,7 @@
         <Border Grid.Row="1" BorderBrush="White" BorderThickness="0 0.75 0 0.75">
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center"
                         Orientation="Horizontal">
-                <Label Content="Select:" Style="{StaticResource SelectionLabel}"/>
+                <Label Content="Select:" Style="{StaticResource SelectionLabel}" />
                 <Button Command="{Binding SelectAllCommand}" Content="all" Style="{StaticResource SelectionButton}" />
                 <Button Command="{Binding SelectNoneCommand}" Content="none" Style="{StaticResource SelectionButton}"/>
                 <Button Command="{Binding InvertSelectionCommand}" Content="invert" Style="{StaticResource SelectionButton}" />
