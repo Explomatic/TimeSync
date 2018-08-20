@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -22,7 +23,8 @@ namespace TimeSync.Model
         {
             throw new NotImplementedException();
         }
-
+        
+        [IgnoreDataMember]
         public bool HasErrors { get; }
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         

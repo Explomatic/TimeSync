@@ -21,7 +21,8 @@ namespace TimeSync.DataAccess
 
             // Encryption the data using DataProtectionScope.CurrentUser. The result can be decrypted
             //  only by the same current user.
-            return Convert.ToBase64String(ProtectedData.Protect(plainTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
+//            return Convert.ToBase64String(ProtectedData.Protect(plainTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
+            return Encoding.ASCII.GetString(ProtectedData.Protect(plainTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
         }
 
         public string DecryptText(string encryptedText)
@@ -30,7 +31,7 @@ namespace TimeSync.DataAccess
 
             // Encryption the data using DataProtectionScope.CurrentUser. The result can be decrypted
             //  only by the same current user.
-            return Convert.ToBase64String(ProtectedData.Protect(encryptedTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
+            return Encoding.ASCII.GetString(ProtectedData.Unprotect(encryptedTextBytes, AdditionalEntropy, DataProtectionScope.CurrentUser));
         }
     }
 }

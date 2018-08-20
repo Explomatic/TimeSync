@@ -23,37 +23,23 @@ namespace TimeSync.DataAccess
         
         public ToolkitUser UserInfo;
 
-        public TimeManager(IRepository<ToolkitUser> tkUserRepo, 
-            IRepository<List<Toolkit>> tkRepo, 
-            IRepository<List<Timeregistration>> timeregRepo,
-            ISharepointClient spClient,
-            IEncryption encryptionManager)
+        public TimeManager(IRepository<ToolkitUser> tkUserRepo, IRepository<List<Toolkit>> tkRepo, 
+            IRepository<List<Timeregistration>> timeregRepo, ISharepointClient spClient, IEncryption encryptionManager)
         {
-            UserInfo = new ToolkitUser();
             _toolkitUserRepository = tkUserRepo;
             _toolkitRepository = tkRepo;
             _timeregistrationRepository = timeregRepo;
             _sharepointClient = spClient;
 
-            UserInfo = _toolkitUserRepository.GetData();
-            if (UserInfo.Password?.Length > 0)
+            var userInfo = _toolkitUserRepository.GetData();
+            if (userInfo.Password?.Length > 0)
             {
-                UserInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(UserInfo.Password))
+                userInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(userInfo.Password))
                     .SecurePassword;
             }
             
             _toolkits = _toolkitRepository.GetData();
         }
-
-//        public TimeManager(IRepository<ToolkitUser> userRepo, IRepository<List<Toolkit>> toolkitRepo,
-//            IRepository<List<Timeregistration>> timeregRepo
-//            , ISharepointClient spClient)
-//        {
-//            _toolkitUserRepository = userRepo;
-//            _toolkitRepository = toolkitRepo;
-//            _timeregistrationRepository = timeregRepo;
-//            _sharepointClient = spClient;
-//        }
 
         /// <summary>
         /// Stores timeregs that have been input by user in "DB"

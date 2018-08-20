@@ -123,6 +123,18 @@ namespace TimeSync.Tests
         }
 
         [TestMethod]
+        public void EncryptPasswordTest()
+        {
+            var password = @"";
+            _toolkitUser.Password = _encryptionManager.EncryptText(password);
+            _toolkitUser.Name = "MOMA";
+
+            var success = _toolkitUserRepository.SaveData(_toolkitUser);
+            
+            Assert.IsTrue(success);
+        }
+
+        [TestMethod]
         public void GetUserIdByEmailTest()
         {
             var email = "moma@netcompany.com";
