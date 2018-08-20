@@ -77,7 +77,9 @@ namespace TimeSync.UI.ViewModel
             
 
             // Used for easy UI population during design phases.
+#if DEBUG
             InitializeToolkitList();
+#endif            
         }
 
         public ICommand AddCommand

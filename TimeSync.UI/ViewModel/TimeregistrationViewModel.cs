@@ -112,7 +112,9 @@ namespace TimeSync.UI.ViewModel
             ToolkitNames = (from tk in Toolkits select tk.DisplayName).ToList();
 
             // Used for easy UI population during design phases.
-            //InitializeTimeregList();
+#if DEBUG
+            InitializeTimeregList();
+#endif
         }
 
         public ICommand AddCommand
