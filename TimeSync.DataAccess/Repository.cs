@@ -27,7 +27,17 @@ namespace TimeSync.DataAccess
 
         public Repository()
         {
-            var repoType = typeof(T).Name;
+            string repoType;
+            var type = typeof(T);
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                repoType = type.GetGenericArguments()[0].Name;
+            }
+            else
+            {
+                repoType = typeof(T).Name;    
+            }
+            
             _saveLocation = $"{_appData}\\{repoType}.txt";
             if (!Directory.Exists(_appData))
             {

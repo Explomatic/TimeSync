@@ -31,10 +31,10 @@ namespace TimeSync.DataAccess
             _timeregistrationRepository = timeregRepo;
             _sharepointClient = spClient;
 
-            var userInfo = _toolkitUserRepository.GetData();
-            if (userInfo.Password?.Length > 0)
+            UserInfo = _toolkitUserRepository.GetData();
+            if (UserInfo.Password?.Length > 0)
             {
-                userInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(userInfo.Password))
+                UserInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(UserInfo.Password))
                     .SecurePassword;
             }
             
