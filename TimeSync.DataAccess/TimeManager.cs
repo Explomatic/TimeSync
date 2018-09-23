@@ -6,7 +6,9 @@ using TimeSync.IoC;
 using TimeSync.Model;
 using System;
 using System.Net;
+using System.Security.Cryptography;
 using Castle.Core.Internal;
+using log4net;
 using Microsoft.SharePoint.Client;
 
 namespace TimeSync.DataAccess
@@ -20,22 +22,26 @@ namespace TimeSync.DataAccess
         private readonly ISharepointClient _sharepointClient;
         private ToolkitUser _toolkitUser;
         private List<Toolkit> _toolkits;
+        private ILog _logger;
         
         public ToolkitUser UserInfo;
 
         public TimeManager(IRepository<ToolkitUser> tkUserRepo, IRepository<List<Toolkit>> tkRepo, 
-            IRepository<List<Timeregistration>> timeregRepo, ISharepointClient spClient, IEncryption encryptionManager)
+            IRepository<List<Timeregistration>> timeregRepo, ISharepointClient spClient, IEncryption encryptionManager,
+            ILog logger)
         {
             _toolkitUserRepository = tkUserRepo;
             _toolkitRepository = tkRepo;
             _timeregistrationRepository = timeregRepo;
             _sharepointClient = spClient;
+            _logger = logger;
 
             UserInfo = _toolkitUserRepository.GetData();
             if (UserInfo.Password?.Length > 0)
             {
-                UserInfo.SecurePassword = new NetworkCredential("", encryptionManager.DecryptText(UserInfo.Password))
-                    .SecurePassword;
+                UserInfo.SecurePassword =
+                    new NetworkCredential("", encryptionManager.DecryptText(UserInfo.Password))
+                        .SecurePassword;                
             }
             
             _toolkits = _toolkitRepository.GetData();

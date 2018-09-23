@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Castle.Core;
 using log4net;
+using log4net.Core;
 using TimeSync.DataAccess;
 using TimeSync.IoC;
 using TimeSync.Model;
@@ -33,7 +34,7 @@ namespace TimeSync.UI.ViewModel
         private bool _isDataSaved;
         private readonly IEncryption _encryptionManager;
         private RelayCommand _updateToolkitUserCommand;
-        private ILog _logger;
+        private ILog _logger; 
 
         public bool ClearPasswordBox
         {
@@ -93,9 +94,9 @@ namespace TimeSync.UI.ViewModel
         public ToolkitUserViewModel(TimeManager tm, IEncryption encryptionManager, ILog logger)
         {
             TimeManager = tm;
-            _logger = logger;
-            _encryptionManager = encryptionManager;            
+            _encryptionManager = encryptionManager;
             _toolkitUser = TimeManager.UserInfo;
+            _logger = logger;
             
             if (!string.IsNullOrEmpty(_toolkitUser.Password))
             {
@@ -107,9 +108,9 @@ namespace TimeSync.UI.ViewModel
                 {
                     _logger.Info($"Could not decrypt password for user {_toolkitUser.Name}. User must retype the password in order to continue.");
                     popText = "Could not decrypt the saved password, please retype it.";
-                    pop = true;
                     PopupIsOpen = true; 
                 }
+                
             }
             
             Username = _toolkitUser.Name;

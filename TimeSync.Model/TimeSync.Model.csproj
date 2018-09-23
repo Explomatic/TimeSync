@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="baseModel.cs" />
+    <Compile Include="BaseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Timeregistration.cs" />
     <Compile Include="Toolkit.cs" />
